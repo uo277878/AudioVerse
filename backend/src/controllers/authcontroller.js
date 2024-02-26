@@ -1,10 +1,16 @@
 import User from '../models/user.js'
 import bcrypt from 'bcryptjs'
 import { createToken} from '../libs/jwt.js';
+import {validationResult} from "express-validator";
 
 export const signup = async (req, res) => {
     const {username, email, password, role, creationDate} = req.body
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(422).json({ errors: errors.array() });
+            return;
+          }
         const passwordEncriptada = await bcrypt.hash(password, 10)
 
         const user = new User({
@@ -27,7 +33,7 @@ export const signup = async (req, res) => {
             role: newUser.role
         }); 
     } catch(error){
-        res.status(500).json({ message: error.message});
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -35,7 +41,11 @@ export const login = async (req, res) => {
     const {email, password} = req.body
 
     try {
-
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(422).json({ errors: errors.array() });
+            return;
+          }
         const userFound = await User.findOne({ email });
         if(!userFound){
             return res.status(400).json({ message: "Usuario no encontrado"});
