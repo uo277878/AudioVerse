@@ -19,11 +19,15 @@ jobs:
       working-directory: ./frontend
       npm run build
 
+      - name: Disable Jekyll
+        run: echo "" > ./frontend/dist/.nojekyll
+
       - name: Deploy frontend
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: main
         folder: frontend/dist
+        clean: true
 
       - name: Install backend packages
         working-directory: ./backend
