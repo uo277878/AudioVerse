@@ -4,14 +4,23 @@ import { createToken} from '../libs/jwt.js';
 import {validationResult} from "express-validator";
 
 export const signup = async (req, res) => {
-    const {username, email, password, role, creationDate} = req.body
+    const {username, email, password} = req.body
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ errors: errors.array() });
+            res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
             return;
-          }
+        }
+
+        const userFound = await User.findOne({email});
+        if(userFound){
+            return res.status(400).json({msg: "El email ya existe"});
+        }
+
         const passwordEncriptada = await bcrypt.hash(password, 10)
+
+        const role = "user";
+        const creationDate = new Date();
 
         const user = new User({
             username, 
@@ -33,7 +42,7 @@ export const signup = async (req, res) => {
             role: newUser.role
         }); 
     } catch(error){
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ msg: error.message });
     }
 };
 
@@ -43,17 +52,18 @@ export const login = async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ errors: errors.array() });
+            res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
             return;
           }
         const userFound = await User.findOne({ email });
         if(!userFound){
-            return res.status(400).json({ message: "Usuario no encontrado"});
+            return res.status(400).json({ msg: "Usuario no encontrado"});
         }
 
         const passwordMatch = await bcrypt.compare(password, userFound.password);
         if(!passwordMatch){
-            return res.status(400).json({ message: "Contraseña incorrecta"});
+            console.log("Llega")
+            return res.status(400).json({ msg: "Contraseña incorrecta"});
         }
 
         const token = await createToken({ id: userFound._id });

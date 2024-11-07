@@ -6,13 +6,14 @@ const singUpValidatorInsert = [
     check('email', 'El email es necesario').trim().not().isEmpty(),
     check('email', 'El email debe tener 5 o más caracteres').trim().isLength({min: 5}),
     check('password', 'La contraseña es necesaria').trim().not().isEmpty(),
-    check('password', 'La contraseña debe tener 5 o más caracteres').trim().isLength({min: 5}),
-    check('role', 'Role is required').trim().not().isEmpty()
+    check('password', 'La contraseña debe tener 5 o más caracteres').trim().isLength({min: 5})
 ]
 
 const loginValidator = [
     check('email', 'El email es necesario').trim().not().isEmpty(),
-    check('password', 'La contraseña es necesaria').trim().not().isEmpty()
+    check('email', 'El email debe tener 5 o más caracteres').trim().isLength({min: 5}),
+    check('password', 'La contraseña es necesaria').trim().not().isEmpty(),
+    check('password', 'La contraseña debe tener 5 o más caracteres').trim().isLength({min: 5})
 ]
 
 export {loginValidator, singUpValidatorInsert};
