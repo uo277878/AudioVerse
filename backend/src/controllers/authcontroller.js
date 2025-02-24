@@ -2,6 +2,8 @@ import User from '../models/user.js'
 import bcrypt from 'bcryptjs'
 import { createToken} from '../libs/jwt.js';
 import {validationResult} from "express-validator";
+import { TOKEN_SECRET } from '../config.js';
+import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res) => {
     const {username, email, password} = req.body
@@ -54,16 +56,19 @@ export const login = async (req, res) => {
         if (!errors.isEmpty()) {
             res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
             return;
-          }
+        }
+        
+        // No existe usuario
         const userFound = await User.findOne({ email });
         if(!userFound){
-            return res.status(400).json({ msg: "Usuario no encontrado"});
+            return res.status(400).json({ msg: "Credenciales incorrectas"});
         }
 
+        // La contraseña está mal
         const passwordMatch = await bcrypt.compare(password, userFound.password);
         if(!passwordMatch){
             console.log("Llega")
-            return res.status(400).json({ msg: "Contraseña incorrecta"});
+            return res.status(400).json({ msg: "Credenciales incorrectas"});
         }
 
         const token = await createToken({ id: userFound._id });
@@ -90,8 +95,9 @@ export const logout = (req, res) => {
 export const myprofile = async (req, res) => {
     const userFound = await  User.findById(req.user.id);
 
+    // no exite ningun usuario
     if(!userFound){
-        return res.status(400).json({ message: "Usuario no encontrado"});
+        return res.status(400).json({ message: "Credenciales incorrectas"});
     }
     return res.json({
         id: userFound._id,
@@ -100,3 +106,26 @@ export const myprofile = async (req, res) => {
             role: userFound.role
     });
 }
+
+export const verifyToken = async (req, res) => {
+    const {token} = req.cookies;
+
+    if(!token){
+        return res.status(401).json({message: "Unauthorized"});
+    }
+
+    jwt.verify(token, TOKEN_SECRET, async (err, user) => {
+        if(err){
+            return res.status(401).json({message: "Unauthorized"});
+        }
+        const userFound = await User.findById(user.id);
+        if(!userFound){
+            return res.status(401).json({ msg: "Unauthorized"});
+        }
+        return res.json({id: userFound._id,
+            username: userFound.username,
+                email: userFound.email,
+                role: userFound.role
+            });
+    });
+};

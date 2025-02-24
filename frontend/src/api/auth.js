@@ -20,3 +20,5 @@ export const loginRequest = user => {
 
     return axios.post(`${API}/login`, userData, { withCredentials: true });
 };
+
+export const verifyTokenRequest = () => axios.get(`${API}/verify`, { withCredentials: true });
