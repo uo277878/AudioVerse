@@ -52,7 +52,7 @@ function SignUpPage(){
                     {
                         errors.password && <p className='text-red-500'>Password es obligatoria</p>
                     }
-                    <button type="submit">
+                    <button type="submit" className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
                         Registrarse
                     </button>
                 </form>

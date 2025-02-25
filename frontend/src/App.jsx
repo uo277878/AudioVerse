@@ -8,11 +8,13 @@ import ProtectedRoutes from "./ProtectedRoutes"
 import TimeLinePage from "./pages/TimeLinePage"
 import UserPage from "./pages/UserPage"
 import ProfilePage from "./pages/ProfilePage"
+import Navbar from "./components/Navbar"
 
 function App(){
   return (
     <AuthProvider>
       <BrowserRouter>
+      <Navbar/>
         <Routes>
           <Route path='/' element={<HomePage/>}/>
           <Route path='/login' element={<LoginPage/>}/>
@@ -20,7 +22,7 @@ function App(){
           <Route element={<ProtectedRoutes/>}>
             <Route path='/songs' element={<TimeLinePage/>}/>
             <Route path='/users/:id' element={<UserPage/>}/>
-            <Route path='/profile' element={<ProfilePage/>}/>
+            <Route path='/users/profile' element={<ProfilePage/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
