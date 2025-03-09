@@ -14,4 +14,9 @@ const loginValidator = [
     check('password', 'La contraseña es necesaria').trim().not().isEmpty()
 ]
 
-export {loginValidator, singUpValidatorInsert};
+const updateUserValidator = [
+    check('email', 'El email es necesario').trim().not().isEmpty(),
+    check('username', 'El nombre de usuario es necesario').trim().not().isEmpty()
+]
+
+export {loginValidator, singUpValidatorInsert, updateUserValidator};
