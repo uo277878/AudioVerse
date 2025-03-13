@@ -10,6 +10,7 @@ import UserPage from "./pages/UserPage"
 import ProfilePage from "./pages/ProfilePage"
 import Navbar from "./components/Navbar"
 import { UserProvider } from "./context/UserContext"
+import UpdatePasswordPage from "./pages/UpdatePasswordPage"
 
 function App(){
   return (
@@ -25,6 +26,7 @@ function App(){
               <Route path='/songs' element={<TimeLinePage/>}/>
               <Route path='/users/:id' element={<UserPage/>}/>
               <Route path='/users/profile' element={<ProfilePage/>}/>
+              <Route path='/users/profile/password' element={<UpdatePasswordPage/>}/>
             </Route>
           </Routes>
         </BrowserRouter>

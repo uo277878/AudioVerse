@@ -1,6 +1,5 @@
 import {Router} from 'express'
 import {login, signup, logout, verifyToken} from '../controllers/authcontroller.js'
-import { tokenRequired } from '../middlewares/validateToken.js';
 import { singUpValidatorInsert } from '../middlewares/authValidator.js';
 import { loginValidator } from '../middlewares/authValidator.js';
 

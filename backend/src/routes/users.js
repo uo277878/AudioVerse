@@ -1,12 +1,15 @@
 import {Router} from 'express'
 import { tokenRequired } from '../middlewares/validateToken.js';
-import {getUsers, getUser, createUser, deleteUser, updateUser, profile} from '../controllers/userscontroller.js';
+import {getUsers, getUser, createUser, deleteUser, updateUser, profile, updatePassword, passwordPage} from '../controllers/userscontroller.js';
+import {updateUserValidator, updatePasswordValidator} from '../middlewares/authValidator.js';
 
 const router = new Router();
 
 router.get('/users', tokenRequired, getUsers);
 router.get('/users/profile', tokenRequired, profile);
-router.put('/users/profile', tokenRequired, updateUser);
+router.put('/users/profile', updateUserValidator, tokenRequired, updateUser);
+router.get('/users/profile/password', tokenRequired, passwordPage);
+router.put('/users/profile/password', updatePasswordValidator, tokenRequired, updatePassword);
 router.get('/users/:id', tokenRequired, getUser);
 router.post('/users', tokenRequired, createUser);
 router.delete('/users/:id', tokenRequired, deleteUser);

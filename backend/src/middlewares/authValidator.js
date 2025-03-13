@@ -19,4 +19,16 @@ const updateUserValidator = [
     check('username', 'El nombre de usuario es necesario').trim().not().isEmpty()
 ]
 
+export const updatePasswordValidator = [
+    check("password", "La contraseña actual es obligatoria").not().isEmpty(),
+    check("newPassword", "La nueva contraseña debe tener al menos 6 caracteres").isLength({ min: 6 }),
+    check("repeatPassword", "Debes confirmar la nueva contraseña").not().isEmpty(),
+    check("repeatPassword").custom((value, { req }) => {
+        if (value !== req.body.newPassword) {
+            throw new Error("Las contraseñas no coinciden");
+        }
+        return true;
+    })
+];
+
 export {loginValidator, singUpValidatorInsert, updateUserValidator};
