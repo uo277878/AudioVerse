@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useUsers } from "../context/UserContext";
 import { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom"
 
 function ProfilePage(){
     const {register, handleSubmit, setValue, formState: {errors}} = useForm();
@@ -41,7 +42,10 @@ function ProfilePage(){
                     {
                         errors.email && <p className='text-red-500'>Email es obligatorio</p>
                     }
-                    <div className="flex justify-end">
+                    <div className="flex justify-between">
+                        <Link to="/users/profile/password" className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
+                            Editar contraseña
+                        </Link>
                         <button type="submit" className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
                             Guardar
                         </button>
