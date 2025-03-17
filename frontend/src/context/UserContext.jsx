@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getUserRequest, updateUserRequest, updatePasswordRequest } from "../api/users";
+import { getUserRequest, updateUserRequest, updatePasswordRequest, updateProfilePicRequest } from "../api/users";
 
 const UserContext = createContext();
 
@@ -22,7 +22,6 @@ export const UserProvider = ({children}) => {
     }
 
     const updateUser = async (user, userData) => {
-        console.log(user);
         try{
             const res = await updateUserRequest(user, userData);
         } catch(error){
@@ -47,6 +46,19 @@ export const UserProvider = ({children}) => {
         }
     }
 
+    const updateProfilePic = async (userData) => {
+        try{
+            const res = await updateProfilePicRequest(userData);
+            console.log(res);
+        } catch(error){
+            if(Array.isArray(error.response.data)){
+                return setErrors(error.response.data);
+            }
+            setErrors([error.response.data])
+            console.log(errors);
+        }
+    }
+
     useEffect(() => {
             if(errors.length > 0){
                 const timer = setTimeout(() => {
@@ -57,7 +69,7 @@ export const UserProvider = ({children}) => {
         }, [errors])
 
     return (
-        <UserContext.Provider value={{getUser, updateUser, errors, updatePassword}}>
+        <UserContext.Provider value={{getUser, updateUser, errors, updatePassword, updateProfilePic}}>
             {children}
         </UserContext.Provider>
     ) 

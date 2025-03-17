@@ -93,6 +93,23 @@ export const updatePassword = async (req, res) => {
     }
 }
 
+export const updateProfilePic = async(req, res) => {
+    try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
+        }
+        const user = await User.findByIdAndUpdate(req.user.id, req.body, { new: true});
+        if(!user){
+            return res.status(404).json({ message: "Usuario no encontrado"});
+        }
+
+        return res.json(user);
+    } catch(error){
+        return res.status(500).json({ message: "Usuario no encontrado"});
+    }
+}
+
 export const deleteUser = async (req, res) => {
     try{
         const user = await User.findByIdAndDelete(req.params.id);

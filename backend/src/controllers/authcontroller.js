@@ -67,7 +67,6 @@ export const login = async (req, res) => {
         // La contraseña está mal
         const passwordMatch = await bcrypt.compare(password, userFound.password);
         if(!passwordMatch){
-            console.log("Llega")
             return res.status(400).json({ msg: "Credenciales incorrectas"});
         }
 

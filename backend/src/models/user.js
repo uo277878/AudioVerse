@@ -16,6 +16,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    profilePic:{
+        type: String,
+        required: false
+    },
     role:{
         type: String,
         required: true,

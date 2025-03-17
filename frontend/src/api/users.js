@@ -7,7 +7,6 @@ export const updateUserRequest = (user, data) => {
         username: data.username,
         email: data.email
     };
-    console.log(userData);
 
     return axios.put(`${API}/users/profile`, userData, { withCredentials: true });
 };
@@ -18,9 +17,12 @@ export const updatePasswordRequest = async (data) => {
         newPassword: data.newPassword,
         repeatPassword: data.repeatPassword
     };
-    console.log(userData);
 
     return axios.put(`${API}/users/profile/password`, userData, { withCredentials: true });
 };
+
+export const updateProfilePicRequest = async (data) => {
+    return axios.put(`${API}/users/profile/image`, data, {withCredentials: true})
+}
 
 export const getUserRequest = (id) => axios.get(`/users/${id}`);

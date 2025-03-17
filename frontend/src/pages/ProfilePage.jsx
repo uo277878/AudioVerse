@@ -1,13 +1,15 @@
 import { useForm } from "react-hook-form";
 import { useUsers } from "../context/UserContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import { updateProfilePicRequest } from "../api/users";
 
 function ProfilePage(){
-    const {register, handleSubmit, setValue, formState: {errors}} = useForm();
+    const {register, handleSubmit, setValue, formState: {errors}, setValue: setValueForm} = useForm();
     const {updateUser, errors: updateErrors} = useUsers();
     const { user } = useAuth();
+    const [profileImage, setProfileImage] = useState(user?.profileImage || "");
 
     useEffect(() => {
         if(user){
@@ -23,6 +25,24 @@ function ProfilePage(){
         }
     });
 
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            try{
+                const formData = new FormData();
+                formData.append("image", file);
+
+                const res = await updateProfilePicRequest(formData);
+                console.log(res);
+                setProfileImage(res.data.profileImage);
+                setValueForm('profileImage', res.data.profileImage); 
+            } catch(error){
+                console.log(error);
+            }
+
+        }
+    };
+
     return (
         <div className='flex justify-center'>
             <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
@@ -34,6 +54,16 @@ function ProfilePage(){
                     ))
                 }
                 <form onSubmit={onSubmit}>
+                <div className="mb-4">
+                        <label className="block text-white mb-2">Foto de perfil</label>
+                        <input
+                            type="file"
+                            {...register('image')}
+                            onChange={handleImageChange}
+                            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md"
+                        />
+                        {profileImage && <img src={profileImage} alt="Perfil" className="w-32 h-32 object-cover mt-4 rounded-full" />}
+                    </div>
                     <input type="text" placeholder="Username" {... register("username", {required: true})} className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></input>
                     {
                         errors.username && <p className='text-red-500'>Username es obligatorio</p>

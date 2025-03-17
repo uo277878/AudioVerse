@@ -22,11 +22,9 @@ export const AuthProvider = ({children}) => {
     const signup = async (user) => {
         try{
             const res = await signupRequest(user);
-            console.log(res.data);
             setUser(res.data);
             setIsAuthenticated(true);
         } catch(error){
-            console.log(error);
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);
             }
@@ -38,7 +36,6 @@ export const AuthProvider = ({children}) => {
     const login = async (user) => {
         try{
             const res = await loginRequest(user);
-            console.log(res.data);
             setUser(res.data);
             setIsAuthenticated(true);
         } catch(error){
@@ -77,7 +74,6 @@ export const AuthProvider = ({children}) => {
 
             try {
                 const res = await verifyTokenRequest(token);
-                console.log(res);
                 if (res.data) {
                     setUser(res.data);
                     setIsAuthenticated(true);
