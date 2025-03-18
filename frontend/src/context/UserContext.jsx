@@ -46,16 +46,18 @@ export const UserProvider = ({children}) => {
         }
     }
 
-    const updateProfilePic = async (userData) => {
+    const updateProfilePic = async (file) => {
         try{
-            const res = await updateProfilePicRequest(userData);
-            console.log(res);
+            setErrors([]); 
+
+            const formData = new FormData();
+            formData.append("image", file);
+
+            const res = await updateProfilePicRequest(formData);
+            console.log(res.data);
+            return res;
         } catch(error){
-            if(Array.isArray(error.response.data)){
-                return setErrors(error.response.data);
-            }
-            setErrors([error.response.data])
-            console.log(errors);
+            console.log(error);
         }
     }
 

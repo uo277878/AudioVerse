@@ -15,19 +15,27 @@ export const uploadProfileImage = async (req, res) => {
         if (!req.files || !req.files.image) {
             return res.status(400).json({ msg: "No se ha subido ninguna imagen" });
         }
+        console.log(req.files);
         const user = await User.findById(req.user.id);
         if (!user) {
             return res.status(404).json({ msg: "Usuario no encontrado" });
+        }
+
+        if (user.profilePic) {
+            const publicId = user.profilePic.split('/').pop().split('.')[0];
+            await cloudinary.uploader.destroy(`profile_pictures/${publicId}`);
         }
 
         const result = await cloudinary.uploader.upload(req.files.image.tempFilePath, {
             folder: "profile_pictures",
         });
 
-        user.profileImage = result.secure_url;
+        console.log(result.secure_url);
+
+        user.profilePic = result.secure_url;
         await user.save();
 
-        res.json({ profileImage: user.profileImage });
+        res.json({ profilePic: user.profilePic });
 
     } catch (error) {
         res.status(500).json({ msg: "Error al subir la imagen", error });

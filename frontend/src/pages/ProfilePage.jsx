@@ -3,20 +3,22 @@ import { useUsers } from "../context/UserContext";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
-import { updateProfilePicRequest } from "../api/users";
 
 function ProfilePage(){
-    const {register, handleSubmit, setValue, formState: {errors}, setValue: setValueForm} = useForm();
-    const {updateUser, errors: updateErrors} = useUsers();
-    const { user } = useAuth();
-    const [profileImage, setProfileImage] = useState(user?.profileImage || "");
+    const {register, handleSubmit, setValue, formState: {errors}} = useForm();
+    const {updateUser, errors: updateErrors, updateProfilePic} = useUsers();
+    const { user, setUser } = useAuth();
+    const [profilePic, setProfilePic] = useState(user?.profilePic || "");
 
     useEffect(() => {
         if(user){
             setValue('username', user.username);
             setValue('email', user.email);
+            setValue('image', user.profilePic);
+            console.log(user);
+            setProfilePic(user.profilePic);
         }
-    }, []);
+    }, [user]);
 
     const onSubmit = handleSubmit((data) => {
         console.log(data);
@@ -27,19 +29,20 @@ function ProfilePage(){
 
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
+        console.log(file);
         if (file) {
-            try{
-                const formData = new FormData();
-                formData.append("image", file);
-
-                const res = await updateProfilePicRequest(formData);
+            try {
+                const res = await updateProfilePic(file);
                 console.log(res);
-                setProfileImage(res.data.profileImage);
-                setValueForm('profileImage', res.data.profileImage); 
-            } catch(error){
+                const data = res.json();
+                if (data.profilePic) {
+                    setProfilePic(data.profilePic);
+                    setUser((prevUser) => ({ ...prevUser, profilePic: data.profilePic }));
+                }
+                console.log(profilePic);
+            } catch (error) {
                 console.log(error);
             }
-
         }
     };
 
@@ -58,11 +61,11 @@ function ProfilePage(){
                         <label className="block text-white mb-2">Foto de perfil</label>
                         <input
                             type="file"
-                            {...register('image')}
+                            {...register("image")}
                             onChange={handleImageChange}
                             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md"
                         />
-                        {profileImage && <img src={profileImage} alt="Perfil" className="w-32 h-32 object-cover mt-4 rounded-full" />}
+                        <img src={user.profilePic} alt="Imagen de perfil" className="w-32 h-32 object-cover mt-4 rounded-full" />
                     </div>
                     <input type="text" placeholder="Username" {... register("username", {required: true})} className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></input>
                     {

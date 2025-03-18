@@ -22,7 +22,9 @@ export const updatePasswordRequest = async (data) => {
 };
 
 export const updateProfilePicRequest = async (data) => {
-    return axios.put(`${API}/users/profile/image`, data, {withCredentials: true})
+    console.log("updateProfilePicRequest");
+    console.log(data);
+    return axios.put(`${API}/users/profile/image`, data, {withCredentials: true, headers: {"Content-Type": "multipart/form-data"}})
 }
 
 export const getUserRequest = (id) => axios.get(`/users/${id}`);

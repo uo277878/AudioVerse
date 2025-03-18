@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import { tokenRequired } from '../middlewares/validateToken.js';
-import {getUsers, getUser, createUser, deleteUser, updateUser, profile, updatePassword, passwordPage, updateProfilePic} from '../controllers/userscontroller.js';
+import {getUsers, getUser, createUser, deleteUser, updateUser, profile, updatePassword, passwordPage} from '../controllers/userscontroller.js';
 import {updateUserValidator, updatePasswordValidator} from '../middlewares/authValidator.js';
 import { uploadProfileImage } from '../controllers/upload.js';
 
