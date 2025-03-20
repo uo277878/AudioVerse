@@ -6,7 +6,7 @@ import { uploadProfileImage } from '../controllers/upload.js';
 
 const router = new Router();
 
-router.get('/users', tokenRequired, getUsers);
+router.get('/users/getAllUsers', tokenRequired, getUsers);
 router.get('/users/profile', tokenRequired, profile);
 router.put('/users/profile', updateUserValidator, tokenRequired, updateUser);
 router.get('/users/profile/password', tokenRequired, passwordPage);

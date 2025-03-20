@@ -24,10 +24,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    creationDate:{
+    dateBirth:{
         type: Date,
-        required: true,
-        default: new Date()
+        required: true
     }
 }, {
     timestamps: true

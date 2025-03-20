@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar"
 import { UserProvider } from "./context/UserContext"
 import UpdatePasswordPage from "./pages/UpdatePasswordPage"
 import EditProfilePicPage from "./pages/EditProfilePicPage"
+import UsersAdminPage from "./pages/UsersAdminPage"
 
 function App(){
   return (
@@ -25,6 +26,7 @@ function App(){
             <Route path='/signup' element={<SignUpPage/>}/>
             <Route element={<ProtectedRoutes/>}>
               <Route path='/songs' element={<TimeLinePage/>}/>
+              <Route path='/users/getAllUsers' element={<UsersAdminPage/>}/>
               <Route path='/users/:id' element={<UserPage/>}/>
               <Route path='/users/profile' element={<ProfilePage/>}/>
               <Route path='/users/profile/password' element={<UpdatePasswordPage/>}/>

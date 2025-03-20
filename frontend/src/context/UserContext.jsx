@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getUserRequest, updateUserRequest, updatePasswordRequest, updateProfilePicRequest } from "../api/users";
+import { getUserRequest, updateUserRequest, updatePasswordRequest, updateProfilePicRequest, getUsersAdminRequest, deleteUserRequest } from "../api/users";
 
 const UserContext = createContext();
 
@@ -12,6 +12,7 @@ export const useUsers = () => {
 }
 export const UserProvider = ({children}) => {
     const [errors, setErrors] = useState([]);
+    const [users, setUsers] = useState([]);
     const getUser = async (id) => {
         try{
             const res = await getUserRequest(id);
@@ -61,6 +62,29 @@ export const UserProvider = ({children}) => {
         }
     }
 
+    const getUsersAdmin = async () => {
+        try{
+            const res = await getUsersAdminRequest();
+            setUsers(res.data);
+        } catch(error){
+            console.error(error);
+        }
+        
+    }
+
+    const deleteUser = async (id) => {
+        try{
+            const res = await deleteUserRequest(id);
+            console.log(res);
+            if(res.status == 204){
+                setUsers(users.filter(user => user._id != id));
+            }
+        } catch(error){
+            console.error(error);
+        }
+        
+    }
+
     useEffect(() => {
             if(errors.length > 0){
                 const timer = setTimeout(() => {
@@ -71,7 +95,7 @@ export const UserProvider = ({children}) => {
         }, [errors])
 
     return (
-        <UserContext.Provider value={{getUser, updateUser, errors, updatePassword, updateProfilePic}}>
+        <UserContext.Provider value={{users, getUser, updateUser, errors, updatePassword, updateProfilePic, getUsersAdmin, deleteUser}}>
             {children}
         </UserContext.Provider>
     ) 

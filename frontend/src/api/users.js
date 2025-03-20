@@ -27,4 +27,8 @@ export const updateProfilePicRequest = async (data) => {
     return axios.put(`${API}/users/profile/image`, data, {withCredentials: true, headers: {"Content-Type": "multipart/form-data"}})
 }
 
-export const getUserRequest = (id) => axios.get(`/users/${id}`);
+export const getUserRequest = (id) => axios.get(`/users/${id}`, { withCredentials: true });
+
+export const getUsersAdminRequest = () => {return axios.get(`${API}/users/getAllUsers`, { withCredentials: true })};
+
+export const deleteUserRequest = (id) => axios.delete(`${API}/users/${id}`, { withCredentials: true })

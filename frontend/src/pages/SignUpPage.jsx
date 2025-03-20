@@ -6,14 +6,18 @@ import { Link } from 'react-router-dom';
 
 function SignUpPage(){
     const {register, handleSubmit, formState: {errors}} = useForm();
-    const {signup, isAuthenticated, errors: registerErrors} = useAuth();
+    const {signup, isAuthenticated, errors: registerErrors, user} = useAuth();
     const navigate = useNavigate();
     
     useEffect(() => {
         if(isAuthenticated){
-            navigate('/users');
+            if(user.role == "admin"){
+                navigate("/users/getAllUsers");
+            } else{
+                navigate("/users/profile")
+            }
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated, user])
 
     const actionSubmit = handleSubmit(async (values) => {
         signup(values);

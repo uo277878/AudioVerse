@@ -5,6 +5,7 @@ import {validationResult} from "express-validator";
 export const getUsers = async (req, res) => {
     try{
         const users = await User.find();
+        console.log(users);
         res.json(users);
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });
@@ -12,7 +13,7 @@ export const getUsers = async (req, res) => {
 }
 
 export const createUser = async (req, res) => {
-    const {username, email, password, role, creationDate} = req.body
+    const {username, email, password, role, dateBirth} = req.body
     try {
         const passwordEncriptada = await bcrypt.hash(password, 10)
 
@@ -21,7 +22,7 @@ export const createUser = async (req, res) => {
             email, 
             password: passwordEncriptada, 
             role, 
-            creationDate
+            dateBirth
         });
 
         const newUser = await user.save();

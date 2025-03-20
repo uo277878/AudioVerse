@@ -6,7 +6,7 @@ import { TOKEN_SECRET } from '../config.js';
 import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res) => {
-    const {username, email, password} = req.body
+    const {username, email, password, dateBirth} = req.body
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -22,14 +22,13 @@ export const signup = async (req, res) => {
         const passwordEncriptada = await bcrypt.hash(password, 10)
 
         const role = "user";
-        const creationDate = new Date();
 
         const user = new User({
             username, 
             email, 
             password: passwordEncriptada, 
             role, 
-            creationDate
+            dateBirth
         });
 
         const newUser = await user.save();

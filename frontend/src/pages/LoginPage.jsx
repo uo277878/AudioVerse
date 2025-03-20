@@ -1,15 +1,28 @@
 import {useForm} from 'react-hook-form'
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage(){
 
     const {register, handleSubmit, formState: {errors}} = useForm();
-    const {login, errors: loginErrors} = useAuth();
+    const {login, errors: loginErrors, isAuthenticated, user} = useAuth();
+    const navigate = useNavigate();
 
     const actionSubmit = handleSubmit(data => {
         login(data);
     })
+
+    useEffect(() => {
+        if(isAuthenticated){
+            if(user.role == "admin"){
+                navigate("/users/getAllUsers");
+            } else{
+                navigate("/users/profile")
+            }
+        }
+    }, [isAuthenticated, user])
 
     return (
         <div className='flex h-screen items-center justify-center'>
