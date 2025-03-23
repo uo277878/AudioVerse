@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 function EditProfilePicPage(){
     const {register, handleSubmit, setValue} = useForm();
-    const {updateUser, updateProfilePic} = useUsers();
+    const {updateProfile, updateProfilePic} = useUsers();
     const { user, setUser } = useAuth();
     const [profilePic, setProfilePic] = useState(user?.profilePic || "");
     const [previewPic, setPreviewPic] = useState(user?.profilePic || "");
@@ -30,12 +30,13 @@ function EditProfilePicPage(){
                 let newProfilePic = profilePic;
                 if (selectedFile) {
                     const res = await updateProfilePic(selectedFile);
+                    console.log(res);
                     if (res.data.profilePic) {
                         newProfilePic = res.data.profilePic;
                     }
                 }
 
-                await updateUser(user, { ...data, profilePic: newProfilePic });
+                await updateProfile(user, { ...data, profilePic: newProfilePic });
                 setUser((prevUser) => ({ ...prevUser, profilePic: newProfilePic }));
                 navigate('/users/profile');
             } catch (error) {

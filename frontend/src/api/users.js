@@ -1,12 +1,14 @@
 import axios from 'axios'
+import user from '../../../backend/src/models/user';
 
 const API = 'http://localhost:3000/api'
 
-export const updateUserRequest = (user, data) => {
+export const updateProfileRequest = (user, data) => {
     const userData = {
         username: data.username,
         email: data.email
     };
+    console.log(userData);
 
     return axios.put(`${API}/users/profile`, userData, { withCredentials: true });
 };
@@ -22,12 +24,20 @@ export const updatePasswordRequest = async (data) => {
 };
 
 export const updateProfilePicRequest = async (data) => {
-    console.log("updateProfilePicRequest");
-    console.log(data);
     return axios.put(`${API}/users/profile/image`, data, {withCredentials: true, headers: {"Content-Type": "multipart/form-data"}})
 }
 
-export const getUserRequest = (id) => axios.get(`/users/${id}`, { withCredentials: true });
+export const updateUserRequest = async(id, user) => {
+    const userData = {
+        username: user.username,
+        email: user.email,
+        role: user.rol
+    };
+
+    return axios.put(`${API}/users/${id}`, userData, { withCredentials: true });
+};
+
+export const getUserRequest = (id) => {return axios.get(`${API}//users/${id}`, { withCredentials: true })};
 
 export const getUsersAdminRequest = () => {return axios.get(`${API}/users/getAllUsers`, { withCredentials: true })};
 

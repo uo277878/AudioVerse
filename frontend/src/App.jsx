@@ -13,6 +13,7 @@ import { UserProvider } from "./context/UserContext"
 import UpdatePasswordPage from "./pages/UpdatePasswordPage"
 import EditProfilePicPage from "./pages/EditProfilePicPage"
 import UsersAdminPage from "./pages/UsersAdminPage"
+import ErrorPage from "./pages/ErrorPage"
 
 function App(){
   return (
@@ -24,13 +25,14 @@ function App(){
             <Route path='/' element={<HomePage/>}/>
             <Route path='/login' element={<LoginPage/>}/>
             <Route path='/signup' element={<SignUpPage/>}/>
+            <Route path='/error' element={<ErrorPage/>}/>
             <Route element={<ProtectedRoutes/>}>
               <Route path='/songs' element={<TimeLinePage/>}/>
               <Route path='/users/getAllUsers' element={<UsersAdminPage/>}/>
-              <Route path='/users/:id' element={<UserPage/>}/>
               <Route path='/users/profile' element={<ProfilePage/>}/>
               <Route path='/users/profile/password' element={<UpdatePasswordPage/>}/>
               <Route path='/users/profile/image' element={<EditProfilePicPage/>}/>
+              <Route path='/users/:id' element={<UserPage/>}/>
             </Route>
           </Routes>
         </BrowserRouter>

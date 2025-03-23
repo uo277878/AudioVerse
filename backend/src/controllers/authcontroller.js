@@ -28,7 +28,8 @@ export const signup = async (req, res) => {
             email, 
             password: passwordEncriptada, 
             role, 
-            dateBirth
+            dateBirth,
+            profilePic: "https://res.cloudinary.com/dtlhuysrz/image/upload/v1742580474/default_h6yht5.webp"
         });
 
         const newUser = await user.save();

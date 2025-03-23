@@ -49,6 +49,13 @@ function SignUpPage(){
                     {
                         errors.email && <p className='text-red-500'>Email es obligatorio</p>
                     }
+                    <input type="date" {... register("dateBirth", {required: true})}
+                        className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
+                        placeholder='Fecha de nacimiento'
+                    />
+                    {
+                        errors.dateBirth && <p className='text-red-500'>Fecha de nacimiento es obligatoria</p>
+                    }
                     <input type="password" {... register("password", {required: true})}
                         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
                         placeholder='Password'

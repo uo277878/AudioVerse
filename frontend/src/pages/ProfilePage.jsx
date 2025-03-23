@@ -7,7 +7,7 @@ import { HiOutlinePencilAlt } from "react-icons/hi";
 
 function ProfilePage(){
     const {register, handleSubmit, setValue, formState: {errors}} = useForm();
-    const {updateUser, errors: updateErrors, updateProfilePic} = useUsers();
+    const {updateProfile, errors: updateErrors, updateProfilePic} = useUsers();
     const { user, setUser } = useAuth();
     const [profilePic, setProfilePic] = useState(user?.profilePic || "");
 
@@ -22,13 +22,14 @@ function ProfilePage(){
     const onSubmit = handleSubmit((data) => {
         console.log(data);
         if(user){
-            updateUser(user, data);
+            updateProfile(user, data);
         }
     });
 
     return (
         <div className="flex flex-col md:flex-row justify-center items-center">
             <div className="bg-zinc-800 max-w-xl w-full p-10 rounded-md">
+                <h1 className='text-2xl mb-4 font-bold'>Información de su perfil</h1>
                 {
                     updateErrors.map((error, i) => (
                         <div className='bg-red-500 p-2 text-white my-2' key={i}>

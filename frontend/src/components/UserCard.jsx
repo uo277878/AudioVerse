@@ -1,4 +1,5 @@
 import { useUsers } from "../context/UserContext";
+import { Link } from "react-router-dom";
 
 function UserCard({user}){
     const {deleteUser} = useUsers();
@@ -9,7 +10,7 @@ function UserCard({user}){
                 <h1 className="text-2xl font-bold">{user.username}</h1>
                 <div className="flex gap-x-2 items-center">
                     <button className='bg-red-500 p-2 text-white my-2' onClick={() => deleteUser(user._id)}>Eliminar</button>
-                    <button className='bg-red-500 p-2 text-white my-2'>Editar</button>
+                    <Link to={`/users/${user._id}`} className='bg-red-500 p-2 text-white my-2'>Editar</Link>
                 </div>
             </div>
             <p className="text-white">{user.email}</p>

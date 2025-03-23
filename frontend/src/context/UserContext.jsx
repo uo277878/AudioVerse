@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getUserRequest, updateUserRequest, updatePasswordRequest, updateProfilePicRequest, getUsersAdminRequest, deleteUserRequest } from "../api/users";
+import { getUserRequest, updateProfileRequest, updatePasswordRequest, updateProfilePicRequest, updateUserRequest, getUsersAdminRequest, deleteUserRequest } from "../api/users";
 
 const UserContext = createContext();
 
@@ -22,9 +22,9 @@ export const UserProvider = ({children}) => {
         }
     }
 
-    const updateUser = async (user, userData) => {
+    const updateProfile = async (user, userData) => {
         try{
-            const res = await updateUserRequest(user, userData);
+            const res = await updateProfileRequest(user, userData);
         } catch(error){
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);
@@ -55,10 +55,21 @@ export const UserProvider = ({children}) => {
             formData.append("image", file);
 
             const res = await updateProfilePicRequest(formData);
-            console.log(res.data);
             return res;
         } catch(error){
             console.log(error);
+        }
+    }
+
+    const updateUser = async (id, user) => {
+        try{
+            const res = await updateUserRequest(id, user);
+        } catch(error){
+            if(Array.isArray(error.response.data)){
+                return setErrors(error.response.data);
+            }
+            setErrors([error.response.data])
+            console.log(errors);
         }
     }
 
@@ -95,7 +106,7 @@ export const UserProvider = ({children}) => {
         }, [errors])
 
     return (
-        <UserContext.Provider value={{users, getUser, updateUser, errors, updatePassword, updateProfilePic, getUsersAdmin, deleteUser}}>
+        <UserContext.Provider value={{users, getUser, updateProfile, errors, updatePassword, updateProfilePic, updateUser, getUsersAdmin, deleteUser}}>
             {children}
         </UserContext.Provider>
     ) 

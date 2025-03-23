@@ -5,7 +5,6 @@ import {validationResult} from "express-validator";
 export const getUsers = async (req, res) => {
     try{
         const users = await User.find();
-        console.log(users);
         res.json(users);
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });
@@ -46,15 +45,35 @@ export const getUser = async (req, res) => {
     }
 }
 
-export const updateUser = async (req, res) => {
+export const updateProfile = async (req, res) => {
     try{
         const errors = validationResult(req);
-        console.log(errors);
         if (!errors.isEmpty()) {
-            console.log("Errores de validacion:", errors.array());
             return res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
         }
         const user = await User.findByIdAndUpdate(req.user.id, req.body, { new: true});
+        if(!user){
+            return res.status(404).json({ message: "Usuario no encontrado"});
+        } else{
+            res.json({
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role
+            });
+        }
+    } catch(error){
+        return res.status(500).json({ message: "Usuario no encontrado"});
+    }
+}
+
+export const updateUser = async (req, res) => {
+    try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
+        }
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true});
         if(!user){
             return res.status(404).json({ message: "Usuario no encontrado"});
         } else{

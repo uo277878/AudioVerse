@@ -6,7 +6,8 @@ const singUpValidatorInsert = [
     check('email', 'El email es necesario').trim().not().isEmpty(),
     check('email', 'El email debe tener 5 o más caracteres').trim().isLength({min: 5}),
     check('password', 'La contraseña es necesaria').trim().not().isEmpty(),
-    check('password', 'La contraseña debe tener 5 o más caracteres').trim().isLength({min: 5})
+    check('password', 'La contraseña debe tener 5 o más caracteres').trim().isLength({min: 5}),
+    check('dateBirth').trim().isDate()
 ]
 
 const loginValidator = [
@@ -14,7 +15,7 @@ const loginValidator = [
     check('password', 'La contraseña es necesaria').trim().not().isEmpty()
 ]
 
-const updateUserValidator = [
+const updateProfileValidator = [
     check('email', 'El email es necesario').trim().not().isEmpty(),
     check('username', 'El nombre de usuario es necesario').trim().not().isEmpty()
 ]
@@ -31,4 +32,4 @@ export const updatePasswordValidator = [
     })
 ];
 
-export {loginValidator, singUpValidatorInsert, updateUserValidator};
+export {loginValidator, singUpValidatorInsert, updateProfileValidator};
