@@ -6,6 +6,7 @@ import morgan from 'morgan'
 import cookieParser from 'cookie-parser';
 import authRouters from './routes/auth.js'
 import usersRouters from './routes/users.js'
+import songsRouters from './routes/songs.js'
 import cors from 'cors'
 import fileUpload from "express-fileupload";
 
@@ -22,5 +23,6 @@ app.use(fileUpload({ useTempFiles: true }));
 
 app.use('/api', authRouters)
 app.use('/api', usersRouters)
+app.use('/api', songsRouters)
 
 export default app

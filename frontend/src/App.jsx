@@ -14,28 +14,33 @@ import UpdatePasswordPage from "./pages/UpdatePasswordPage"
 import EditProfilePicPage from "./pages/EditProfilePicPage"
 import UsersAdminPage from "./pages/UsersAdminPage"
 import ErrorPage from "./pages/ErrorPage"
+import SearchPage from "./pages/SearchPage"
+import { SongProvider } from "./context/SongContext"
 
 function App(){
   return (
     <AuthProvider>
       <UserProvider>
-        <BrowserRouter>
-        <Navbar/>
-          <Routes>
-            <Route path='/' element={<HomePage/>}/>
-            <Route path='/login' element={<LoginPage/>}/>
-            <Route path='/signup' element={<SignUpPage/>}/>
-            <Route path='/error' element={<ErrorPage/>}/>
-            <Route element={<ProtectedRoutes/>}>
-              <Route path='/songs' element={<TimeLinePage/>}/>
-              <Route path='/users/getAllUsers' element={<UsersAdminPage/>}/>
-              <Route path='/users/profile' element={<ProfilePage/>}/>
-              <Route path='/users/profile/password' element={<UpdatePasswordPage/>}/>
-              <Route path='/users/profile/image' element={<EditProfilePicPage/>}/>
-              <Route path='/users/:id' element={<UserPage/>}/>
-            </Route>
-          </Routes>
-        </BrowserRouter>
+        <SongProvider>
+          <BrowserRouter>
+          <Navbar/>
+            <Routes>
+              <Route path='/' element={<HomePage/>}/>
+              <Route path='/login' element={<LoginPage/>}/>
+              <Route path='/signup' element={<SignUpPage/>}/>
+              <Route path='/error' element={<ErrorPage/>}/>
+              <Route element={<ProtectedRoutes/>}>
+                <Route path='/songs' element={<TimeLinePage/>}/>
+                <Route path='/search' element={<SearchPage/>}/>
+                <Route path='/users/getAllUsers' element={<UsersAdminPage/>}/>
+                <Route path='/users/profile' element={<ProfilePage/>}/>
+                <Route path='/users/profile/password' element={<UpdatePasswordPage/>}/>
+                <Route path='/users/profile/image' element={<EditProfilePicPage/>}/>
+                <Route path='/users/:id' element={<UserPage/>}/>
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </SongProvider>
       </UserProvider>
     </AuthProvider>
     
