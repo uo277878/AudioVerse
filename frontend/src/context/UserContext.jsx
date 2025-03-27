@@ -13,6 +13,7 @@ export const useUsers = () => {
 export const UserProvider = ({children}) => {
     const [errors, setErrors] = useState([]);
     const [users, setUsers] = useState([]);
+    
     const getUser = async (id) => {
         try{
             const res = await getUserRequest(id);
@@ -57,7 +58,10 @@ export const UserProvider = ({children}) => {
             const res = await updateProfilePicRequest(formData);
             return res;
         } catch(error){
-            console.log(error);
+            if(Array.isArray(error.response.data)){
+                return setErrors(error.response.data);
+            }
+            setErrors([error.response.data])
         }
     }
 

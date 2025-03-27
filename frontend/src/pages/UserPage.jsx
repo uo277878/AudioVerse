@@ -64,7 +64,7 @@ function UserPage(){
                             <label htmlFor="userRadio" className="ml-4 mr-2">User</label>
                             <input type="radio" id="userRadio" value="user" name="rol" {...register("rol")} />
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-end">
                             <button type="submit" className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
                                 Guardar
                             </button>

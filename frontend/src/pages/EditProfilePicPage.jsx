@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 function EditProfilePicPage(){
     const {register, handleSubmit, setValue} = useForm();
-    const {updateProfile, updateProfilePic} = useUsers();
+    const {updateProfile, updateProfilePic, errors: updateErrors} = useUsers();
     const { user, setUser } = useAuth();
     const [profilePic, setProfilePic] = useState(user?.profilePic || "");
     const [previewPic, setPreviewPic] = useState(user?.profilePic || "");
@@ -24,13 +24,16 @@ function EditProfilePicPage(){
         }
     }, [user]);
 
+    useEffect(() => {
+        console.log("Errores actualizados:", updateErrors);
+    }, [updateErrors]);
+
     const onSubmit = handleSubmit(async (data) => {
         if (user) {
             try {
                 let newProfilePic = profilePic;
                 if (selectedFile) {
                     const res = await updateProfilePic(selectedFile);
-                    console.log(res);
                     if (res.data.profilePic) {
                         newProfilePic = res.data.profilePic;
                     }
@@ -40,7 +43,7 @@ function EditProfilePicPage(){
                 setUser((prevUser) => ({ ...prevUser, profilePic: newProfilePic }));
                 navigate('/users/profile');
             } catch (error) {
-                console.error("Error al actualizar la imagen de perfil:", error);
+                navigate('/users/profile/image');
             }
         }
     });
@@ -68,6 +71,13 @@ function EditProfilePicPage(){
             <div className="bg-zinc-800 max-w-xl w-full p-10 rounded-md">
                 <form className="w-full flex flex-col justify-center items-center" onSubmit={onSubmit}>
                     <div className="w-full flex flex-col justify-center items-center mr-4 mb-4 md:mb-0">
+                        {
+                            updateErrors.map((error, i) => (
+                                <div className='bg-red-500 p-2 text-white my-2' key={i}>
+                                    {error.msg}
+                                </div>
+                            ))
+                        }
                         <img src={previewPic} alt="Imagen de perfil" className="w-32 h-32 mt-4 rounded-full border-white border-2 border-opacity-100" />
                         <input type="file" {...register("image")} onChange={handleImageChange} className="w-full text-white md:ml-20 py-2 my-4 rounded-md"/>
                         <div className="flex">

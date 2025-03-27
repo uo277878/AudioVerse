@@ -15,7 +15,17 @@ export const uploadProfileImage = async (req, res) => {
         if (!req.files || !req.files.image) {
             return res.status(400).json({ msg: "No se ha subido ninguna imagen" });
         }
-        console.log(req.files);
+        
+        const ext = ["image/jpeg", "image/png"];
+        if (!ext.includes(req.files.image.mimetype)) {
+            return res.status(400).json({ msg: "Formato de imagen no permitido. Solo JPG y PNG" });
+        }
+
+        const size = 2 * 1024 * 1024; 
+        if (req.files.image.size > size) {
+            return res.status(400).json({ msg: "La imagen debe ser menor de 2MB" });
+        }
+
         const user = await User.findById(req.user.id);
         if (!user) {
             return res.status(404).json({ msg: "Usuario no encontrado" });

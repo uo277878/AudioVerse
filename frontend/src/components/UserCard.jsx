@@ -14,7 +14,7 @@ function UserCard({user}){
                 </div>
             </div>
             <p className="text-white">{user.email}</p>
-            <p className="text-white">Fecha de nacimiento: {user.dateBirth}</p>
+            <p className="text-white">Fecha de nacimiento: {new Date(user.dateBirth).toLocaleDateString()}</p>
             <p className="text-white">Dado de alta el: {new Date(user.createdAt).toLocaleDateString()}</p>
         </div>
     );
