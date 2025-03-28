@@ -1,12 +1,27 @@
 import { useEffect, useState } from "react";
 import { useSongs } from "../context/SongContext";
 import SongCard from "../components/SongCard";
+import Pagination from "../components/Pagination";
  
 function SearchPage(){
     const [searchInput, setSearchInput] = useState("");
     const [accessToken, setAccessToken] = useState();
-    const [albums, setAlbums] = useState([]);
+    const [filter, setFilter] = useState("tracks");
+    const [items, setItems] = useState({
+        artists: [],
+        albums: [],
+        playlists: [],
+        tracks: []
+    });
     const {getToken, search} = useSongs();
+
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const filteredItems = items[filter].filter(i => i !== null);
+    const totalItems = filteredItems?.length ||0;
+    const lastIndex = currentPage * itemsPerPage;
+    const firstIndex = lastIndex - itemsPerPage;
+    const currentItems = filteredItems.slice(firstIndex, lastIndex);
 
     useEffect(() => {
         const getTokenFromSpotify = async () => {
@@ -23,8 +38,13 @@ function SearchPage(){
     async function handleSearch(){
         try {
             const res = await search(accessToken, searchInput);
-            setAlbums(res.items);
-            console.log(albums);
+            setItems({
+                artists: res.artists?.items || [],
+                albums: res.albums?.items || [],
+                playlists: res.playlists?.items || [],
+                tracks: res.tracks?.items || []
+            });
+            console.log(items);
         } catch (error) {
             console.error("Error en la búsqueda:", error);
         }
@@ -45,13 +65,22 @@ function SearchPage(){
                         Buscar
                     </button> 
                 </div>
+                <div className="flex flex-row justify-center mt-4">
+                    <p className="mt-4">Filtrar por:</p>
+                    <button onClick={() => setFilter("artists")} className='bg-red-500 p-2 text-white my-2 mx-4'>Artistas</button>
+                    <button onClick={() => setFilter("tracks")} className='bg-red-500 p-2 text-white my-2 mx-4'>Canciones</button>
+                    <button onClick={() => setFilter("playlists")} className='bg-red-500 p-2 text-white my-2 mx-4'>Listas</button>
+                    <button onClick={() => setFilter("albums")} className='bg-red-500 p-2 text-white my-2 mx-4'>Álbumes</button>
+                </div>
                 <div className="grid grid-cols-5 gap-3">
                 {
-                    albums.map(song => (
-                        <SongCard song={song} key={song.id}/>
+                    currentItems.map(song => (
+                        <SongCard song={song} key={song.id} />
                     ))
                 }
-            </div>
+                </div>
+                <Pagination itemsPerPage={itemsPerPage} currentPage={currentPage} 
+            setCurrentPage={setCurrentPage} totalItems={totalItems}></Pagination>
             </div>
         </div>
     )

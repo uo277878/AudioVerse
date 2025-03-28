@@ -43,14 +43,9 @@ export const search = async (req, res) => {
                 "Authorization": "Bearer " + token
             }
         }
-        var artistID = await fetch("https://api.spotify.com/v1/search?q=" + input + "&type=artist", searchParams)
-        .then(response => response.json())
-        .then(data => {return data.artists.items[0].id});
-
-        var albums = await fetch("https://api.spotify.com/v1/artists/" + artistID + "/albums?limit=50", searchParams)
-        .then(response => response.json());
-        console.log(albums);
-        return res.json(albums);
+        const url = "https://api.spotify.com/v1/search?q=" + input + "&type=artist%2Calbum%2Cplaylist%2Ctrack&limit=50";
+        const result = await fetch(url, searchParams).then(response => response.json());
+        return res.json(result);
     } catch(error){
         console.error(error);
         res.status(500).json({ message: "Error en la búsqueda de artistas" });
