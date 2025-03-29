@@ -16,6 +16,7 @@ import UsersAdminPage from "./pages/UsersAdminPage"
 import ErrorPage from "./pages/ErrorPage"
 import SearchPage from "./pages/SearchPage"
 import { SongProvider } from "./context/SongContext"
+import CreatePlaylistPage from "./pages/CreatePlaylistPage"
 
 function App(){
   return (
@@ -37,6 +38,7 @@ function App(){
                 <Route path='/users/profile/password' element={<UpdatePasswordPage/>}/>
                 <Route path='/users/profile/image' element={<EditProfilePicPage/>}/>
                 <Route path='/users/:id' element={<UserPage/>}/>
+                <Route path='/playlists/new' element={<CreatePlaylistPage/>}/>
               </Route>
             </Routes>
           </BrowserRouter>

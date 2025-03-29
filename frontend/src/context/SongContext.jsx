@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getTokenRequest, searchRequest } from "../api/songs";
+import { getTokenRequest, searchRequest, createPlaylistRequest } from "../api/songs";
 
 const SongContext = createContext();
 
@@ -32,6 +32,14 @@ export const SongProvider = ({children}) => {
         }
     }
 
+    const createPlaylist = async (user, data) => {
+        try{
+            const res = await createPlaylistRequest(user, data)
+        } catch(error){
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
             if(errors.length > 0){
                 const timer = setTimeout(() => {
@@ -42,7 +50,7 @@ export const SongProvider = ({children}) => {
         }, [errors])
 
     return (
-        <SongContext.Provider value={{songs, errors, getToken, search}}>
+        <SongContext.Provider value={{songs, errors, getToken, search, createPlaylist}}>
             {children}
         </SongContext.Provider>
     ) 

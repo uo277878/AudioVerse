@@ -8,7 +8,6 @@ export const updateProfileRequest = (user, data) => {
         username: data.username,
         email: data.email
     };
-    console.log(userData);
 
     return axios.put(`${API}/users/profile`, userData, { withCredentials: true });
 };
@@ -37,7 +36,7 @@ export const updateUserRequest = async(id, user) => {
     return axios.put(`${API}/users/${id}`, userData, { withCredentials: true });
 };
 
-export const getUserRequest = (id) => {return axios.get(`${API}//users/${id}`, { withCredentials: true })};
+export const getUserRequest = (id) => {return axios.get(`${API}/users/${id}`, { withCredentials: true })};
 
 export const getUsersAdminRequest = () => {return axios.get(`${API}/users/getAllUsers`, { withCredentials: true })};
 

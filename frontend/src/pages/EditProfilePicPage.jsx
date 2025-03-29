@@ -24,10 +24,6 @@ function EditProfilePicPage(){
         }
     }, [user]);
 
-    useEffect(() => {
-        console.log("Errores actualizados:", updateErrors);
-    }, [updateErrors]);
-
     const onSubmit = handleSubmit(async (data) => {
         if (user) {
             try {

@@ -14,6 +14,9 @@ function Navbar(){
                         <Link to="/users/profile">Mi perfil</Link>
                     </li>
                     <li>
+                        <Link to="/playlists/getAll">Mi biblioteca</Link>
+                    </li>
+                    <li>
                         <Link
                             to="/login"
                             onClick={() => logout()}
