@@ -17,6 +17,8 @@ import ErrorPage from "./pages/ErrorPage"
 import SearchPage from "./pages/SearchPage"
 import { SongProvider } from "./context/SongContext"
 import CreatePlaylistPage from "./pages/CreatePlaylistPage"
+import PlaylistsPage from "./pages/PlaylistsPage"
+import FollowedPage from "./pages/FollowedPage"
 
 function App(){
   return (
@@ -34,11 +36,13 @@ function App(){
                 <Route path='/songs' element={<TimeLinePage/>}/>
                 <Route path='/search' element={<SearchPage/>}/>
                 <Route path='/users/getAllUsers' element={<UsersAdminPage/>}/>
+                <Route path='/users/followed' element={<FollowedPage/>}/>
                 <Route path='/users/profile' element={<ProfilePage/>}/>
                 <Route path='/users/profile/password' element={<UpdatePasswordPage/>}/>
                 <Route path='/users/profile/image' element={<EditProfilePicPage/>}/>
-                <Route path='/users/:id' element={<UserPage/>}/>
+                <Route path='/users/edit/:id' element={<UserPage/>}/>
                 <Route path='/playlists/new' element={<CreatePlaylistPage/>}/>
+                <Route path='/playlists/getAll' element={<PlaylistsPage/>}/>
               </Route>
             </Routes>
           </BrowserRouter>

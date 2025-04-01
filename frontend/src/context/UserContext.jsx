@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getUserRequest, updateProfileRequest, updatePasswordRequest, updateProfilePicRequest, updateUserRequest, getUsersAdminRequest, deleteUserRequest } from "../api/users";
+import { getUserRequest, updateProfileRequest, updatePasswordRequest, 
+    updateProfilePicRequest, updateUserRequest, getUsersAdminRequest, 
+    deleteUserRequest, getFollowedUsersRequest } from "../api/users";
 
 const UserContext = createContext();
 
@@ -87,6 +89,15 @@ export const UserProvider = ({children}) => {
         
     }
 
+    const getFollowedUsers = async (user) => {
+        try{
+            const res = await getFollowedUsersRequest(user);
+            return res.data;
+        } catch(error){
+            console.error(error);
+        }
+    }
+
     const deleteUser = async (id) => {
         try{
             const res = await deleteUserRequest(id);
@@ -110,7 +121,8 @@ export const UserProvider = ({children}) => {
         }, [errors])
 
     return (
-        <UserContext.Provider value={{users, getUser, updateProfile, errors, updatePassword, updateProfilePic, updateUser, getUsersAdmin, deleteUser}}>
+        <UserContext.Provider value={{users, getUser, updateProfile, errors, updatePassword, updateProfilePic, 
+        updateUser, getUsersAdmin, deleteUser, getFollowedUsers}}>
             {children}
         </UserContext.Provider>
     ) 

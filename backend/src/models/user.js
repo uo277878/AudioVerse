@@ -27,7 +27,14 @@ const UserSchema = new mongoose.Schema({
     dateBirth:{
         type: Date,
         required: true
-    }
+    },
+    followed: [
+        {
+          type: String,
+          required: true,
+          ref: "User"
+        }
+      ],
 }, {
     timestamps: true
 })

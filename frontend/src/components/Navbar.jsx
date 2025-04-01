@@ -6,15 +6,18 @@ function Navbar(){
     const { user, isAuthenticated, logout } = useAuth();
     return (
         <nav className="bg-zinc-700 my-3 flex justify-between py-5 px-10 rounded-lg">
-            <Link to="/"><img src="/Audioverse_lunas.png" alt="Logo AudioVerse" className="h-8" /></Link>
+            <Link to="/"><img src="/logo.png" alt="Logo AudioVerse" className="h-8" /></Link>
             {isAuthenticated && (
                 <ul className="flex gap-x-2">
                     <li>¡Hola, {user?.username}!</li>
                     <li>
-                        <Link to="/users/profile">Mi perfil</Link>
+                        <Link to="/users/followed">Mis seguidos</Link>
                     </li>
                     <li>
                         <Link to="/playlists/getAll">Mi biblioteca</Link>
+                    </li>
+                    <li>
+                        <Link to="/users/profile">Mi perfil</Link>
                     </li>
                     <li>
                         <Link

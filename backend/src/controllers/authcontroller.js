@@ -72,13 +72,15 @@ export const login = async (req, res) => {
 
         const token = await createToken({ id: userFound._id });
 
+        console.log(userFound);
         res.cookie('token', token)
         res.json({
             id: userFound._id,
             username: userFound.username,
             email: userFound.email,
             role: userFound.role,
-            profilePic: userFound.profilePic
+            profilePic: userFound.profilePic,
+            followed: userFound.followed
         }); 
     } catch(error){
         res.status(500).json({ message: error.message});
@@ -111,7 +113,8 @@ export const verifyToken = async (req, res) => {
             username: userFound.username,
                 email: userFound.email,
                 role: userFound.role,
-                profilePic: userFound.profilePic
+                profilePic: userFound.profilePic,
+                followed: userFound.followed
             });
     });
 };

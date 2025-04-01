@@ -33,11 +33,15 @@ export const updateUserRequest = async(id, user) => {
         role: user.rol
     };
 
-    return axios.put(`${API}/users/${id}`, userData, { withCredentials: true });
+    return axios.put(`${API}/users/edit/${id}`, userData, { withCredentials: true });
 };
 
-export const getUserRequest = (id) => {return axios.get(`${API}/users/${id}`, { withCredentials: true })};
+export const getUserRequest = (id) => {return axios.get(`${API}/users/edit/${id}`, { withCredentials: true })};
 
 export const getUsersAdminRequest = () => {return axios.get(`${API}/users/getAllUsers`, { withCredentials: true })};
+
+export const getFollowedUsersRequest = (user) => {
+    return axios.get(`${API}/users/followed/${user.id}`, { withCredentials: true })
+}
 
 export const deleteUserRequest = (id) => axios.delete(`${API}/users/${id}`, { withCredentials: true })

@@ -31,6 +31,7 @@ function UserPage(){
     const onSubmit = handleSubmit((data) => {
         if(params.id){
             updateUser(params.id, data);
+            navigate("/users/getAllUsers");
         }
     });
 

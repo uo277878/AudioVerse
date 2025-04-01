@@ -113,6 +113,20 @@ export const updatePassword = async (req, res) => {
     }
 }
 
+export const getFollowedUsers = async(req, res) => {
+    console.log(req.body);
+    try{
+        const user = await User.findById(req.params.id).populate("followed");
+        if(!user){
+            return res.status(404).json({ message: "Usuario no encontrado"});
+        } else{
+            res.json({followed: user.followed});
+        }
+    } catch(error){
+        return res.status(500).json({ message: "Usuario no encontrado"});
+    }
+}
+
 export const deleteUser = async (req, res) => {
     try{
         const user = await User.findByIdAndDelete(req.params.id);

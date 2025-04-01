@@ -8,8 +8,8 @@ function CreatePlaylistPage(){
     const {register, handleSubmit} = useForm();
     const {createPlaylist, errors: updateErrors} = useSongs();
     const { user } = useAuth();
-    const [playlistPic, setPlaylistPic] = useState("https://res.cloudinary.com/dtlhuysrz/image/upload/v1743288198/default_playlist_udkb5x.png");
-    const [previewPic, setPreviewPic] = useState("https://res.cloudinary.com/dtlhuysrz/image/upload/v1743288198/default_playlist_udkb5x.png");
+    const [playlistPic, setPlaylistPic] = useState("https://res.cloudinary.com/dtlhuysrz/image/upload/v1743524882/default_playlist_qv9jx6.png");
+    const [previewPic, setPreviewPic] = useState("https://res.cloudinary.com/dtlhuysrz/image/upload/v1743524882/default_playlist_qv9jx6.png");
     const [selectedFile, setSelectedFile] = useState(null);
     const navigate = useNavigate();
 
@@ -23,7 +23,11 @@ function CreatePlaylistPage(){
             const formData = new FormData();
             formData.append("name", data.name);
             formData.append("creator", user._id);
-            formData.append("pic", previewPic); 
+            if (selectedFile) {
+                formData.append("pic", selectedFile);
+            } else {
+                formData.append("pic", playlistPic);
+            }
             createPlaylist(user, data);
         }
     });
@@ -43,7 +47,7 @@ function CreatePlaylistPage(){
     const handleCancelar= () => {
         setPreviewPic(playlistPic);
         setSelectedFile(null);
-        navigate("/playlist/getAll");
+        navigate("/playlists/getAll");
     }
 
     return (
