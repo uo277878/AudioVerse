@@ -6,7 +6,7 @@ import SignUpPage from "./pages/SignUpPage"
 import LoginPage from "./pages/LoginPage"
 import ProtectedRoutes from "./ProtectedRoutes"
 import TimeLinePage from "./pages/TimeLinePage"
-import UserPage from "./pages/UserPage"
+import UserAdminPage from "./pages/UserAdminPage"
 import ProfilePage from "./pages/ProfilePage"
 import Navbar from "./components/Navbar"
 import { UserProvider } from "./context/UserContext"
@@ -19,6 +19,7 @@ import { SongProvider } from "./context/SongContext"
 import CreatePlaylistPage from "./pages/CreatePlaylistPage"
 import PlaylistsPage from "./pages/PlaylistsPage"
 import FollowedPage from "./pages/FollowedPage"
+import UserPage from "./pages/UserPage"
 
 function App(){
   return (
@@ -40,7 +41,8 @@ function App(){
                 <Route path='/users/profile' element={<ProfilePage/>}/>
                 <Route path='/users/profile/password' element={<UpdatePasswordPage/>}/>
                 <Route path='/users/profile/image' element={<EditProfilePicPage/>}/>
-                <Route path='/users/edit/:id' element={<UserPage/>}/>
+                <Route path='/users/edit/:id' element={<UserAdminPage/>}/>
+                <Route path='/users/:id' element={<UserPage/>}/>
                 <Route path='/playlists/new' element={<CreatePlaylistPage/>}/>
                 <Route path='/playlists/getAll' element={<PlaylistsPage/>}/>
               </Route>

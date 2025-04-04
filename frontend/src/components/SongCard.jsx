@@ -1,10 +1,10 @@
 
 function SongCard({song}){
-
+    console.log(song);
     return(
-        <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md ml-4 my-4 ">
+        <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md ml-4 mb-4 ">
             <img src={song.images != null ? song.images[0].url : song.album.images[0].url}/>
-            <p className="text-md font-bold mt-2">{song.name}</p>
+            <p className="text-sm font-bold mt-2">{song.name}</p>
         </div>
     );
 }

@@ -10,6 +10,10 @@ export const searchRequest = (token, input) => {
     return axios.post(`${API}/search`, {token, input}, {withCredentials: true});
 }
 
+export const getTrackRequest = (token, id) => {
+    return axios.get(`${API}/getTrack/${id}`, {headers: { Authorization: `Bearer ${token}` }, withCredentials: true});
+}
+
 export const createPlaylistRequest = (user, data) => {
     const playlistData = new FormData();
     playlistData.append("name", data.name);

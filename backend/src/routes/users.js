@@ -16,6 +16,7 @@ router.post('/users', tokenRequired, createUser);
 router.get('/users/followed/:id', tokenRequired, getFollowedUsers);
 router.delete('/users/:id', tokenRequired, deleteUser);
 router.get('/users/edit/:id', tokenRequired, getUser);
+router.get('/users/:id', tokenRequired, getUser);
 router.put('/users/edit/:id', tokenRequired, updateUser);
 
 

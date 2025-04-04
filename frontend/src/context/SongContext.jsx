@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getTokenRequest, searchRequest, createPlaylistRequest, getAllPlaylistsRequest } from "../api/songs";
+import { getTokenRequest, searchRequest, getTrackRequest, createPlaylistRequest, getAllPlaylistsRequest } from "../api/songs";
 
 const SongContext = createContext();
 
@@ -27,6 +27,16 @@ export const SongProvider = ({children}) => {
     const search = async (access_token, searchInput) => {
         try{
             const res = await searchRequest(access_token, searchInput);
+            return res.data;
+        } catch(error){
+            console.error(error);
+        }
+    }
+
+    const getTrack = async (token, id) => {
+        try{
+            const res = await getTrackRequest(token, id);
+            console.log(res);
             return res.data;
         } catch(error){
             console.error(error);
@@ -61,7 +71,7 @@ export const SongProvider = ({children}) => {
         }, [errors])
 
     return (
-        <SongContext.Provider value={{songs, errors, playlists, getToken, search, createPlaylist, getAllPlaylists}}>
+        <SongContext.Provider value={{songs, errors, playlists, getToken, search, getTrack, createPlaylist, getAllPlaylists}}>
             {children}
         </SongContext.Provider>
     ) 
