@@ -27,8 +27,8 @@ export const createPlaylistRequest = (user, data) => {
     return axios.post(`${API}/playlists/new`, playlistData, { withCredentials: true, headers: { "Content-Type": "multipart/form-data" }});
 };
 
-export const getPlaylistRequest = (user) => {
-    return axios.get(`${API}/playlists/${user._id}`, { withCredentials: true });
+export const getPlaylistRequest = (id) => {
+    return axios.get(`${API}/playlists/${id}`, { withCredentials: true });
 };
 
 export const getAllPlaylistsRequest = () => {

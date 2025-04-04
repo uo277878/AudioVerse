@@ -6,7 +6,7 @@ function Navbar(){
     const { user, isAuthenticated, logout } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
     return (
-        <nav className="bg-zinc-700 my-3 flex justify-between py-5 px-10 rounded-lg">
+        <nav className="bg-zinc-700 mb-3 flex justify-between py-5 px-10 rounded-b-lg">
             <Link to="/"><img src="/logo.png" alt="Logo AudioVerse" className="h-8" /></Link>
             {isAuthenticated && (
                 <>
@@ -37,7 +37,7 @@ function Navbar(){
                             <Link
                                 to="/login"
                                 onClick={() => logout()}
-                                className="block bg-red-400 px-4 py-2 rounded-md text-white text-center md:inline"
+                                className="block bg-red-500 px-4 py-2 rounded-md text-white text-center md:inline"
                             >
                                 Cerrar sesión
                             </Link>

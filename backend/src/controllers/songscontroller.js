@@ -45,3 +45,16 @@ export const getAll = async (req, res) => {
         return res.status(500).json({ message: "Se ha producido un error" });
     }
 };
+
+export const getPlaylist = async (req, res) => {
+    try{
+        const playlist = await Playlist.findById(req.params.id);
+        if(!playlist){
+            return res.status(404).json({ message: "Playlist no encontrada"});
+        } else{
+            res.json(playlist);
+        }
+    } catch(error){
+        return res.status(500).json({ message: "Se ha producido un error" });
+    }
+};

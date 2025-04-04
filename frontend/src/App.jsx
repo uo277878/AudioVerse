@@ -20,6 +20,7 @@ import CreatePlaylistPage from "./pages/CreatePlaylistPage"
 import PlaylistsPage from "./pages/PlaylistsPage"
 import FollowedPage from "./pages/FollowedPage"
 import UserPage from "./pages/UserPage"
+import PlaylistPage from "./pages/PlaylistPage"
 
 function App(){
   return (
@@ -45,6 +46,7 @@ function App(){
                 <Route path='/users/:id' element={<UserPage/>}/>
                 <Route path='/playlists/new' element={<CreatePlaylistPage/>}/>
                 <Route path='/playlists/getAll' element={<PlaylistsPage/>}/>
+                <Route path='/playlists/:id' element={<PlaylistPage/>}/>
               </Route>
             </Routes>
           </BrowserRouter>
