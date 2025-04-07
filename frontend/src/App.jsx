@@ -21,6 +21,7 @@ import PlaylistsPage from "./pages/PlaylistsPage"
 import FollowedPage from "./pages/FollowedPage"
 import UserPage from "./pages/UserPage"
 import PlaylistPage from "./pages/PlaylistPage"
+import SearchUsersPage from "./pages/SearchUsersPage"
 
 function App(){
   return (
@@ -43,6 +44,7 @@ function App(){
                 <Route path='/users/profile/password' element={<UpdatePasswordPage/>}/>
                 <Route path='/users/profile/image' element={<EditProfilePicPage/>}/>
                 <Route path='/users/edit/:id' element={<UserAdminPage/>}/>
+                <Route path='/users/search' element={<SearchUsersPage/>}/>
                 <Route path='/users/:id' element={<UserPage/>}/>
                 <Route path='/playlists/new' element={<CreatePlaylistPage/>}/>
                 <Route path='/playlists/getAll' element={<PlaylistsPage/>}/>

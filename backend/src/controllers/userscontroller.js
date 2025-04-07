@@ -163,7 +163,6 @@ export const profile = async (req, res) => {
 
 export const passwordPage = async (req, res) => {
     try {
-        console.log("password page");
         const user = await User.findById(req.user.id);
 
         if (!user) {
@@ -182,3 +181,25 @@ export const passwordPage = async (req, res) => {
         return res.status(500).json({ message: "Error al obtener el perfil" });
     }
 };
+
+export const searchUser = async (req, res) => {
+    try{
+        const input = req.body.input;
+
+        if (!input) {
+            return res.status(400).json({ message: "Falta el texto de búsqueda" });
+        }
+
+        const users = await User.find({
+            username: { $regex: new RegExp(input, 'i') }
+        });
+
+        if (users.length == 0) {
+            return res.status(404).json({ message: "Usuarios no encontrados" });
+        }
+
+        return res.json({users});
+    } catch(error){
+        return res.status(500).json({ message: "Error al buscar el usuario" });
+    }
+}

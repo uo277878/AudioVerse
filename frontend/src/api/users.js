@@ -41,7 +41,11 @@ export const getUserRequest = (id) => {return axios.get(`${API}/users/edit/${id}
 export const getUsersAdminRequest = () => {return axios.get(`${API}/users/getAllUsers`, { withCredentials: true })};
 
 export const getFollowedUsersRequest = (user) => {
-    return axios.get(`${API}/users/followed/${user.id}`, { withCredentials: true })
+    return axios.get(`${API}/users/followed/${user.id}`, { withCredentials: true });
 }
 
-export const deleteUserRequest = (id) => axios.delete(`${API}/users/${id}`, { withCredentials: true })
+export const deleteUserRequest = (id) => axios.delete(`${API}/users/${id}`, { withCredentials: true });
+
+export const searchUserRequest = async (input) => {
+    return await axios.post(`${API}/users/search`, {input}, {withCredentials: true});
+}

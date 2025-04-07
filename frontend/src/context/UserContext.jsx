@@ -1,7 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { getUserRequest, updateProfileRequest, updatePasswordRequest, 
     updateProfilePicRequest, updateUserRequest, getUsersAdminRequest, 
-    deleteUserRequest, getFollowedUsersRequest } from "../api/users";
+    deleteUserRequest, getFollowedUsersRequest, 
+    searchUserRequest} from "../api/users";
 
 const UserContext = createContext();
 
@@ -108,7 +109,15 @@ export const UserProvider = ({children}) => {
         } catch(error){
             console.error(error);
         }
-        
+    }
+
+    const searchUsers = async (input) => {
+        try{
+            const res = await searchUserRequest(input);
+            return res.data;
+        } catch(error){
+            console.error(error);
+        }
     }
 
     useEffect(() => {
@@ -122,7 +131,7 @@ export const UserProvider = ({children}) => {
 
     return (
         <UserContext.Provider value={{users, getUser, updateProfile, errors, updatePassword, updateProfilePic, 
-        updateUser, getUsersAdmin, deleteUser, getFollowedUsers}}>
+        updateUser, getUsersAdmin, deleteUser, getFollowedUsers, searchUsers}}>
             {children}
         </UserContext.Provider>
     ) 
