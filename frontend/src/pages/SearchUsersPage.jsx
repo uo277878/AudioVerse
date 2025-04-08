@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
-import UserCard from "../components/UserCard";
 import { useUsers } from "../context/UserContext";
+import UserSearchCard from "../components/UserSearchCard";
  
 function SearchUsersPage(){
     const {searchUsers} = useUsers();
@@ -18,7 +18,11 @@ function SearchUsersPage(){
     async function handleSearch(){
         try {
             const res = await searchUsers(searchInput);
-            setUsers(res.users);
+            if(Array.isArray(res.users)){
+                setUsers(res.users);
+            } else{
+                setUsers([]);
+            }
         } catch (error) {
             console.error(error);
         }
@@ -39,15 +43,16 @@ function SearchUsersPage(){
                         Buscar
                     </button> 
                 </div>
-                <div className="grid grid-cols-5 gap-3">
+                {users.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
+                <div className="grid grid-cols-5 gap-3 mt-4">
                 {
                     currentUsers.map(user => (
-                        <UserCard user={user} key={user.id} />
+                        <UserSearchCard userSearch={user} key={user._id} />
                     ))
                 }
                 </div>
                 <Pagination itemsPerPage={usersPerPage} currentPage={currentPage} 
-            setCurrentPage={setCurrentPage} totalItems={totalUsers}></Pagination>
+                setCurrentPage={setCurrentPage} totalItems={totalUsers}></Pagination>
             </div>
         </div>
     )

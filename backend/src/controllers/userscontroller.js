@@ -195,11 +195,47 @@ export const searchUser = async (req, res) => {
         });
 
         if (users.length == 0) {
-            return res.status(404).json({ message: "Usuarios no encontrados" });
+            return res.json({});
         }
 
         return res.json({users});
     } catch(error){
         return res.status(500).json({ message: "Error al buscar el usuario" });
+    }
+}
+
+export const followUser = async (req, res) => {
+    try{
+        const userToFollow = await User.findById(req.params.id);
+        if (!userToFollow) {
+            return res.status(404).json({ message: "Usuario a seguir no encontrado" });
+        } else{
+            const authUser = await User.findById(req.body.user.id);
+            if (!authUser.followed.includes(userToFollow._id)) {
+                authUser.followed.push(userToFollow._id);
+                await authUser.save();
+            }
+            return res.status(200).json({authUser});
+        }
+    } catch(error){
+        return res.status(500).json({message: "No se ha podido seguir a este usuario"});
+    }
+}
+
+export const unfollowUser = async (req, res) => {
+    try{
+        const userToUnfollow = await User.findById(req.params.id);
+        if (!userToUnfollow) {
+            return res.status(404).json({ message: "Usuario a dejar de seguir no encontrado" });
+        } else{
+            const authUser = await User.findById(req.body.user.id);
+            if (authUser.followed.includes(userToUnfollow._id)) {
+                authUser.followed.pull(userToUnfollow._id);
+                await authUser.save();
+            }
+            return res.status(200).json({authUser});
+        }
+    } catch(error){
+        return res.status(500).json({message: "No se ha podido dejar de seguir a este usuario"});
     }
 }

@@ -49,3 +49,11 @@ export const deleteUserRequest = (id) => axios.delete(`${API}/users/${id}`, { wi
 export const searchUserRequest = async (input) => {
     return await axios.post(`${API}/users/search`, {input}, {withCredentials: true});
 }
+
+export const followRequest = async (user, id) => {
+    return axios.post(`${API}/users/follow/${id}`, {user}, {withCredentials: true});
+}
+
+export const unfollowRequest = async (user, id) => {
+    return axios.post(`${API}/users/unfollow/${id}`, {user}, {withCredentials: true});
+}
