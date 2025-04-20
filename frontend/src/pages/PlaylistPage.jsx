@@ -3,10 +3,12 @@ import { useSongs } from "../context/SongContext";
 import { useParams } from "react-router-dom";
 import SongCard from "../components/SongCard";
 import { useUsers } from "../context/UserContext";
+import { useAuth } from "../context/AuthContext";
 
 function PlaylistPage(){
     const {getTrack, getToken, getPlaylist } = useSongs();
     const {getUser} = useUsers();
+    const {user} = useAuth();
     const params = useParams();
     const [playlist, setPlaylist] = useState();
     const [accessToken, setAccessToken] = useState();
@@ -79,7 +81,7 @@ function PlaylistPage(){
                             <div className="grid md:grid-cols-5 sm:grid-cols-1 gap-3 p-4 mr-6">
                             {
                                 songs.map(song => (
-                                    <SongCard song={song} key={song._id}/>
+                                    <SongCard song={song} key={song.id} likedSongs={user.songsLiked}/>
                                 ))
                             }
                             </div>

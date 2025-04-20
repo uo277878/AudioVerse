@@ -114,7 +114,8 @@ export const verifyToken = async (req, res) => {
                 email: userFound.email,
                 role: userFound.role,
                 profilePic: userFound.profilePic,
-                followed: userFound.followed
+                followed: userFound.followed,
+                songsLiked: userFound.songsLiked
             });
     });
 };

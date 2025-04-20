@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useSongs } from "../context/SongContext";
 import SongCard from "../components/SongCard";
 import Pagination from "../components/Pagination";
+import { useAuth } from "../context/AuthContext";
  
 function SearchPage(){
+    const {user} = useAuth();
     const [searchInput, setSearchInput] = useState("");
     const [accessToken, setAccessToken] = useState();
     const [filter, setFilter] = useState("tracks");
@@ -65,6 +67,7 @@ function SearchPage(){
                         Buscar
                     </button> 
                 </div>
+                {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
                 <div className="flex flex-row justify-center mt-4">
                     <p className="mt-4">Filtrar por:</p>
                     <button onClick={() => setFilter("artists")} className='bg-red-500 p-2 text-white my-2 mx-4'>Artistas</button>
@@ -75,7 +78,7 @@ function SearchPage(){
                 <div className="grid grid-cols-5 gap-3">
                 {
                     currentItems.map(song => (
-                        <SongCard song={song} key={song.id} />
+                        <SongCard song={song} key={song.id} likedSongs={user.songsLiked}/>
                     ))
                 }
                 </div>

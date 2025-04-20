@@ -239,3 +239,31 @@ export const unfollowUser = async (req, res) => {
         return res.status(500).json({message: "No se ha podido dejar de seguir a este usuario"});
     }
 }
+
+export const likeSong = async (req, res) => {
+    try{
+        const user = await User.findById(req.body.user.id);
+        const idSong = req.body.id;
+        if (!user.songsLiked.includes(idSong)) {
+            user.songsLiked.push(idSong);
+            await user.save();
+        }
+        return res.status(200).json({user});
+    } catch(error){
+        return res.status(500).json({ message: "Se ha producido un error al darle me gusta a la canción" });
+    }
+}
+
+export const dislikeSong = async (req, res) => {
+    try{
+        const user = await User.findById(req.body.user.id);
+        const idSong = req.body.id;
+        if (user.songsLiked.includes(idSong)) {
+            user.songsLiked.pull(idSong);
+            await user.save();
+        }
+        return res.status(200).json({user});
+    } catch(error){
+        return res.status(500).json({ message: "Se ha producido un error al eliminar el me gusta de la canción" });
+    }
+}

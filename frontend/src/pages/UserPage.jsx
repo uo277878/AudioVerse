@@ -66,7 +66,7 @@ function UserPage(){
                         <div className="grid grid-cols-4">
                         {
                             songsLiked.map((song,i) => (
-                                <SongCard song={song} key={i} />
+                                <SongCard song={song} key={i} likedSongs={user.songsLiked}/>
                             ))
                         }
                         </div>

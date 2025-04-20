@@ -57,3 +57,11 @@ export const followRequest = async (user, id) => {
 export const unfollowRequest = async (user, id) => {
     return axios.post(`${API}/users/unfollow/${id}`, {user}, {withCredentials: true});
 }
+
+export const likeSongRequest = (user, id) => {
+    return axios.post(`${API}/users/like`, {user, id}, { withCredentials: true })
+}
+
+export const dislikeSongRequest = (user, id) => {
+    return axios.post(`${API}/users/dislike`, {user, id}, { withCredentials: true })
+}

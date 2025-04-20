@@ -34,7 +34,13 @@ const UserSchema = new mongoose.Schema({
           required: true,
           ref: "User"
         }
-      ],
+    ],
+    songsLiked: [
+        {
+          type: String,
+          required: true
+        }
+    ],
 }, {
     timestamps: true
 })

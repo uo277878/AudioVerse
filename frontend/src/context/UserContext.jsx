@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { getUserRequest, updateProfileRequest, updatePasswordRequest, 
     updateProfilePicRequest, updateUserRequest, getUsersAdminRequest, 
     deleteUserRequest, getFollowedUsersRequest, 
-    searchUserRequest, followRequest, unfollowRequest} from "../api/users";
+    searchUserRequest, followRequest, unfollowRequest, likeSongRequest, dislikeSongRequest} from "../api/users";
 
 const UserContext = createContext();
 
@@ -139,6 +139,24 @@ export const UserProvider = ({children}) => {
         }
     }
 
+    const likeSong = async (user, id) => {
+        try{
+            const res = await likeSongRequest(user, id);
+            return res.data;
+        } catch(error){
+            console.error(error);
+        }
+    }
+
+    const dislikeSong = async (user, id) => {
+        try{
+            const res = await dislikeSongRequest(user, id);
+            return res.data;
+        } catch(error){
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
             if(errors.length > 0){
                 const timer = setTimeout(() => {
@@ -150,7 +168,7 @@ export const UserProvider = ({children}) => {
 
     return (
         <UserContext.Provider value={{users, getUser, updateProfile, errors, updatePassword, updateProfilePic, 
-        updateUser, getUsersAdmin, deleteUser, getFollowedUsers, searchUsers, follow, unfollow}}>
+        updateUser, getUsersAdmin, deleteUser, getFollowedUsers, searchUsers, follow, unfollow, likeSong, dislikeSong}}>
             {children}
         </UserContext.Provider>
     ) 

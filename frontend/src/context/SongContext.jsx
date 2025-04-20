@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getTokenRequest, searchRequest, getTrackRequest, createPlaylistRequest, getAllPlaylistsRequest, getPlaylistRequest } from "../api/songs";
+import { getTokenRequest, searchRequest, getTrackRequest, createPlaylistRequest, 
+    getAllPlaylistsRequest, getPlaylistRequest } from "../api/songs";
 
 const SongContext = createContext();
 
@@ -80,7 +81,8 @@ export const SongProvider = ({children}) => {
         }, [errors])
 
     return (
-        <SongContext.Provider value={{songs, errors, playlists, getToken, search, getTrack, createPlaylist, getAllPlaylists, getPlaylist}}>
+        <SongContext.Provider value={{songs, errors, playlists, getToken, search, getTrack, 
+        createPlaylist, getAllPlaylists, getPlaylist}}>
             {children}
         </SongContext.Provider>
     ) 

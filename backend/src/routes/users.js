@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import { tokenRequired } from '../middlewares/validateToken.js';
 import {getUsers, getUser, createUser, deleteUser, updateProfile, profile, updatePassword, updateUser, 
-    passwordPage, getFollowedUsers, searchUser, followUser, unfollowUser} from '../controllers/userscontroller.js';
+    passwordPage, getFollowedUsers, searchUser, followUser, unfollowUser, likeSong, dislikeSong} from '../controllers/userscontroller.js';
 import {updateProfileValidator, updatePasswordValidator} from '../middlewares/authValidator.js';
 import { uploadProfileImage } from '../controllers/upload.js';
 
@@ -16,11 +16,13 @@ router.put('/users/profile/image', tokenRequired, uploadProfileImage);
 router.post('/users', tokenRequired, createUser);
 router.post('/users/search', tokenRequired, searchUser);
 router.get('/users/followed/:id', tokenRequired, getFollowedUsers);
-router.delete('/users/:id', tokenRequired, deleteUser);
 router.get('/users/edit/:id', tokenRequired, getUser);
-router.get('/users/:id', tokenRequired, getUser);
 router.put('/users/edit/:id', tokenRequired, updateUser);
 router.post('/users/follow/:id', tokenRequired, followUser);
 router.post('/users/unfollow/:id', tokenRequired, unfollowUser);
+router.post('/users/like', tokenRequired, likeSong);
+router.post('/users/dislike', tokenRequired, dislikeSong);
+router.get('/users/:id', tokenRequired, getUser);
+router.delete('/users/:id', tokenRequired, deleteUser);
 
 export default router;
