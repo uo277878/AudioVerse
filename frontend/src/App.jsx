@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { AuthProvider } from "./context/AuthContext"
 
-import HomePage from "./pages/HomePage"
+import WelcomePage from "./pages/WelcomePage"
 import SignUpPage from "./pages/SignUpPage"
 import LoginPage from "./pages/LoginPage"
 import ProtectedRoutes from "./ProtectedRoutes"
@@ -22,6 +22,7 @@ import FollowedPage from "./pages/FollowedPage"
 import UserPage from "./pages/UserPage"
 import PlaylistPage from "./pages/PlaylistPage"
 import SearchUsersPage from "./pages/SearchUsersPage"
+import HomePage from "./pages/HomePage"
 
 function App(){
   return (
@@ -31,11 +32,12 @@ function App(){
           <BrowserRouter>
           <Navbar/>
             <Routes>
-              <Route path='/' element={<HomePage/>}/>
+              <Route path='/' element={<WelcomePage/>}/>
               <Route path='/login' element={<LoginPage/>}/>
               <Route path='/signup' element={<SignUpPage/>}/>
               <Route path='/error' element={<ErrorPage/>}/>
               <Route element={<ProtectedRoutes/>}>
+                <Route path='/home' element={<HomePage/>}/>
                 <Route path='/songs' element={<TimeLinePage/>}/>
                 <Route path='/search' element={<SearchPage/>}/>
                 <Route path='/users/getAllUsers' element={<UsersAdminPage/>}/>
