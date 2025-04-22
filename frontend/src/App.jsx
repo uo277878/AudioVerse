@@ -23,37 +23,40 @@ import UserPage from "./pages/UserPage"
 import PlaylistPage from "./pages/PlaylistPage"
 import SearchUsersPage from "./pages/SearchUsersPage"
 import HomePage from "./pages/HomePage"
+import { PostProvider } from "./context/PostContext"
 
 function App(){
   return (
     <AuthProvider>
       <UserProvider>
         <SongProvider>
-          <BrowserRouter>
-          <Navbar/>
-            <Routes>
-              <Route path='/' element={<WelcomePage/>}/>
-              <Route path='/login' element={<LoginPage/>}/>
-              <Route path='/signup' element={<SignUpPage/>}/>
-              <Route path='/error' element={<ErrorPage/>}/>
-              <Route element={<ProtectedRoutes/>}>
-                <Route path='/home' element={<HomePage/>}/>
-                <Route path='/songs' element={<TimeLinePage/>}/>
-                <Route path='/search' element={<SearchPage/>}/>
-                <Route path='/users/getAllUsers' element={<UsersAdminPage/>}/>
-                <Route path='/users/followed' element={<FollowedPage/>}/>
-                <Route path='/users/profile' element={<ProfilePage/>}/>
-                <Route path='/users/profile/password' element={<UpdatePasswordPage/>}/>
-                <Route path='/users/profile/image' element={<EditProfilePicPage/>}/>
-                <Route path='/users/edit/:id' element={<UserAdminPage/>}/>
-                <Route path='/users/search' element={<SearchUsersPage/>}/>
-                <Route path='/users/:id' element={<UserPage/>}/>
-                <Route path='/playlists/new' element={<CreatePlaylistPage/>}/>
-                <Route path='/playlists/getAll' element={<PlaylistsPage/>}/>
-                <Route path='/playlists/:id' element={<PlaylistPage/>}/>
-              </Route>
-            </Routes>
-          </BrowserRouter>
+          <PostProvider>
+            <BrowserRouter>
+            <Navbar/>
+              <Routes>
+                <Route path='/' element={<WelcomePage/>}/>
+                <Route path='/login' element={<LoginPage/>}/>
+                <Route path='/signup' element={<SignUpPage/>}/>
+                <Route path='/error' element={<ErrorPage/>}/>
+                <Route element={<ProtectedRoutes/>}>
+                  <Route path='/home' element={<HomePage/>}/>
+                  <Route path='/songs' element={<TimeLinePage/>}/>
+                  <Route path='/search' element={<SearchPage/>}/>
+                  <Route path='/users/getAllUsers' element={<UsersAdminPage/>}/>
+                  <Route path='/users/followed' element={<FollowedPage/>}/>
+                  <Route path='/users/profile' element={<ProfilePage/>}/>
+                  <Route path='/users/profile/password' element={<UpdatePasswordPage/>}/>
+                  <Route path='/users/profile/image' element={<EditProfilePicPage/>}/>
+                  <Route path='/users/edit/:id' element={<UserAdminPage/>}/>
+                  <Route path='/users/search' element={<SearchUsersPage/>}/>
+                  <Route path='/users/:id' element={<UserPage/>}/>
+                  <Route path='/playlists/new' element={<CreatePlaylistPage/>}/>
+                  <Route path='/playlists/getAll' element={<PlaylistsPage/>}/>
+                  <Route path='/playlists/:id' element={<PlaylistPage/>}/>
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </PostProvider>
         </SongProvider>
       </UserProvider>
     </AuthProvider>
