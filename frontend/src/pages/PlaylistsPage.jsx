@@ -21,7 +21,6 @@ function PlaylistsPage(){
             async function getPlaylists(){
                 try{
                     const pl = await getAllPlaylists(user);
-                    console.log(pl);
                 } catch(error){
                     console.error(error);
                 }

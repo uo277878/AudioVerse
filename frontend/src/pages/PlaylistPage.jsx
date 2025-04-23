@@ -57,7 +57,6 @@ function PlaylistPage(){
         const loadCreator = async () => {
             const userPlaylist = await getUser(playlist.creator);
             setCreator(userPlaylist);
-            console.log(userPlaylist);
         }
         loadCreator();
     }, [playlist]);

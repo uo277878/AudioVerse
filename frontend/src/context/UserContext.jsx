@@ -33,21 +33,18 @@ export const UserProvider = ({children}) => {
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);
             }
-            setErrors([error.response.data])
-            console.log(errors);
+            setErrors([error.response.data]);
         }
     }
 
     const updatePassword = async (userData) => {
         try{
             const res = await updatePasswordRequest(userData);
-            console.log(res);
         } catch(error){
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);
             }
             setErrors([error.response.data])
-            console.log(errors);
         }
     }
 
@@ -64,7 +61,7 @@ export const UserProvider = ({children}) => {
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);
             }
-            setErrors([error.response.data])
+            setErrors([error.response.data]);
         }
     }
 
@@ -75,8 +72,7 @@ export const UserProvider = ({children}) => {
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);
             }
-            setErrors([error.response.data])
-            console.log(errors);
+            setErrors([error.response.data]);
         }
     }
 
@@ -102,7 +98,6 @@ export const UserProvider = ({children}) => {
     const deleteUser = async (id) => {
         try{
             const res = await deleteUserRequest(id);
-            console.log(res);
             if(res.status == 204){
                 setUsers(users.filter(user => user._id != id));
             }
@@ -123,7 +118,6 @@ export const UserProvider = ({children}) => {
     const follow = async (user, id) => {
         try{
             const res = await followRequest(user, id);
-            console.log(res);
             return res.data;
         } catch(error){
             console.error(error);

@@ -40,8 +40,6 @@ export const uploadProfileImage = async (req, res) => {
             folder: "profile_pictures",
         });
 
-        console.log(result.secure_url);
-
         user.profilePic = result.secure_url;
         await user.save();
 

@@ -8,7 +8,6 @@ function UpdatePasswordPage(){
     const { user } = useAuth();
 
     const onSubmit = handleSubmit((data) => {
-        console.log(data);
         if(user){
             updatePassword(data);
         }

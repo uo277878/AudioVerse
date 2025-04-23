@@ -17,16 +17,16 @@ export const PostProvider = ({children}) => {
     const createPost = async (userId, text) => {
         try{
             const res = await createPostRequest(userId, text);
-            console.log(res);
             return res.data;
         } catch(error){
             console.error(error);
         }
     }
 
-    const getPosts = async () => {
+    const getPosts = async (user) => {
         try{
-            const res = await getPostsRequest();
+            const res = await getPostsRequest(user);
+            console.log(res);
             setPosts(res.data);
         } catch(error){
             console.error(error);

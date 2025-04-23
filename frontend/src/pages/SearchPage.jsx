@@ -46,7 +46,6 @@ function SearchPage(){
                 playlists: res.playlists?.items || [],
                 tracks: res.tracks?.items || []
             });
-            console.log(items);
         } catch (error) {
             console.error("Error en la búsqueda:", error);
         }

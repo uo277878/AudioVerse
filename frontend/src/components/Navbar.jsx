@@ -7,7 +7,15 @@ function Navbar(){
     const [menuOpen, setMenuOpen] = useState(false);
     return (
         <nav className="bg-zinc-700 mb-3 flex justify-between py-5 px-10 rounded-b-lg">
-            <Link to="/"><img src="/logo.png" alt="Logo AudioVerse" className="h-8" /></Link>
+            {isAuthenticated ? (
+                <>
+                    <Link to="/home"><img src="/logo.png" alt="Logo AudioVerse" className="h-8" /></Link>
+                </>
+            ) : (
+                <>
+                    <Link to="/"><img src="/logo.png" alt="Logo AudioVerse" className="h-8" /></Link>
+                </>
+            )}
             {isAuthenticated && (
                 <>
                     <button 
@@ -26,6 +34,9 @@ function Navbar(){
                         <li>¡Hola, {user?.username}!</li>
                         <li>
                             <Link to="/users/followed" className="block text-white py-2 md:py-0">Mis seguidos</Link>
+                        </li>
+                        <li>
+                            <Link to="/search" className="block text-white py-2 md:py-0">Buscar canciones</Link>
                         </li>
                         <li>
                             <Link to="/users/search" className="block text-white py-2 md:py-0">Buscar personas</Link>

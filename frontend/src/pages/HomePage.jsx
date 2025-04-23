@@ -14,8 +14,12 @@ function HomePage(){
     });
 
     useEffect(() =>{
-            getPosts();
-        }, []);
+        getPosts(user);
+    }, []);
+
+    useEffect(() => {
+        console.log(posts);
+    }, [posts]);
 
     return (
         <div>
@@ -33,10 +37,10 @@ function HomePage(){
                     </div>
                 </div>
             </form>
-            <div className="flex items-center justify-center">
+            <div className="flex flex-col items-center justify-center">
             {
                 posts.map(post => (
-                    <PostCard user={user} post={post} key={post._id}/>
+                    <PostCard post={post} key={post._id}/>
                 ))
             }
             </div>

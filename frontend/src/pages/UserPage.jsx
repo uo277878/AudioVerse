@@ -42,7 +42,6 @@ function UserPage(){
             }
         }
         loadUser();
-        console.log(songsLiked);
     }, [accessToken]);
 
     return (

@@ -9,7 +9,6 @@ export const signupRequest = user => {
         password: user.password,
         dateBirth: user.dateBirth
     };
-    console.log(userData);
 
     return axios.post(`${API}/signup`, userData, { withCredentials: true });
 };
