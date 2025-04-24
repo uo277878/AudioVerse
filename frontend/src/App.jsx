@@ -51,7 +51,7 @@ function App(){
                   <Route path='/users/search' element={<SearchUsersPage/>}/>
                   <Route path='/users/:id' element={<UserPage/>}/>
                   <Route path='/playlists/new' element={<CreatePlaylistPage/>}/>
-                  <Route path='/playlists/getAll' element={<PlaylistsPage/>}/>
+                  <Route path='/playlists/getAllByUser/:id' element={<PlaylistsPage/>}/>
                   <Route path='/playlists/:id' element={<PlaylistPage/>}/>
                 </Route>
               </Routes>

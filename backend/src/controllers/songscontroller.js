@@ -1,4 +1,5 @@
 import Playlist from "../models/playlist.js";
+import User from "../models/user.js";
 import {validationResult} from "express-validator";
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
@@ -13,17 +14,14 @@ cloudinary.config({
 
 export const createPlaylist = async (req, res) => {
     try {
-        let image = req.body.pic;
-        if (!req.files || !req.files.pic) {
-            return res.status(400).json({ msg: "No se ha subido ninguna imagen" });
-        } else{
-            const result = await cloudinary.uploader.upload(image.tempFilePath, {
-                folder: "playlist_pictures",
-            });
-            image = result.secure_url;
-        }
+        let image = req.files?.pic ? req.files.pic.tempFilePath : "https://res.cloudinary.com/dtlhuysrz/image/upload/v1743524882/default_playlist_qv9jx6.png";
+        const result = await cloudinary.uploader.upload(image, {
+            folder: "playlist_pictures",
+        });
+        image = result.secure_url;
 
         const { name, creator } = req.body;
+        console.log(creator);
         const playlist = new Playlist({
             name,
             creator,
@@ -37,9 +35,14 @@ export const createPlaylist = async (req, res) => {
     }
 };
 
-export const getAll = async (req, res) => {
+export const getAllByUser = async (req, res) => {
     try{
-        const playlists = await Playlist.find();
+        const user = await User.findById(req.params.id);
+        console.log(user);
+        if(!user){
+            return res.status(404).json({ message: "No se ha encontrado ningún usuario con ese id" });
+        }
+        const playlists = await Playlist.find({creator: { $in: [user._id] }});
         res.json(playlists);
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });

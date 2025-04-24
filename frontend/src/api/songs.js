@@ -17,12 +17,10 @@ export const getTrackRequest = (token, id) => {
 export const createPlaylistRequest = (user, data) => {
     const playlistData = new FormData();
     playlistData.append("name", data.name);
-    playlistData.append("creator", user._id);
+    playlistData.append("creator", user.id);
 
     if (data.pic && data.pic[0]) {
         playlistData.append("pic", data.pic[0]); 
-    } else{
-        playlistData.append("pic", "https://res.cloudinary.com/dtlhuysrz/image/upload/v1743524882/default_playlist_qv9jx6.png");
     }
     return axios.post(`${API}/playlists/new`, playlistData, { withCredentials: true, headers: { "Content-Type": "multipart/form-data" }});
 };
@@ -31,6 +29,6 @@ export const getPlaylistRequest = (id) => {
     return axios.get(`${API}/playlists/${id}`, { withCredentials: true });
 };
 
-export const getAllPlaylistsRequest = () => {
-    return axios.get(`${API}/playlists/getAll`, { withCredentials: true });
+export const getAllByUserRequest = (id) => {
+    return axios.get(`${API}/playlists/getAllByUser/${id}`, { withCredentials: true });
 }

@@ -42,7 +42,9 @@ function Navbar(){
                             <Link to="/users/search" className="block text-white py-2 md:py-0">Buscar personas</Link>
                         </li>
                         <li>
-                            <Link to="/playlists/getAll" className="block text-white py-2 md:py-0">Mi biblioteca</Link>
+                            <Link to={`/playlists/getAllByUser/${user.id}`} className="block text-white py-2 md:py-0">
+                                Mi biblioteca
+                            </Link>
                         </li>
                         <li>
                             <Link to="/users/profile" className="block text-white py-2 md:py-0">Mi perfil</Link>

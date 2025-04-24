@@ -6,7 +6,7 @@ import PlaylistCard from "../components/PlaylistCard";
 import { Link } from "react-router-dom";
 
 function PlaylistsPage(){
-    const { getAllPlaylists, playlists } = useSongs();
+    const { getAllByUser, playlists } = useSongs();
     const {user} = useAuth();
 
     const [playlistsPerPage, setPlaylistsPerPage] = useState(10);
@@ -20,7 +20,7 @@ function PlaylistsPage(){
         if(user){
             async function getPlaylists(){
                 try{
-                    const pl = await getAllPlaylists(user);
+                    const pl = await getAllByUser(user);
                 } catch(error){
                     console.error(error);
                 }
