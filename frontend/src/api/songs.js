@@ -25,6 +25,12 @@ export const createPlaylistRequest = (user, data) => {
     return axios.post(`${API}/playlists/new`, playlistData, { withCredentials: true, headers: { "Content-Type": "multipart/form-data" }});
 };
 
+export const addSongToPlaylistRequest = (playlistId, songId) => {
+    console.log(playlistId);
+    console.log(songId);
+    return axios.post(`${API}/playlists/add`, {playlistId, songId}, { withCredentials: true });
+}
+
 export const getPlaylistRequest = (id) => {
     return axios.get(`${API}/playlists/${id}`, { withCredentials: true });
 };

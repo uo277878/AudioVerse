@@ -11,7 +11,8 @@ function SongCard({song, likedSongs}){
     const {user} = useAuth();
     const {likeSong, dislikeSong} = useUsers();
     const [showModal, setShowModal] = useState(false);
-    const { getAllByUser, playlists } = useSongs();
+    const { getAllByUser, playlists, addSongToPlaylist } = useSongs();
+    const [selectedPlaylist, setSelectedPlaylist] = useState('');
 
     async function handleClick(id){
         try{
@@ -22,6 +23,20 @@ function SongCard({song, likedSongs}){
                 const res = await dislikeSong(user, id);
             }
         } catch(error){
+            console.error(error);
+        }
+    }
+
+    async function handleSaveToPlaylist() {
+        if (!selectedPlaylist) return;
+        try {
+            const res = await addSongToPlaylist(selectedPlaylist, song.id);
+            if(res.status == 200){
+                setShowModal(false);
+            } else{
+
+            }
+        } catch (error) {
             console.error(error);
         }
     }
@@ -55,14 +70,18 @@ function SongCard({song, likedSongs}){
             </div>
 
             <PlaylistModal isVisible={showModal} onClose={() => setShowModal(false)}>
-                <h1>Escoge una playlist:</h1>
-                {
-                    playlists.map((playlist) => (
-                        <div className='mt-2'>
+                <select className="w-full p-2 rounded bg-zinc-700 text-white" value={selectedPlaylist} 
+                onChange={(e) => setSelectedPlaylist(e.target.value)}>
+                    <option value="">-- Selecciona una playlist --</option>
+                    {playlists.map((playlist) => (
+                        <option key={playlist._id} value={playlist._id}>
                             {playlist.name}
-                        </div>
-                    ))
-                }
+                        </option>
+                    ))}
+                </select>
+                <button onClick={handleSaveToPlaylist} className="mt-4 bg-red-500 text-white py-2 px-4 rounded">
+                    Guardar
+                </button>
             </PlaylistModal>
         </div>
     );
