@@ -14,9 +14,9 @@ export const PostProvider = ({children}) => {
     const [errors, setErrors] = useState([]);
     const [posts, setPosts] = useState([]);
     
-    const createPost = async (userId, text) => {
+    const createPost = async (userId, text, songId) => {
         try{
-            const res = await createPostRequest(userId, text);
+            const res = await createPostRequest(userId, text, songId);
             return res.data;
         } catch(error){
             console.error(error);

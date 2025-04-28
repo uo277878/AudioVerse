@@ -10,16 +10,12 @@ function HomePage(){
     const {createPost, posts, getPosts} = usePosts();
 
     const onSubmit = handleSubmit(async (data) => {
-        createPost(user.id, data.txtPost);
+        createPost(user.id, data.txtPost, null);
     });
 
     useEffect(() =>{
         getPosts(user);
     }, []);
-
-    useEffect(() => {
-        console.log(posts);
-    }, [posts]);
 
     return (
         <div>

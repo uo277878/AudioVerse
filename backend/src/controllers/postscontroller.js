@@ -3,10 +3,11 @@ import User from '../models/user.js';
 
 export const createPost = async (req, res) => {
     try {
-        const {userId, text} = req.body;
+        const {userId, text, songId} = req.body;
         const post = new Post({
             user: userId,
-            text
+            text,
+            song: songId
         });
         const newPost = await post.save();
         res.json({newPost}); 
