@@ -2,7 +2,6 @@ import User from '../models/user.js'
 import bcrypt from 'bcryptjs'
 import { createToken} from '../libs/jwt.js';
 import {validationResult} from "express-validator";
-import { TOKEN_SECRET } from '../config.js';
 import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res) => {
@@ -29,7 +28,9 @@ export const signup = async (req, res) => {
             password: passwordEncriptada, 
             role, 
             dateBirth,
-            profilePic: "https://res.cloudinary.com/dtlhuysrz/image/upload/v1742580474/default_h6yht5.webp"
+            profilePic: "https://res.cloudinary.com/dtlhuysrz/image/upload/v1742580474/default_h6yht5.webp",
+            followed: [],
+            songsLiked: []
         });
 
         const newUser = await user.save();
@@ -79,7 +80,8 @@ export const login = async (req, res) => {
             email: userFound.email,
             role: userFound.role,
             profilePic: userFound.profilePic,
-            followed: userFound.followed
+            followed: userFound.followed,
+            songsLiked: userFound.songsLiked
         }); 
     } catch(error){
         res.status(500).json({ message: error.message});
@@ -100,7 +102,7 @@ export const verifyToken = async (req, res) => {
         return res.status(401).json({message: "Unauthorized"});
     }
 
-    jwt.verify(token, TOKEN_SECRET, async (err, user) => {
+    jwt.verify(token, process.env.TOKEN_SECRET, async (err, user) => {
         if(err){
             return res.status(401).json({message: "Unauthorized"});
         }
@@ -108,8 +110,9 @@ export const verifyToken = async (req, res) => {
         if(!userFound){
             return res.status(401).json({ msg: "Unauthorized"});
         }
-        return res.json({id: userFound._id,
-            username: userFound.username,
+        return res.json({
+                id: userFound._id,
+                username: userFound.username,
                 email: userFound.email,
                 role: userFound.role,
                 profilePic: userFound.profilePic,

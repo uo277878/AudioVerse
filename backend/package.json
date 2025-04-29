@@ -19,6 +19,7 @@
     "express": "^4.21.1",
     "express-fileupload": "^1.5.1",
     "express-validator": "^7.0.1",
+    "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.1",
     "morgan": "^1.10.0"

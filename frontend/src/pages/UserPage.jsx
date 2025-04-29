@@ -34,8 +34,9 @@ function UserPage(){
                 setValue('username', gotUser.username);
                 setValue('email', gotUser.email);
                 if (gotUser.songsLiked?.length > 0 && accessToken) {
+                    const ultimas = gotUser.songsLiked.slice(-4).reverse();
                     const tracks = await Promise.all(
-                        gotUser.songsLiked.map(id => getTrack(accessToken, id))
+                        ultimas.map(id => getTrack(accessToken, id))
                     );
                     setSongsLiked(tracks);
                 }

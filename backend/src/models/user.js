@@ -30,15 +30,17 @@ const UserSchema = new mongoose.Schema({
     },
     followed: [
         {
-          type: String,
-          required: true,
-          ref: "User"
+          type: [String],
+          required: false,
+          ref: "User",
+          default: []
         }
     ],
     songsLiked: [
         {
-          type: String,
-          required: true
+          type: [String],
+          required: false,
+          default: []
         }
     ]
 }, {
