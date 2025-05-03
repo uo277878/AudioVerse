@@ -111,7 +111,10 @@ export const UserProvider = ({children}) => {
             const res = await searchUserRequest(input);
             return res.data;
         } catch(error){
-            console.error(error);
+            if(Array.isArray(error.response.data)){
+                return setErrors(error.response.data);
+            }
+            setErrors([error.response.data]);
         }
     }
 

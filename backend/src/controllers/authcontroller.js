@@ -1,4 +1,5 @@
 import User from '../models/user.js'
+import Playlist from '../models/playlist.js'
 import bcrypt from 'bcryptjs'
 import { createToken} from '../libs/jwt.js';
 import {validationResult} from "express-validator";
@@ -36,6 +37,16 @@ export const signup = async (req, res) => {
         const newUser = await user.save();
 
         const token = await createToken({ id: newUser._id });
+
+        let image = "https://res.cloudinary.com/dtlhuysrz/image/upload/v1743524882/default_playlist_qv9jx6.png";
+        let name = "Canciones que me gustan";
+        const playlist = new Playlist({
+            name,
+            creator: newUser._id,
+            pic: image
+        });
+
+        await playlist.save();
 
         res.cookie('token', token)
         res.json({

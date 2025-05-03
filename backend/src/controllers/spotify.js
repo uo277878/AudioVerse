@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import {validationResult} from "express-validator";
 
 dotenv.config();
 
@@ -31,11 +32,21 @@ export const getToken = async (req, res) => {
 export const search = async (req, res) => {
     const {token, input} = req.body;
 
-    if (!token || !input) {
-        return res.status(400).json({ message: "Faltan parámetros" });
-    }
+    if (!token) {
+        res.status(401).json({ msg: "Token inválido" });
+        return;
+    } 
+    /*else if(!input){
+        res.status(400).json({msg: "El texto de búsqueda es obligatorio"});
+        return;
+    }*/
 
     try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
+            return;
+        }
         var searchParams = {
             method: 'GET',
             headers: {
@@ -47,8 +58,7 @@ export const search = async (req, res) => {
         const result = await fetch(url, searchParams).then(response => response.json());
         return res.json(result);
     } catch(error){
-        console.error(error);
-        res.status(500).json({ message: "Error en la búsqueda de artistas" });
+        res.status(500).json({ msg: "Error en la búsqueda de artistas" });
     }
     
 }

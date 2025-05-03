@@ -40,15 +40,15 @@ export const addSongToPlaylist = async (req, res) => {
     const playlist = await Playlist.findById(playlistId);
     console.log(playlist);
     if (!playlist) {
-        return res.status(404).json({ message: "Playlist no encontrada" });
+        return res.status(404).json({ msg: "Playlist no encontrada" });
     } else if(!songId){
-        return res.status(403).json({ message: "Id de canción inválido" });
+        return res.status(403).json({ msg: "Id de canción inválido" });
     } else{
         if (!playlist.songs.includes(songId)) {
             playlist.songs.push(songId);
             await playlist.save();
         } else{
-            return res.status(402).json({ message: "La playlist ya contiene esa canción" });
+            return res.status(402).json({ msg: "La playlist ya contiene esa canción" });
         }
         return res.status(200).json({playlist});
     }

@@ -4,6 +4,7 @@ import {getUsers, getUser, createUser, deleteUser, updateProfile, profile, updat
     passwordPage, getFollowedUsers, searchUser, followUser, unfollowUser, likeSong, dislikeSong} from '../controllers/userscontroller.js';
 import {updateProfileValidator, updatePasswordValidator} from '../middlewares/authValidator.js';
 import { uploadProfileImage } from '../controllers/upload.js';
+import { searchUserValidator } from '../middlewares/usersValidator.js';
 
 const router = new Router();
 
@@ -14,7 +15,7 @@ router.get('/users/profile/password', tokenRequired, passwordPage);
 router.put('/users/profile/password', updatePasswordValidator, tokenRequired, updatePassword);
 router.put('/users/profile/image', tokenRequired, uploadProfileImage);
 router.post('/users', tokenRequired, createUser);
-router.post('/users/search', tokenRequired, searchUser);
+router.post('/users/search', searchUserValidator, tokenRequired, searchUser);
 router.get('/users/followed/:id', tokenRequired, getFollowedUsers);
 router.get('/users/edit/:id', tokenRequired, getUser);
 router.put('/users/edit/:id', tokenRequired, updateUser);

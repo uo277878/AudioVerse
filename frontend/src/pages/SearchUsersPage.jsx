@@ -5,7 +5,7 @@ import UserSearchCard from "../components/UserSearchCard";
 import { useAuth } from "../context/AuthContext";
  
 function SearchUsersPage(){
-    const {searchUsers} = useUsers();
+    const {searchUsers, errors: searchErrors} = useUsers();
     const [searchInput, setSearchInput] = useState("");
     const [users, setUsers] = useState([]);
     const {user} = useAuth();
@@ -29,6 +29,12 @@ function SearchUsersPage(){
         }
     }
 
+    useEffect(() => {
+        if(searchErrors.length > 0){
+            setUsers([]);
+        }
+    }, [searchErrors]);
+
     return (
         <div className='flex min-h-screen justify-center'>
             <div className='bg-zinc-800 w-full p-10 rounded-md mx-8 my-8'>
@@ -44,6 +50,13 @@ function SearchUsersPage(){
                         Buscar
                     </button> 
                 </div>
+                {
+                    searchErrors.map((error, i) => (
+                        <div className='bg-red-500 p-2 text-white  my-2' key={i}>
+                            {error.msg}
+                        </div>
+                    ))
+                }
                 {users.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
                 <div className="grid grid-cols-5 gap-3 mt-4">
                 {

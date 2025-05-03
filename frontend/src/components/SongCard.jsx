@@ -9,21 +9,26 @@ import { useForm } from 'react-hook-form';
 import { usePosts } from '../context/PostContext';
 
 function SongCard({song, likedSongs}){
-    const isLiked = likedSongs?.includes(song.id) || false; 
     const {register, handleSubmit} = useForm();
     const {createPost} = usePosts();
-    const [active, setActive] = useState(isLiked);
+    const [active, setActive] = useState(false);
     const {user} = useAuth();
     const {likeSong, dislikeSong} = useUsers();
     const [showModal, setShowModal] = useState(false);
     const [showPostModal, setShowPostModal] = useState(false);
-    const { getAllByUser, playlists, addSongToPlaylist } = useSongs();
+    const { getAllByUser, playlists, addSongToPlaylist, errors: songErrors } = useSongs();
     const [selectedPlaylist, setSelectedPlaylist] = useState('');
+
+    useEffect(() => {
+        const isLiked = likedSongs?.includes(song.id) || false;
+        setActive(isLiked);
+    }, [likedSongs, song.id]);
 
     async function handleClick(id){
         try{
-            setActive(!active);
-            if(active == false){
+            const newActive = !active;
+            setActive(newActive);
+            if(newActive){
                 const res = await likeSong(user, id);
             } else{
                 const res = await dislikeSong(user, id);
@@ -50,9 +55,6 @@ function SongCard({song, likedSongs}){
 
     async function handleCreatePost(data){
         try {
-            console.log(user.id);
-            console.log(data.txtPost);
-            console.log(song.id);
             const res = await createPost(user.id, data.txtPost, song.id);
         } catch (error) {
             console.error(error);
@@ -77,7 +79,7 @@ function SongCard({song, likedSongs}){
             <img src={song.images != null ? song.images[0].url : song.album.images[0].url}/>
             <p className="text-sm font-bold mt-2">{song.name}</p>
             <div className='mt-2 flex'>
-                <Heart className="w-6 h-6" isActive={active} inactiveColor="white" onClick={() => handleClick(song.id)}/>
+                <Heart className="w-6 h-6" isActive={active} inactiveColor="white" activeColor="red" onClick={() => handleClick(song.id)}/>
                 <svg onClick={() => setShowModal(true)} className="h-6 w-6 ml-2 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 
                     0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/>
@@ -92,6 +94,13 @@ function SongCard({song, likedSongs}){
             </div>
 
             <PlaylistModal isVisible={showModal} onClose={() => setShowModal(false)}>
+                {
+                    songErrors.map((error, i) => (
+                        <div className='bg-red-500 p-2 text-white my-2' key={i}>
+                            {error.msg}
+                        </div>
+                    ))
+                }
                 <select className="w-full p-2 rounded bg-zinc-700 text-white" value={selectedPlaylist} 
                 onChange={(e) => setSelectedPlaylist(e.target.value)}>
                     <option value="">-- Selecciona una playlist --</option>

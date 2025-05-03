@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
  
 function SearchPage(){
     const {user} = useAuth();
+    const {errors: searchErrors} = useSongs();
     const [searchInput, setSearchInput] = useState("");
     const [accessToken, setAccessToken] = useState();
     const [filter, setFilter] = useState("tracks");
@@ -37,6 +38,17 @@ function SearchPage(){
         getTokenFromSpotify();
     }, []);
 
+    useEffect(() => {
+        if(searchErrors.length > 0){
+            setItems({
+                artists: [],
+                albums: [],
+                playlists: [],
+                tracks: []
+            });
+        }
+    }, [searchErrors]);
+
     async function handleSearch(){
         try {
             const res = await search(accessToken, searchInput);
@@ -66,6 +78,13 @@ function SearchPage(){
                         Buscar
                     </button> 
                 </div>
+                {
+                    searchErrors.map((error, i) => (
+                        <div className='bg-red-500 p-2 text-white  my-2' key={i}>
+                            {error.msg}
+                        </div>
+                    ))
+                }
                 {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
                 <div className="flex flex-row justify-center mt-4">
                     <p className="mt-4">Filtrar por:</p>

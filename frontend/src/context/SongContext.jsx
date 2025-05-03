@@ -30,7 +30,10 @@ export const SongProvider = ({children}) => {
             const res = await searchRequest(access_token, searchInput);
             return res.data;
         } catch(error){
-            console.error(error);
+            if(Array.isArray(error.response.data)){
+                return setErrors(error.response.data);
+            }
+            setErrors([error.response.data]);
         }
     }
 
@@ -55,7 +58,10 @@ export const SongProvider = ({children}) => {
         try{
             const res = await addSongToPlaylistRequest(playlist, id)
         } catch(error){
-            console.error(error);
+            if(Array.isArray(error.response.data)){
+                return setErrors(error.response.data);
+            }
+            setErrors([error.response.data]);
         }
     }
 

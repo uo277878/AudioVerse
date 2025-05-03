@@ -1,4 +1,5 @@
 import User from '../models/user.js';
+import Playlist from '../models/playlist.js';
 import bcrypt from 'bcryptjs'
 import {validationResult} from "express-validator";
 
@@ -50,6 +51,17 @@ export const updateProfile = async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
+        }
+        const usernameExists = await User.findOne({username: req.body.username, _id: { $ne: req.user.id } });
+
+        if (usernameExists) {
+            return res.status(401).json({ msg: "Nombre de usuario no disponible" });
+        }
+
+        const emailExists = await User.findOne({email: req.body.email, _id: { $ne: req.user.id }});
+
+        if (emailExists) {
+            return res.status(402).json({ msg: "Email no disponible" });
         }
         const user = await User.findByIdAndUpdate(req.user.id, req.body, { new: true});
         if(!user){
@@ -185,8 +197,9 @@ export const searchUser = async (req, res) => {
     try{
         const input = req.body.input;
 
-        if (!input) {
-            return res.status(400).json({ message: "Falta el texto de búsqueda" });
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
         }
 
         const users = await User.find({
@@ -247,6 +260,12 @@ export const likeSong = async (req, res) => {
             user.songsLiked.push(idSong);
             await user.save();
         }
+        const mgPlaylist = await Playlist.findOne({creator: user._id, name: "Canciones que me gustan"});
+        console.log(mgPlaylist);
+        if (!mgPlaylist.songs.includes(idSong)) {
+            mgPlaylist.songs.push(idSong);
+            await mgPlaylist.save();
+        }
         return res.status(200).json({user});
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error al darle me gusta a la canción" });
@@ -260,6 +279,12 @@ export const dislikeSong = async (req, res) => {
         if (user.songsLiked.includes(idSong)) {
             user.songsLiked.pull(idSong);
             await user.save();
+        }
+        const mgPlaylist = await Playlist.findOne({creator: user._id, name: "Canciones que me gustan"});
+        console.log(mgPlaylist);
+        if (mgPlaylist.songs.includes(idSong)) {
+            mgPlaylist.songs.pull(idSong);
+            await mgPlaylist.save();
         }
         return res.status(200).json({user});
     } catch(error){
