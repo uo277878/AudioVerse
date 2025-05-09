@@ -30,17 +30,17 @@ const UserSchema = new mongoose.Schema({
     },
     followed: [
         {
-          type: [String],
+          type: mongoose.Schema.Types.ObjectId,
           required: false,
           ref: "User",
           default: []
         }
     ],
-    songsLiked: {
-        type: [String],
+    songsLiked: [{
+        type: String,
         required: false,
         default: []
-    }
+    }]
 }, {
     timestamps: true
 })

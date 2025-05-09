@@ -36,6 +36,7 @@ export const createUser = async (req, res) => {
 export const getUser = async (req, res) => {
     try{
         const user = await User.findById(req.params.id);
+        console.log(user);
         if(!user){
             return res.status(404).json({ message: "Usuario no encontrado"});
         } else{
@@ -128,6 +129,7 @@ export const updatePassword = async (req, res) => {
 export const getFollowedUsers = async(req, res) => {
     try{
         const user = await User.findById(req.params.id).populate("followed");
+        console.log(user);
         if(!user){
             return res.status(404).json({ message: "Usuario no encontrado"});
         } else{

@@ -16,6 +16,7 @@ export const useUsers = () => {
 export const UserProvider = ({children}) => {
     const [errors, setErrors] = useState([]);
     const [users, setUsers] = useState([]);
+    const [likedSongs, setLikedSongs] = useState([]);
     
     const getUser = async (id) => {
         try{
@@ -139,6 +140,7 @@ export const UserProvider = ({children}) => {
     const likeSong = async (user, id) => {
         try{
             const res = await likeSongRequest(user, id);
+            setLikedSongs(res.user.songsLiked);
             return res.data;
         } catch(error){
             console.error(error);
@@ -148,6 +150,7 @@ export const UserProvider = ({children}) => {
     const dislikeSong = async (user, id) => {
         try{
             const res = await dislikeSongRequest(user, id);
+            setLikedSongs(res.user.songsLiked);
             return res.data;
         } catch(error){
             console.error(error);

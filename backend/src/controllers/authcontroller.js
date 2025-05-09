@@ -40,8 +40,10 @@ export const signup = async (req, res) => {
 
         let image = "https://res.cloudinary.com/dtlhuysrz/image/upload/v1743524882/default_playlist_qv9jx6.png";
         let name = "Canciones que me gustan";
+        let description = "Playlist que guarda todas las canciones que me gustan";
         const playlist = new Playlist({
             name,
+            description,
             creator: newUser._id,
             pic: image
         });

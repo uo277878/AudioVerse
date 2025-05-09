@@ -7,6 +7,8 @@ import { useSongs } from '../context/SongContext';
 import PostModal from './PostModal';
 import { useForm } from 'react-hook-form';
 import { usePosts } from '../context/PostContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFire } from '@fortawesome/free-solid-svg-icons'
 
 function SongCard({song, likedSongs}){
     const {register, handleSubmit} = useForm();
@@ -18,9 +20,19 @@ function SongCard({song, likedSongs}){
     const [showPostModal, setShowPostModal] = useState(false);
     const { getAllByUser, playlists, addSongToPlaylist, errors: songErrors } = useSongs();
     const [selectedPlaylist, setSelectedPlaylist] = useState('');
+    const [defaultValue, setDefaultValue] = useState("");
 
     useEffect(() => {
         const isLiked = likedSongs?.includes(song.id) || false;
+        if(song.type == "album"){
+            setDefaultValue("¡Me encanta este álbum!");
+        } else if(song.type == "artist"){
+            setDefaultValue("¡Me encanta este artista!");
+        } else if(song.type == "playlist"){
+            setDefaultValue("¡Me encanta esta playlist!");
+        } else if(song.type == "track"){
+            setDefaultValue("¡Me encanta esta canción!");
+        }
         setActive(isLiked);
     }, [likedSongs, song.id]);
 
@@ -55,7 +67,8 @@ function SongCard({song, likedSongs}){
 
     async function handleCreatePost(data){
         try {
-            const res = await createPost(user.id, data.txtPost, song.id);
+            const res = await createPost(user.id, data.txtPost, song.id, song.type);
+            console.log(song);
         } catch (error) {
             console.error(error);
         }
@@ -75,10 +88,10 @@ function SongCard({song, likedSongs}){
     }, []);
 
     return(
-        <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md ml-4 mb-4 ">
+        <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md ml-4 mb-4">
             <img src={song.images != null ? song.images[0].url : song.album.images[0].url}/>
             <p className="text-sm font-bold mt-2">{song.name}</p>
-            <div className='mt-2 flex'>
+            <div className='mt-2 flex items-center'>
                 <Heart className="w-6 h-6" isActive={active} inactiveColor="white" activeColor="red" onClick={() => handleClick(song.id)}/>
                 <svg onClick={() => setShowModal(true)} className="h-6 w-6 ml-2 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 
@@ -91,6 +104,11 @@ function SongCard({song, likedSongs}){
                     <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />  
                     <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
                 </svg>
+                {song.popularity > 60 && 
+                <>
+                    <FontAwesomeIcon icon={faFire} style={{color: "#ff7300",}} className='h-6 w-6 ml-auto'/>
+                </>
+                }
             </div>
 
             <PlaylistModal isVisible={showModal} onClose={() => setShowModal(false)}>
@@ -117,7 +135,7 @@ function SongCard({song, likedSongs}){
             <PostModal isVisible={showPostModal} onClose={() => setShowPostModal(false)}>
                 <form onSubmit={handleSubmit(handleCreatePost)}>
                     <textarea {...register("txtPost")} id="txtPost" rows="4" className="resize-none p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border
-                    dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" defaultValue="¡Me encanta esta canción!"></textarea>
+                    dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" defaultValue={defaultValue}></textarea>
                     <div className="flex items-center mb-4">
                         <img src={song.images != null ? song.images[0].url : song.album.images[0].url} className="w-12 h-12 rounded mr-3" />
                         <p className="text-white font-bold">{song.name}</p>

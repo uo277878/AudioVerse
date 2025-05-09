@@ -12,6 +12,9 @@ const PostSchema = new mongoose.Schema({
     text:{
         type: String,
         required: true
+    },
+    item_type:{
+        type:String
     }
 }, {
     timestamps: true

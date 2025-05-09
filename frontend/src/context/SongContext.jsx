@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getTokenRequest, searchRequest, getTrackRequest, createPlaylistRequest, 
-    getAllByUserRequest, getPlaylistRequest, addSongToPlaylistRequest } from "../api/songs";
+import { getTokenRequest, searchRequest, getTrackRequest, getAlbumRequest, getArtistRequest, 
+    getPlaylistSpotifyRequest, createPlaylistRequest, getAllByUserRequest, getPlaylistRequest, 
+    addSongToPlaylistRequest } from "../api/songs";
 
 const SongContext = createContext();
 
@@ -40,6 +41,33 @@ export const SongProvider = ({children}) => {
     const getTrack = async (token, id) => {
         try{
             const res = await getTrackRequest(token, id);
+            return res.data;
+        } catch(error){
+            console.error(error);
+        }
+    }
+    
+    const getArtist = async (token, id) => {
+        try{
+            const res = await getArtistRequest(token, id);
+            return res.data;
+        } catch(error){
+            console.error(error);
+        }
+    }
+    
+    const getPlaylistSpotify = async (token, id) => {
+        try{
+            const res = await getPlaylistSpotifyRequest(token, id);
+            return res.data;
+        } catch(error){
+            console.error(error);
+        }
+    }
+    
+    const getAlbum = async (token, id) => {
+        try{
+            const res = await getAlbumRequest(token, id);
             return res.data;
         } catch(error){
             console.error(error);
@@ -94,7 +122,7 @@ export const SongProvider = ({children}) => {
         }, [errors])
 
     return (
-        <SongContext.Provider value={{songs, errors, playlists, getToken, search, getTrack, 
+        <SongContext.Provider value={{songs, errors, playlists, getToken, search, getTrack, getPlaylistSpotify, getArtist, getAlbum, 
         createPlaylist, getAllByUser, getPlaylist, addSongToPlaylist}}>
             {children}
         </SongContext.Provider>

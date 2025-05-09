@@ -6,6 +6,11 @@ const PlaylistSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    description:{
+        type: String,
+        required: true,
+        trim: true
+    },
     creator:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -14,6 +19,11 @@ const PlaylistSchema = new mongoose.Schema({
     pic:{
         type: String,
         required: true
+    },
+    numFollows:{
+        type: Number,
+        required: true,
+        default: 0
     },
     songs: [
         {

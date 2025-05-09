@@ -64,13 +64,14 @@ function PlaylistPage(){
     return (
         <div className='flex h-screen mx-8 justify-center'>
             <div className='bg-zinc-800 w-full p-10 rounded-md'>
-                <div className="flex items-center space-x-8 ml-8 bg-zinc-900 md:w-1/2 p-10 rounded-md">
-                    <img src={playlist?.pic} alt="Imagen de paylist" className="w-32 h-32 mt-4 rounded-full border-white border-2 border-opacity-100" />
+                <div className="flex items-center space-x-8 ml-8 bg-zinc-900 md:w-3/4 p-10 rounded-md">
+                    <img src={playlist?.pic} alt="Imagen de playlist" className="w-32 h-32 mt-4 rounded-full border-white border-2 border-opacity-100" />
                     <div className="flex flex-col justify-center">
                         <h1 className="text-4xl">{playlist?.name}</h1>
-                        <div className="flex items-center space-x-3">
+                        <h2 className="text-xl mt-4">{playlist?.description}</h2>
+                        <div className="flex items-center space-x-3 mt-4">
                             <img src={creator?.profilePic} alt="Imagen de perfil" className="w-12 h-12 mt-4 rounded-full border-white border-2 border-opacity-100" />
-                            <h2 className="text-xl">{creator?.username}</h2>
+                            <h2 className="text-xl mt-2">{creator?.username}<span className="text-zinc-300"> - Fecha de creación: {new Date(playlist?.createdAt).toLocaleDateString()}</span></h2>
                         </div>
                     </div>
                 </div>

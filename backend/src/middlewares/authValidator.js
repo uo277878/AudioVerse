@@ -1,4 +1,5 @@
 import {check} from 'express-validator';
+import moment from 'moment';
 
 const singUpValidatorInsert = [
     check('username', 'El username es necesario').trim().not().isEmpty(),
@@ -7,8 +8,20 @@ const singUpValidatorInsert = [
     check('email', 'El email debe tener 5 o más caracteres').trim().isLength({min: 5}),
     check('password', 'La contraseña es necesaria').trim().not().isEmpty(),
     check('password', 'La contraseña debe tener 5 o más caracteres').trim().isLength({min: 5}),
-    check('dateBirth').trim().isDate()
-]
+    check('dateBirth', 'La fecha de nacimiento debe ser una fecha válida').isDate(),
+    check('dateBirth', 'La fecha de nacimiento es obligatora').trim().not().isEmpty(),
+    check('dateBirth').custom((value, { req }) => {
+        const fecha = moment(value, 'YYYY-MM-DD');
+        if (!fecha.isValid()) {
+            throw new Error('La fecha de nacimiento no es válida');
+        }
+        const age = moment().diff(fecha, 'years');
+        if (age < 16) {
+            throw new Error('Debes tener al menos 16 años para registrarte');
+        }
+        return true;
+    })
+];
 
 const loginValidator = [
     check('email', 'El email es necesario').trim().not().isEmpty(),

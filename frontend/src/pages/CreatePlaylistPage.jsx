@@ -22,6 +22,7 @@ function CreatePlaylistPage(){
         if(user){
             const formData = new FormData();
             formData.append("name", data.name);
+            formData.append("description", data.description);
             formData.append("creator", user._id);
             if (selectedFile) {
                 formData.append("pic", selectedFile);
@@ -60,6 +61,11 @@ function CreatePlaylistPage(){
                     <input type="name" {... register("name", {required: true})}
                         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
                         placeholder='Nombre'
+                    />
+                    <textarea type="description" {... register("description", {required: true})}
+                        className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2 resize-none'
+                        placeholder='Descripción'
+                        rows="4"
                     />
                     <div className="flex">
                         <button type="submit" onClick={handleCancelar} className="bg-rose-500 text-white px-4 py-2 rounded-md my-2 mr-4">

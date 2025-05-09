@@ -36,10 +36,6 @@ export const search = async (req, res) => {
         res.status(401).json({ msg: "Token inválido" });
         return;
     } 
-    /*else if(!input){
-        res.status(400).json({msg: "El texto de búsqueda es obligatorio"});
-        return;
-    }*/
 
     try{
         const errors = validationResult(req);
@@ -84,5 +80,77 @@ export const getTrack = async (req, res) => {
         return res.json(result);
     } catch(error){
         res.status(500).json({ message: "Error en la obtención de la canción" });
+    }
+}
+
+export const getAlbum = async (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    const id = req.params.id;
+
+    if (!token || !id) {
+        return res.status(400).json({ message: "Faltan parámetros" });
+    }
+
+    try{
+        var searchParams = {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            }
+        }
+        const url = "https://api.spotify.com/v1/albums/" + id;
+        const result = await fetch(url, searchParams).then(response => response.json());
+        return res.json(result);
+    } catch(error){
+        res.status(500).json({ message: "Error en la obtención del album" });
+    }
+}
+
+export const getPlaylistSpotify = async (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    const id = req.params.id;
+
+    if (!token || !id) {
+        return res.status(400).json({ message: "Faltan parámetros" });
+    }
+
+    try{
+        var searchParams = {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            }
+        }
+        const url = "https://api.spotify.com/v1/playlists/" + id;
+        const result = await fetch(url, searchParams).then(response => response.json());
+        return res.json(result);
+    } catch(error){
+        res.status(500).json({ message: "Error en la obtención de la playlist" });
+    }
+}
+
+export const getArtist = async (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    const id = req.params.id;
+
+    if (!token || !id) {
+        return res.status(400).json({ message: "Faltan parámetros" });
+    }
+
+    try{
+        var searchParams = {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            }
+        }
+        const url = "https://api.spotify.com/v1/artists/" + id;
+        const result = await fetch(url, searchParams).then(response => response.json());
+        return res.json(result);
+    } catch(error){
+        res.status(500).json({ message: "Error en la obtención del artista" });
     }
 }

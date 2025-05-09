@@ -3,11 +3,12 @@ import User from '../models/user.js';
 
 export const createPost = async (req, res) => {
     try {
-        const {userId, text, songId} = req.body;
+        const {userId, text, songId, type} = req.body;
         const post = new Post({
             user: userId,
             text,
-            song: songId
+            song: songId,
+            item_type: type
         });
         const newPost = await post.save();
         res.json({newPost}); 
@@ -22,13 +23,7 @@ export const getPosts = async (req, res) => {
         const user = await User.findById(userId);
         const followedIds = user.followed;
 
-        const start = new Date();
-        start.setHours(0, 0, 0, 0);
-
-        const end = new Date();
-        end.setHours(23, 59, 59, 999);
-
-        const posts = await Post.find({user: { $in: [...followedIds, userId] }, createdAt: { $gte: start, $lte: end }})
+        const posts = await Post.find({user: { $in: [...followedIds, userId] }})
         .sort({ createdAt: -1 })
         .populate('user', 'username profilePic')
         .exec();

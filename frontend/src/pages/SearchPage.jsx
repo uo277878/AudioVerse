@@ -6,7 +6,6 @@ import { useAuth } from "../context/AuthContext";
  
 function SearchPage(){
     const {user} = useAuth();
-    const {errors: searchErrors} = useSongs();
     const [searchInput, setSearchInput] = useState("");
     const [accessToken, setAccessToken] = useState();
     const [filter, setFilter] = useState("tracks");
@@ -16,7 +15,7 @@ function SearchPage(){
         playlists: [],
         tracks: []
     });
-    const {getToken, search} = useSongs();
+    const {getToken, search, errors: searchErrors} = useSongs();
 
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
@@ -88,10 +87,10 @@ function SearchPage(){
                 {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
                 <div className="flex flex-row justify-center mt-4">
                     <p className="mt-4">Filtrar por:</p>
-                    <button onClick={() => setFilter("artists")} className='bg-red-500 p-2 text-white my-2 mx-4'>Artistas</button>
-                    <button onClick={() => setFilter("tracks")} className='bg-red-500 p-2 text-white my-2 mx-4'>Canciones</button>
-                    <button onClick={() => setFilter("playlists")} className='bg-red-500 p-2 text-white my-2 mx-4'>Listas</button>
-                    <button onClick={() => setFilter("albums")} className='bg-red-500 p-2 text-white my-2 mx-4'>Álbumes</button>
+                    <button onClick={() => setFilter("artists")} className={`${filter === "artists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-4`}>Artistas</button>
+                    <button onClick={() => setFilter("tracks")} className={`${filter === "tracks" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-4`}>Canciones</button>
+                    <button onClick={() => setFilter("playlists")} className={`${filter === "playlists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-4`}>Listas</button>
+                    <button onClick={() => setFilter("albums")} className={`${filter === "albums" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-4`}>Álbumes</button>
                 </div>
                 <div className="grid grid-cols-5 gap-3">
                 {

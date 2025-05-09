@@ -20,10 +20,10 @@ export const createPlaylist = async (req, res) => {
         });
         image = result.secure_url;
 
-        const { name, creator } = req.body;
-        console.log(creator);
+        const { name, creator, description } = req.body;
         const playlist = new Playlist({
             name,
+            description,
             creator,
             pic: image
         });
@@ -57,7 +57,6 @@ export const addSongToPlaylist = async (req, res) => {
 export const getAllByUser = async (req, res) => {
     try{
         const user = await User.findById(req.params.id);
-        console.log(user);
         if(!user){
             return res.status(404).json({ message: "No se ha encontrado ningún usuario con ese id" });
         }
