@@ -26,9 +26,9 @@ export const SongProvider = ({children}) => {
         }
     }
 
-    const search = async (access_token, searchInput) => {
+    const search = async (access_token, searchInput, orderBy) => {
         try{
-            const res = await searchRequest(access_token, searchInput);
+            const res = await searchRequest(access_token, searchInput, orderBy);
             return res.data;
         } catch(error){
             if(Array.isArray(error.response.data)){

@@ -9,6 +9,7 @@ function SearchPage(){
     const [searchInput, setSearchInput] = useState("");
     const [accessToken, setAccessToken] = useState();
     const [filter, setFilter] = useState("tracks");
+    const [orderBy, setOrderBy] = useState("");
     const [items, setItems] = useState({
         artists: [],
         albums: [],
@@ -48,9 +49,16 @@ function SearchPage(){
         }
     }, [searchErrors]);
 
+    useEffect(() => {
+        if (accessToken && searchInput !== "") {
+            handleSearch();
+        }
+    }, [orderBy]);
+
     async function handleSearch(){
+        console.log(orderBy);
         try {
-            const res = await search(accessToken, searchInput);
+            const res = await search(accessToken, searchInput, orderBy);
             setItems({
                 artists: res.artists?.items || [],
                 albums: res.albums?.items || [],
@@ -66,13 +74,13 @@ function SearchPage(){
         <div className='flex min-h-screen justify-center'>
             <div className='bg-zinc-800 w-full p-10 rounded-md mx-8 my-8'>
                 <div className="relative">
-                    <input className="w-full bg-transparent placeholder:text-white text-white text-sm border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
+                    <input className="w-full bg-transparent placeholder:text-white text-white text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
                         placeholder="Introduce tu búsqueda" onKeyDown={event => {
                             if(event.key == "Enter"){
                                 handleSearch();
                             }
                         }}  onChange={event => setSearchInput(event.target.value)}/>
-                    <button onClick={handleSearch} className="absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-sm text-white hover:shadow focus:bg-slate-700 focus:shadow-none hover:bg-slate-700"
+                    <button onClick={handleSearch} className="absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-xl text-white hover:shadow focus:bg-slate-700 focus:shadow-none hover:bg-slate-700"
                         type="button">
                         Buscar
                     </button> 
@@ -86,11 +94,28 @@ function SearchPage(){
                 }
                 {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
                 <div className="flex flex-row justify-center mt-4">
-                    <p className="mt-4">Filtrar por:</p>
-                    <button onClick={() => setFilter("artists")} className={`${filter === "artists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-4`}>Artistas</button>
-                    <button onClick={() => setFilter("tracks")} className={`${filter === "tracks" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-4`}>Canciones</button>
-                    <button onClick={() => setFilter("playlists")} className={`${filter === "playlists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-4`}>Listas</button>
-                    <button onClick={() => setFilter("albums")} className={`${filter === "albums" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-4`}>Álbumes</button>
+                    <p className="mt-3 text-xl">Filtrar por:</p>
+                    <button onClick={() => setFilter("artists")} className={`${filter === "artists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Artistas</button>
+                    <button onClick={() => setFilter("tracks")} className={`${filter === "tracks" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Canciones</button>
+                    <button onClick={() => setFilter("playlists")} className={`${filter === "playlists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Listas</button>
+                    <button onClick={() => setFilter("albums")} className={`${filter === "albums" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Álbumes</button>
+                    {(filter !== "playlists") && (
+                        <p className="ml-8 mt-3 text-xl">Ordenar por:</p>
+                    )}
+                    {(filter === "artists" || filter === "tracks") && (
+                        <button
+                            onClick={() => setOrderBy(orderBy === "popularity" ? "" : "popularity")}
+                            className={`${orderBy === "popularity" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>
+                            Popularidad
+                        </button>
+                    )}
+                    {(filter === "tracks" || filter === "albums") && (
+                        <button
+                            onClick={() => setOrderBy(orderBy === "releaseDate" ? "" : "releaseDate")}
+                            className={`${orderBy === "releaseDate" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>
+                            Fecha de publicación
+                        </button>
+                    )}
                 </div>
                 <div className="grid grid-cols-5 gap-3">
                 {

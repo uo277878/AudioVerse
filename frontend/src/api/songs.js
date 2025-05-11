@@ -6,8 +6,8 @@ export const getTokenRequest = () => {
     return axios.get(`${API}/search`, { withCredentials: true });
 };
 
-export const searchRequest = (token, input) => {
-    return axios.post(`${API}/search`, {token, input}, {withCredentials: true});
+export const searchRequest = (token, input, orderBy) => {
+    return axios.post(`${API}/search`, {token, input, orderBy}, {withCredentials: true});
 }
 
 export const getTrackRequest = (token, id) => {

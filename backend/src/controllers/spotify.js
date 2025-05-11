@@ -30,7 +30,8 @@ export const getToken = async (req, res) => {
 };
 
 export const search = async (req, res) => {
-    const {token, input} = req.body;
+    const {token, input, orderBy} = req.body;
+    console.log(orderBy);
 
     if (!token) {
         res.status(401).json({ msg: "Token inválido" });
@@ -52,6 +53,26 @@ export const search = async (req, res) => {
         }
         const url = "https://api.spotify.com/v1/search?q=" + input + "&type=artist%2Calbum%2Cplaylist%2Ctrack&limit=50";
         const result = await fetch(url, searchParams).then(response => response.json());
+
+        if (orderBy === "popularity") {
+            if (result.artists?.items) {
+                result.artists.items.sort((a, b) => b.popularity - a.popularity);
+            }
+            if (result.tracks?.items) {
+                result.tracks.items.sort((a, b) => b.popularity - a.popularity);
+            }
+        } else if(orderBy === "releaseDate"){
+            if (result.albums?.items) {
+                result.albums.items.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+            }
+            if (result.tracks?.items) {
+                result.tracks.items.sort((a, b) => {
+                    const dateA = a.album?.release_date || "1900-01-01";
+                    const dateB = b.album?.release_date || "1900-01-01";
+                    return new Date(dateB) - new Date(dateA);
+                });
+            }
+        }
         return res.json(result);
     } catch(error){
         res.status(500).json({ msg: "Error en la búsqueda de artistas" });
