@@ -1,20 +1,31 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { usePosts } from "../context/PostContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
 
 function HomePage(){
     const {user} = useAuth();
     const {register, handleSubmit} = useForm();
     const {createPost, posts, getPosts} = usePosts();
+    const [page, setPage] = useState(1);
 
     const onSubmit = handleSubmit(async (data) => {
         createPost(user.id, data.txtPost, null, null);
     });
 
     useEffect(() =>{
-        getPosts(user);
+        getPosts(user, page);
+    }, [page]);
+
+    const handleScroll = () => {
+        if(window.innerHeight+ document.documentElement.scrollTop + 1 > document.documentElement.scrollHeight){
+            setPage((prev) => prev + 1);
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
     }, []);
 
     return (

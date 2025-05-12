@@ -23,11 +23,15 @@ export const PostProvider = ({children}) => {
         }
     }
 
-    const getPosts = async (user) => {
+    const getPosts = async (user, page) => {
         try{
-            const res = await getPostsRequest(user);
+            const res = await getPostsRequest(user, page);
             console.log(res);
-            setPosts(res.data);
+            setPosts(prev => {
+                const todos = [...prev, ...res.data];
+                const sinDuplicados = Array.from(new Map(todos.map(p => [p._id, p])).values());
+                return sinDuplicados;
+            });
         } catch(error){
             console.error(error);
         }

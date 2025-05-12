@@ -4,61 +4,30 @@ import { useState } from "react";
 
 function Navbar(){
     const { user, isAuthenticated, logout } = useAuth();
-    const [menuOpen, setMenuOpen] = useState(false);
+    
     return (
-        <nav className="bg-zinc-700 mb-3 flex justify-between py-5 px-10 rounded-b-lg">
+        <nav className="fixed top-0 left-0 h-screen bg-zinc-700 w-64 p-6 flex flex-col gap-6 z-50">
             {isAuthenticated ? (
                 <>
-                    <Link to="/home"><img src="/logo.png" alt="Logo AudioVerse" className="h-8" /></Link>
+                    <Link to="/home"><img src="/logo.png" alt="Logo AudioVerse" className="h-9" /></Link>
                 </>
             ) : (
                 <>
-                    <Link to="/"><img src="/logo.png" alt="Logo AudioVerse" className="h-8" /></Link>
+                    <Link to="/"><img src="/logo.png" alt="Logo AudioVerse" className="h-9" /></Link>
                 </>
             )}
             {isAuthenticated && (
                 <>
-                    <button 
-                        className="md:hidden text-white text-2xl focus:outline-none" 
-                        onClick={() => setMenuOpen(!menuOpen)}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-
-                    </button>
-                    <ul className={`absolute md:static top-16 left-0 w-full bg-zinc-700 md:flex md:gap-x-4 p-4 md:p-0 md:w-auto rounded-lg 
-                        ${menuOpen ? "flex" : "hidden"} flex-col justify-center items-center w-full first:mt-2 md:flex-row md:w-auto md:space-x-10 md:flex z-50`}>
-                    
-                    
-                        <li>¡Hola, {user?.username}!</li>
-                        <li>
-                            <Link to="/users/followed" className="block text-white py-2 md:py-0">Mis seguidos</Link>
-                        </li>
-                        <li>
-                            <Link to="/search" className="block text-white py-2 md:py-0">Buscar canciones</Link>
-                        </li>
-                        <li>
-                            <Link to="/users/search" className="block text-white py-2 md:py-0">Buscar personas</Link>
-                        </li>
-                        <li>
-                            <Link to={`/playlists/getAllByUser/${user.id}`} className="block text-white py-2 md:py-0">
-                                Mi biblioteca
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/users/profile" className="block text-white py-2 md:py-0">Mi perfil</Link>
-                        </li>
-                        <li>
-                            <Link
-                                to="/login"
-                                onClick={() => logout()}
-                                className="block bg-red-500 px-4 py-2 rounded-md text-white text-center md:inline"
-                            >
-                                Cerrar sesión
-                            </Link>
-                        </li>
-                    </ul>
+                    <span className="md:text-xl text-red-200">¡Hola, {user?.username}!</span>
+                    <Link to="/users/followed" className="text-white md:text-xl py-2 md:py-0">Mis seguidos</Link>
+                    <Link to="/search" className="text-white md:text-xl py-2 md:py-0">Buscar canciones</Link>
+                    <Link to="/users/search" className="text-white md:text-xl py-2 md:py-0">Buscar personas</Link>
+                    <Link to={`/playlists/getAllByUser/${user.id}`} className="text-white md:text-xl py-2 md:py-0">Mi biblioteca</Link>
+                    <Link to="/users/profile" className="text-white md:text-xl py-2 md:py-0">Mi perfil</Link>
+                    <Link to="/login" onClick={() => logout()} 
+                    className="mt-auto bg-red-500 px-4 py-2 rounded-md text-white text-center md:text-xl">
+                        Cerrar sesión
+                    </Link>
                 </>
             )}
         </nav>
