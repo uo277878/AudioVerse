@@ -45,9 +45,13 @@ function PlaylistPage(){
         const loadSongs = async () => {
             if (playlist?.songs.length > 0 && accessToken) {
                 const tracks = await Promise.all(
-                    playlist.songs.map(id => getTrack(accessToken, id))
+                    playlist.songs.map(async ([id, text]) => {
+                        const track = await getTrack(accessToken, id);
+                        return {track, text};
+                    })
                 );
                 setSongs(tracks);
+                console.log(tracks);
             }
         }
         loadSongs();
@@ -62,9 +66,9 @@ function PlaylistPage(){
     }, [playlist]);
     
     return (
-        <div className='flex h-screen mx-8 justify-center'>
+        <div className='flex min-h-screen mx-8 justify-center'>
             <div className='bg-zinc-800 w-full p-10 rounded-md'>
-                <div className="flex items-center space-x-8 ml-8 bg-zinc-900 md:w-3/4 p-10 rounded-md">
+                <div className="flex items-center space-x-8 ml-8 bg-zinc-900 p-10 rounded-md">
                     <img src={playlist?.pic} alt="Imagen de playlist" className="w-32 h-32 mt-4 rounded-full border-white border-2 border-opacity-100" />
                     <div className="flex flex-col justify-center">
                         <h1 className="text-4xl">{playlist?.name}</h1>
@@ -78,10 +82,10 @@ function PlaylistPage(){
                 <div className="mt-4">
                     {songs.length > 0 && (
                         <>
-                            <div className="grid md:grid-cols-5 sm:grid-cols-1 gap-3 p-4 mr-6">
+                            <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-3 p-4 mr-6">
                             {
-                                songs.map(song => (
-                                    <SongCard song={song} key={song.id} likedSongs={user.songsLiked}/>
+                                songs.map(({track, text}) => (
+                                    <SongCard song={track} key={track.id} likedSongs={user.songsLiked} text={text}/>
                                 ))
                             }
                             </div>

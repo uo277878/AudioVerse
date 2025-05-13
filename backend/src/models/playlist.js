@@ -27,7 +27,7 @@ const PlaylistSchema = new mongoose.Schema({
     },
     songs: [
         {
-          type: String,
+          type: [String, String],
           required: true
         }
       ],

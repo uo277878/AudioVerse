@@ -41,6 +41,7 @@ export const SongProvider = ({children}) => {
     const getTrack = async (token, id) => {
         try{
             const res = await getTrackRequest(token, id);
+            console.log(res);
             return res.data;
         } catch(error){
             console.error(error);
@@ -82,9 +83,9 @@ export const SongProvider = ({children}) => {
         }
     }
 
-    const addSongToPlaylist = async (playlist, id) => {
+    const addSongToPlaylist = async (playlist, id, txtSong) => {
         try{
-            const res = await addSongToPlaylistRequest(playlist, id)
+            const res = await addSongToPlaylistRequest(playlist, id, txtSong)
         } catch(error){
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);

@@ -117,7 +117,7 @@ function SearchPage(){
                         </button>
                     )}
                 </div>
-                <div className="grid grid-cols-5 gap-3">
+                <div className="grid grid-cols-4 gap-3 mt-4">
                 {
                     currentItems.map(song => (
                         <SongCard song={song} key={song.id} likedSongs={user.songsLiked}/>

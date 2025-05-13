@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import {createPostRequest, getPostsRequest}  from "../api/posts";
+import {createPostRequest, getPostsRequest, likePostRequest}  from "../api/posts";
 
 const PostContext = createContext();
 
@@ -26,7 +26,6 @@ export const PostProvider = ({children}) => {
     const getPosts = async (user, page) => {
         try{
             const res = await getPostsRequest(user, page);
-            console.log(res);
             setPosts(prev => {
                 const todos = [...prev, ...res.data];
                 const sinDuplicados = Array.from(new Map(todos.map(p => [p._id, p])).values());
@@ -36,6 +35,17 @@ export const PostProvider = ({children}) => {
             console.error(error);
         }
         
+    }
+
+    const likePost = async (id) => {
+        try{
+            const res = await likePostRequest(id);
+            setPosts(prev =>
+                prev.map(post => post._id === res.data._id ? res.data : post)
+            );
+        } catch(error){
+            console.error(error);
+        }
     }
 
     useEffect(() => {
@@ -48,7 +58,7 @@ export const PostProvider = ({children}) => {
             }, [errors])
     
         return (
-            <PostContext.Provider value={{posts, createPost, getPosts}}>
+            <PostContext.Provider value={{posts, createPost, getPosts, likePost}}>
                 {children}
             </PostContext.Provider>
         ) 

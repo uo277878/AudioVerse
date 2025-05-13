@@ -38,3 +38,14 @@ export const getPosts = async (req, res) => {
         return res.status(500).json({ message: "Se ha producido un error" });
     }
 }
+
+export const likePost = async (req, res) => {
+    try{
+        const postId = req.params.id;
+        console.log(postId);
+        const post = await Post.findByIdAndUpdate(postId, { $inc: { likes: 1 } },  { new: true }).populate('user', 'username profilePic');
+        res.json(post);
+    } catch(error){
+        return res.status(500).json({ message: "Se ha producido un error al darle like al post" });
+    }
+}

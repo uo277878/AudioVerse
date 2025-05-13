@@ -9,3 +9,7 @@ export const createPostRequest = (userId, text, songId, type) => {
 export const getPostsRequest = (user, page) => {
     return axios.get(`${API}/home/getPosts?userId=${user.id}&page=${page}`, { withCredentials: true });
 };
+
+export const likePostRequest = (id) => {
+    return axios.put(`${API}/home/like/${id}`, {}, { withCredentials: true })
+}

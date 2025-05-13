@@ -4,10 +4,13 @@ import { useUsers } from "../context/UserContext";
 import Heart from 'react-heart';
 import { useAuth } from "../context/AuthContext";
 import PlaylistModal from "./PlaylistModal";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import { usePosts } from "../context/PostContext";
 
 function PostCard({post}){
 
     const {getToken, getTrack, getArtist, getPlaylistSpotify, getAlbum} = useSongs();
+    const {likePost} = usePosts();
     const [accessToken, setAccessToken] = useState(null);
     const [song, setSong] = useState(null);
     const {likeSong, dislikeSong} = useUsers();
@@ -96,6 +99,14 @@ function PostCard({post}){
         }
     }
 
+    async function handleLike(id){
+        try{
+            const res = await likePost(id);
+        } catch(error){
+            console.error(error);
+        }
+    }
+
     async function handleSaveToPlaylist() {
         if (!selectedPlaylist) return;
         try {
@@ -110,12 +121,17 @@ function PostCard({post}){
 
     return(
         <div className='bg-zinc-800 max-w-2xl w-full p-6 rounded-md mt-2'>
-            <div className="flex items-center space-x-4">
-                <img src={post.user.profilePic} alt="Imagen de perfil" className="w-16 h-16 mt-4 rounded-full border-white border-2 border-opacity-100" />
-                <div className="flex flex-col">
-                    <p className="text-lg">{post.user.username}</p>
-                    <p className="mt-2 text-lg">{post.text}</p>
+            <div className="flex items-start justify-between">
+                <div className="flex space-x-4">
+                    <img src={post.user.profilePic} alt="Imagen de perfil" className="w-16 h-16 mt-4 rounded-full border-white border-2 border-opacity-100" />
+                    <div className="flex flex-col">
+                        <p className="text-lg">{post.user.username}</p>
+                        <p className="mt-2 text-lg">{post.text}</p>
+                    </div>
                 </div>
+                <button className="text-white flex items-center space-x-1" onClick={() => handleLike(post._id)}>
+                    <ThumbUpIcon className="text-rose-400 mr-2"/> {post.likes}
+                </button>
             </div>
             {song && (
                     <div className={`relative flex items-center space-x-4 mt-4 p-4 ${color} rounded`}>

@@ -9,8 +9,9 @@ import { useForm } from 'react-hook-form';
 import { usePosts } from '../context/PostContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFire } from '@fortawesome/free-solid-svg-icons'
+import { useLocation } from 'react-router-dom';
 
-function SongCard({song, likedSongs}){
+function SongCard({song, likedSongs, text}){
     const {register, handleSubmit} = useForm();
     const {createPost} = usePosts();
     const [active, setActive] = useState(false);
@@ -21,6 +22,9 @@ function SongCard({song, likedSongs}){
     const { getAllByUser, playlists, addSongToPlaylist, errors: songErrors } = useSongs();
     const [selectedPlaylist, setSelectedPlaylist] = useState('');
     const [defaultValue, setDefaultValue] = useState("");
+
+    const location = useLocation();
+    const isPlaylistPage = location.pathname.includes('/playlists/');
 
     useEffect(() => {
         const isLiked = likedSongs?.includes(song.id) || false;
@@ -51,10 +55,11 @@ function SongCard({song, likedSongs}){
         }
     }
 
-    async function handleSaveToPlaylist() {
+    async function handleSaveToPlaylist(data) {
         if (!selectedPlaylist) return;
         try {
-            const res = await addSongToPlaylist(selectedPlaylist, song.id);
+            console.log(data.txtSong);
+            const res = await addSongToPlaylist(selectedPlaylist, song.id, data.txtSong);
             if(res.status == 200){
                 setShowModal(false);
             } else{
@@ -88,27 +93,32 @@ function SongCard({song, likedSongs}){
     }, []);
 
     return(
-        <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md ml-4 mb-4">
-            <img src={song.images != null ? song.images[0].url : song.album.images[0].url}/>
-            <p className="text-sm font-bold mt-2">{song.name}</p>
-            <div className='mt-2 flex items-center'>
-                <Heart className="w-6 h-6" isActive={active} inactiveColor="white" activeColor="red" onClick={() => handleClick(song.id)}/>
-                <svg onClick={() => setShowModal(true)} className="h-6 w-6 ml-2 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 
-                    0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/>
-                </svg>
-                <svg onClick={() => setShowPostModal(true)} className="h-6 w-6 ml-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/> 
-                    <circle cx="18" cy="19" r="3" />  
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />  
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                </svg>
-                {song.popularity > 60 && 
-                <>
-                    <FontAwesomeIcon icon={faFire} style={{color: "#ff7300",}} className='h-6 w-6 ml-auto'/>
-                </>
-                }
+        <div className={`bg-zinc-700 max-w-md w-full p-10 rounded-md ml-4 mb-4 ${isPlaylistPage ? 'flex items-center' : ''}`}>
+            <img src={song.images != null ? song.images[0].url : song.album.images[0].url} className={`rounded ${isPlaylistPage ? 'w-28 h-28 mr-4' : ''}`}/>
+            <div className={`${isPlaylistPage ? 'flex flex-col justify-center' : ''}`}>
+                <p className="text-xl font-bold mt-2">{song.name}</p>
+                {text && isPlaylistPage && (
+                    <p className="text-xl text-gray-300 italic mt-2 mb-4">“{text}”</p>
+                )}
+                <div className='mt-2 flex items-center'>
+                    <Heart className="w-6 h-6" isActive={active} inactiveColor="white" activeColor="red" onClick={() => handleClick(song.id)}/>
+                    <svg onClick={() => setShowModal(true)} className="h-6 w-6 ml-2 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 
+                        0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/>
+                    </svg>
+                    <svg onClick={() => setShowPostModal(true)} className="h-6 w-6 ml-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/> 
+                        <circle cx="18" cy="19" r="3" />  
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />  
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                    </svg>
+                    {song.popularity > 60 && 
+                    <>
+                        <FontAwesomeIcon icon={faFire} style={{color: "#ff7300",}} className='h-6 w-6 ml-auto'/>
+                    </>
+                    }
+                </div>
             </div>
 
             <PlaylistModal isVisible={showModal} onClose={() => setShowModal(false)}>
@@ -119,7 +129,7 @@ function SongCard({song, likedSongs}){
                         </div>
                     ))
                 }
-                <select className="w-full p-2 rounded bg-zinc-700 text-white" value={selectedPlaylist} 
+                <select className="w-full p-2 rounded bg-zinc-700 text-white text-xl" value={selectedPlaylist} 
                 onChange={(e) => setSelectedPlaylist(e.target.value)}>
                     <option value="">-- Selecciona una playlist --</option>
                     {playlists.map((playlist) => (
@@ -128,9 +138,17 @@ function SongCard({song, likedSongs}){
                         </option>
                     ))}
                 </select>
-                <button onClick={handleSaveToPlaylist} className="mt-4 bg-red-500 text-white py-2 px-4 rounded">
-                    Guardar
-                </button>
+                <form onSubmit={handleSubmit(handleSaveToPlaylist)}>
+                    <span className="block my-2 text-sm text-gray-500 dark:text-neutral-500">50 caracteres</span>
+                    <textarea {...register("txtSong", {required: true})}  rows="3" maxLength={50} 
+                    className="resize-none p-3 w-full text-xl text-gray-900 bg-gray-50 rounded-lg border
+                        dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                        placeholder="¿Por qué añades esta canción?"></textarea>
+                    <button type="submit" className="mt-4 bg-red-500 text-white py-2 px-4 rounded">
+                        Guardar
+                    </button>
+                </form>
+                
             </PlaylistModal>
             <PostModal isVisible={showPostModal} onClose={() => setShowPostModal(false)}>
                 <form onSubmit={handleSubmit(handleCreatePost)}>
