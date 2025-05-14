@@ -3,9 +3,11 @@ import { useSongs } from "../context/SongContext";
 import SongCard from "../components/SongCard";
 import Pagination from "../components/Pagination";
 import { useAuth } from "../context/AuthContext";
+import { useUsers } from "../context/UserContext";
  
 function SearchPage(){
     const {user} = useAuth();
+    const {likedSongs} = useUsers();
     const [searchInput, setSearchInput] = useState("");
     const [accessToken, setAccessToken] = useState();
     const [filter, setFilter] = useState("tracks");
@@ -120,7 +122,7 @@ function SearchPage(){
                 <div className="grid grid-cols-4 gap-3 mt-4">
                 {
                     currentItems.map(song => (
-                        <SongCard song={song} key={song.id} likedSongs={user.songsLiked}/>
+                        <SongCard song={song} key={song.id} likedSongs={likedSongs}/>
                     ))
                 }
                 </div>

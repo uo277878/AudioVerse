@@ -42,9 +42,22 @@ export const getPosts = async (req, res) => {
 export const likePost = async (req, res) => {
     try{
         const postId = req.params.id;
-        console.log(postId);
-        const post = await Post.findByIdAndUpdate(postId, { $inc: { likes: 1 } },  { new: true }).populate('user', 'username profilePic');
-        res.json(post);
+        const userId = req.body.user.id;
+        const post = await Post.findById(postId);
+        console.log(userId);
+
+        if(!post){
+            return res.status(404).json({message: "No se ha encontrado el post"});
+        }
+
+        let updated;
+        if(post.likedBy.includes(userId)){
+            updated = await Post.findByIdAndUpdate(postId, {$pull: {likedBy: userId}, $inc: {likes: -1}}, {new: true}).populate('user', 'username profilePic');
+        } else{
+            updated = await Post.findByIdAndUpdate(postId, {$push: {likedBy: userId}, $inc: {likes: 1}}, {new: true}).populate('user', 'username profilePic');
+        }
+
+        res.json(updated);
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error al darle like al post" });
     }

@@ -9,7 +9,9 @@ import { useForm } from 'react-hook-form';
 import { usePosts } from '../context/PostContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFire } from '@fortawesome/free-solid-svg-icons'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { useNavigate } from 'react-router-dom';
 
 function SongCard({song, likedSongs, text}){
     const {register, handleSubmit} = useForm();
@@ -19,15 +21,19 @@ function SongCard({song, likedSongs, text}){
     const {likeSong, dislikeSong} = useUsers();
     const [showModal, setShowModal] = useState(false);
     const [showPostModal, setShowPostModal] = useState(false);
-    const { getAllByUser, playlists, addSongToPlaylist, errors: songErrors } = useSongs();
+    const { getAllByUser, playlists, addSongToPlaylist, removeSongPlaylist, errors: songErrors } = useSongs();
     const [selectedPlaylist, setSelectedPlaylist] = useState('');
     const [defaultValue, setDefaultValue] = useState("");
 
     const location = useLocation();
     const isPlaylistPage = location.pathname.includes('/playlists/');
+    const { id: playlistId } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const isLiked = likedSongs?.includes(song.id) || false;
+        console.log(likedSongs);
+        console.log(song);
         if(song.type == "album"){
             setDefaultValue("¡Me encanta este álbum!");
         } else if(song.type == "artist"){
@@ -92,8 +98,22 @@ function SongCard({song, likedSongs, text}){
         }
     }, []);
 
+    async function handleDeleteSong(id){
+        try{
+            const res = await removeSongPlaylist(id, playlistId);
+            navigate(0);
+        } catch(error){
+            console.error(error);
+        }
+    }
+
     return(
-        <div className={`bg-zinc-700 max-w-md w-full p-10 rounded-md ml-4 mb-4 ${isPlaylistPage ? 'flex items-center' : ''}`}>
+        <div className={`relative bg-zinc-700 max-w-md w-full p-10 rounded-md ml-4 mb-4 ${isPlaylistPage ? 'flex items-center' : ''}`}>
+            {isPlaylistPage && (
+                <button className="absolute top-4 right-4 text-white hover:text-red-500" onClick={() => handleDeleteSong(song.id)}>
+                    <RemoveIcon />
+                </button>
+            )}
             <img src={song.images != null ? song.images[0].url : song.album.images[0].url} className={`rounded ${isPlaylistPage ? 'w-28 h-28 mr-4' : ''}`}/>
             <div className={`${isPlaylistPage ? 'flex flex-col justify-center' : ''}`}>
                 <p className="text-xl font-bold mt-2">{song.name}</p>

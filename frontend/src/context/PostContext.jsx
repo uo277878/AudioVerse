@@ -37,12 +37,13 @@ export const PostProvider = ({children}) => {
         
     }
 
-    const likePost = async (id) => {
+    const likePost = async (id, user) => {
         try{
-            const res = await likePostRequest(id);
+            const res = await likePostRequest(id, user);
             setPosts(prev =>
                 prev.map(post => post._id === res.data._id ? res.data : post)
             );
+            return res;
         } catch(error){
             console.error(error);
         }

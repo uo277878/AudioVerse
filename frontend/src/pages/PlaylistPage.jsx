@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 
 function PlaylistPage(){
     const {getTrack, getToken, getPlaylist } = useSongs();
-    const {getUser} = useUsers();
+    const {getUser, likedSongs} = useUsers();
     const {user} = useAuth();
     const params = useParams();
     const [playlist, setPlaylist] = useState();
@@ -51,7 +51,6 @@ function PlaylistPage(){
                     })
                 );
                 setSongs(tracks);
-                console.log(tracks);
             }
         }
         loadSongs();
@@ -80,12 +79,12 @@ function PlaylistPage(){
                     </div>
                 </div>
                 <div className="mt-4">
-                    {songs.length > 0 && (
+                    {songs.length > 0 && likedSongs && (
                         <>
                             <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-3 p-4 mr-6">
                             {
                                 songs.map(({track, text}) => (
-                                    <SongCard song={track} key={track.id} likedSongs={user.songsLiked} text={text}/>
+                                    <SongCard song={track} key={track.id} likedSongs={likedSongs} text={text}/>
                                 ))
                             }
                             </div>

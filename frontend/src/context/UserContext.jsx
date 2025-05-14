@@ -21,6 +21,7 @@ export const UserProvider = ({children}) => {
     const getUser = async (id) => {
         try{
             const res = await getUserRequest(id);
+            setLikedSongs(res.data.songsLiked);
             return res.data;
         } catch(error){
             console.error(error);
@@ -140,7 +141,7 @@ export const UserProvider = ({children}) => {
     const likeSong = async (user, id) => {
         try{
             const res = await likeSongRequest(user, id);
-            setLikedSongs(res.user.songsLiked);
+            setLikedSongs(res.data.user.songsLiked);
             return res.data;
         } catch(error){
             console.error(error);
@@ -150,7 +151,7 @@ export const UserProvider = ({children}) => {
     const dislikeSong = async (user, id) => {
         try{
             const res = await dislikeSongRequest(user, id);
-            setLikedSongs(res.user.songsLiked);
+            setLikedSongs(res.data.user.songsLiked);
             return res.data;
         } catch(error){
             console.error(error);
@@ -168,7 +169,7 @@ export const UserProvider = ({children}) => {
 
     return (
         <UserContext.Provider value={{users, getUser, updateProfile, errors, updatePassword, updateProfilePic, 
-        updateUser, getUsersAdmin, deleteUser, getFollowedUsers, searchUsers, follow, unfollow, likeSong, dislikeSong}}>
+        updateUser, getUsersAdmin, deleteUser, getFollowedUsers, searchUsers, follow, unfollow, likeSong, dislikeSong, likedSongs}}>
             {children}
         </UserContext.Provider>
     ) 

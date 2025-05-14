@@ -42,6 +42,12 @@ export const addSongToPlaylistRequest = (playlistId, songId, txtSong) => {
     return axios.post(`${API}/playlists/add`, {playlistId, songId, txtSong}, { withCredentials: true });
 }
 
+export const removeSongPlaylistRequest = (songId, playlistId) => {
+    console.log(songId);
+    console.log(playlistId);
+    return axios.delete(`${API}/playlists/remove`, {data: { songId, playlistId },  withCredentials: true });
+}
+
 export const getPlaylistRequest = (id) => {
     return axios.get(`${API}/playlists/${id}`, { withCredentials: true });
 };

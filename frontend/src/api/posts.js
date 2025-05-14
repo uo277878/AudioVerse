@@ -10,6 +10,7 @@ export const getPostsRequest = (user, page) => {
     return axios.get(`${API}/home/getPosts?userId=${user.id}&page=${page}`, { withCredentials: true });
 };
 
-export const likePostRequest = (id) => {
-    return axios.put(`${API}/home/like/${id}`, {}, { withCredentials: true })
+export const likePostRequest = (id, user) => {
+    console.log(user);
+    return axios.put(`${API}/home/like/${id}`, {user}, { withCredentials: true })
 }

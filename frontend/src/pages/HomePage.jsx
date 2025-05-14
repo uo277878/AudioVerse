@@ -45,13 +45,17 @@ function HomePage(){
                 </div>
             </form>
             {user.followed.length == 0 && <h1 className='text-xl mt-6 font-bold flex flex-col items-center justify-center'>¡Empieza a seguir a gente para ver sus posts aquí!</h1>}
-            <div className="flex flex-col items-center justify-center">
-            {
-                posts.map(post => (
-                    <PostCard post={post} key={post._id}/>
-                ))
-            }
-            </div>
+            {user.followed.length > 0 && (
+                <>
+                    <div className="flex flex-col items-center justify-center">
+                    {
+                        posts.map(post => (
+                            <PostCard post={post} key={post._id}/>
+                        ))
+                    }
+                    </div>
+                </>
+            )}
         </div>
     )
 }

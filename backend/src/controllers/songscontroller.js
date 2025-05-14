@@ -53,6 +53,25 @@ export const addSongToPlaylist = async (req, res) => {
     }
 }
 
+export const removeSongPlaylist = async (req, res) => {
+    const {songId, playlistId} = req.body;
+    const playlist = await Playlist.findById(playlistId);
+    if (!playlist) {
+        return res.status(404).json({ msg: "Playlist no encontrada" });
+    } else if(!songId){
+        return res.status(403).json({ msg: "Id de canción inválido" });
+    } else{
+        const index = playlist.songs.findIndex(i => Array.isArray(i) && i[0] === songId);
+        if(index == -1){
+            return res.status(402).json({ msg: "La playlist no contiene esa canción" });
+        }
+        playlist.songs.splice(index, 1);
+        await playlist.save();
+        
+        return res.status(200).json({playlist});
+    }
+}
+
 export const getAllByUser = async (req, res) => {
     try{
         const user = await User.findById(req.params.id);

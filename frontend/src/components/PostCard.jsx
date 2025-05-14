@@ -21,6 +21,7 @@ function PostCard({post}){
     const [selectedPlaylist, setSelectedPlaylist] = useState('');
     const { getAllByUser, playlists, addSongToPlaylist } = useSongs();
     const [color, setColor] = useState("");
+    const [likedPost, setLikedPost] = useState(false);
 
     useEffect(() => {
         const getTokenFromSpotify = async () => {
@@ -99,9 +100,19 @@ function PostCard({post}){
         }
     }
 
-    async function handleLike(id){
+    useEffect(() => {
+        if (user && post.likedBy?.includes(user.id)) {
+            setLikedPost(true);
+        } else {
+            setLikedPost(false);
+        }
+    }, [post, user]);
+
+    async function handleLike(id, user){
         try{
-            const res = await likePost(id);
+            console.log(user);
+            const res = await likePost(id, user);
+            setLikedPost(res.data.likedBy.includes(user.id));
         } catch(error){
             console.error(error);
         }
@@ -129,8 +140,8 @@ function PostCard({post}){
                         <p className="mt-2 text-lg">{post.text}</p>
                     </div>
                 </div>
-                <button className="text-white flex items-center space-x-1" onClick={() => handleLike(post._id)}>
-                    <ThumbUpIcon className="text-rose-400 mr-2"/> {post.likes}
+                <button className="text-white flex items-center space-x-1" onClick={() => handleLike(post._id, user)}>
+                    <ThumbUpIcon className={`${likedPost ? 'text-rose-400 mr-2' : 'text-rose-200 mr-2' }`}/> {post.likes}
                 </button>
             </div>
             {song && (
