@@ -44,7 +44,11 @@ export const addSongToPlaylist = async (req, res) => {
         return res.status(403).json({ msg: "Id de canción inválido" });
     } else{
         if (!playlist.songs.includes(songId)) {
-            playlist.songs.push([songId, txtSong]);
+            playlist.songs.push({
+                songId: songId,
+                text: txtSong,
+                likedBy: []
+            });
             await playlist.save();
         } else{
             return res.status(402).json({ msg: "La playlist ya contiene esa canción" });
@@ -93,6 +97,61 @@ export const getPlaylist = async (req, res) => {
         } else{
             res.json(playlist);
         }
+    } catch(error){
+        return res.status(500).json({ message: "Se ha producido un error" });
+    }
+};
+
+export const likeText = async (req, res) => {
+    try{
+        const {playlistId, songId, userId} = req.body;
+        const playlist = await Playlist.findById(playlistId);
+        if(!playlist){
+            return res.status(404).json({ message: "Playlist no encontrada"});
+        }
+
+        let songFound = false;
+        playlist.songs = playlist.songs.map(song => {
+            if (song.songId === songId) {
+                songFound = true;
+                if (!song.likedBy.includes(userId)) {
+                    song.likedBy.push(userId); 
+                } else {
+                    song.likedBy.pull(userId); 
+                }
+            }
+            return song;
+        });
+
+        if (!songFound) {
+            return res.status(404).json({ message: 'No se encontró la canción en la playlist' });
+        }
+
+        await playlist.save();
+        return res.status(200).json(playlist);
+    } catch(error){
+        return res.status(500).json({ message: "Se ha producido un error" });
+    }
+};
+
+export const getTotalLikesAndLiked = async (req, res) => {
+    try{
+        const {playlistId, songId, userId} = req.query;
+        const playlist = await Playlist.findById(playlistId);
+        if(!playlist){
+            return res.status(404).json({ message: "Playlist no encontrada"});
+        }
+
+        const song = playlist.songs.find(song => song.songId === songId);
+
+        if (!song) {
+            return res.status(404).json({ message: 'No se encontró la canción en la playlist' });
+        }
+
+        const totalLikes = song.likedBy.length;
+        const liked = song.likedBy.includes(userId);
+
+        return res.status(200).json({liked, totalLikes});
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });
     }

@@ -55,3 +55,11 @@ export const getPlaylistRequest = (id) => {
 export const getAllByUserRequest = (id) => {
     return axios.get(`${API}/playlists/getAllByUser/${id}`, { withCredentials: true });
 }
+
+export const likeTextRequest = (playlistId, songId, userId) => {
+    return axios.put(`${API}/playlists/likeText`, {playlistId, songId, userId}, { withCredentials: true });
+}
+
+export const getTotalLikesAndLikedRequest = (playlistId, songId, userId) => {
+    return axios.get(`${API}/playlists/getTotalLikesAndLiked`, {params: { playlistId, songId, userId}, withCredentials: true });
+}

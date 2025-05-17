@@ -45,16 +45,19 @@ function PlaylistPage(){
         const loadSongs = async () => {
             if (playlist?.songs.length > 0 && accessToken) {
                 const tracks = await Promise.all(
-                    playlist.songs.map(async ([id, text]) => {
-                        const track = await getTrack(accessToken, id);
-                        return {track, text};
+                    playlist.songs.map(async (song) => {
+                        const id = song[0];
+                        const text = song.text;
+                        const likedBy = song.likedBy;
+                        const track = await getTrack(accessToken, song.songId);
+                        return {track, text, likedBy};
                     })
                 );
                 setSongs(tracks);
             }
         }
         loadSongs();
-    }, [accessToken]);
+    }, [playlist, accessToken]);
 
     useEffect(() => {
         const loadCreator = async () => {

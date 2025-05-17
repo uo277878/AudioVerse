@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { getTokenRequest, searchRequest, getTrackRequest, getAlbumRequest, getArtistRequest, 
     getPlaylistSpotifyRequest, createPlaylistRequest, getAllByUserRequest, getPlaylistRequest, 
-    addSongToPlaylistRequest, removeSongPlaylistRequest } from "../api/songs";
+    addSongToPlaylistRequest, removeSongPlaylistRequest, likeTextRequest, getTotalLikesAndLikedRequest } from "../api/songs";
 
 const SongContext = createContext();
 
@@ -121,6 +121,26 @@ export const SongProvider = ({children}) => {
         }
     }
 
+    const likeText = async (playlistId, songId, userId) => {
+        try{
+            const res = await likeTextRequest(playlistId, songId, userId);
+            console.log(res);
+            return res.data;
+        } catch(error){
+            console.error(error);
+        }
+    }
+
+    const getTotalLikesAndLiked = async (playlistId, songId, userId) => {
+        try{
+            const res = await getTotalLikesAndLikedRequest(playlistId, songId, userId);
+            console.log(res);
+            return res.data;
+        } catch(error){
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
             if(errors.length > 0){
                 const timer = setTimeout(() => {
@@ -132,7 +152,7 @@ export const SongProvider = ({children}) => {
 
     return (
         <SongContext.Provider value={{songs, errors, playlists, getToken, search, getTrack, getPlaylistSpotify, getArtist, getAlbum, 
-        createPlaylist, getAllByUser, getPlaylist, addSongToPlaylist, removeSongPlaylist}}>
+        createPlaylist, getAllByUser, getPlaylist, addSongToPlaylist, removeSongPlaylist, likeText, getTotalLikesAndLiked}}>
             {children}
         </SongContext.Provider>
     ) 

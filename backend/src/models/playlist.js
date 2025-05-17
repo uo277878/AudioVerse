@@ -27,8 +27,17 @@ const PlaylistSchema = new mongoose.Schema({
     },
     songs: [
         {
-          type: [String, String],
-          required: true
+            songId: {
+                type: String,
+                required: true
+            },
+            text: {
+                type: String,
+                required: true
+            },
+            likedBy: [{ 
+                type: mongoose.Schema.Types.ObjectId, ref: 'User' 
+            }],
         }
       ],
 }, {

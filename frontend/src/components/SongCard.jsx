@@ -12,6 +12,7 @@ import { faFire } from '@fortawesome/free-solid-svg-icons'
 import { useLocation, useParams } from 'react-router-dom';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useNavigate } from 'react-router-dom';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 function SongCard({song, likedSongs, text}){
     const {register, handleSubmit} = useForm();
@@ -21,9 +22,11 @@ function SongCard({song, likedSongs, text}){
     const {likeSong, dislikeSong} = useUsers();
     const [showModal, setShowModal] = useState(false);
     const [showPostModal, setShowPostModal] = useState(false);
-    const { getAllByUser, playlists, addSongToPlaylist, removeSongPlaylist, errors: songErrors } = useSongs();
+    const { getAllByUser, playlists, addSongToPlaylist, removeSongPlaylist, likeText, getTotalLikesAndLiked ,errors: songErrors } = useSongs();
     const [selectedPlaylist, setSelectedPlaylist] = useState('');
     const [defaultValue, setDefaultValue] = useState("");
+    const [textLiked, setTextLiked] = useState(false);
+    const [totalLikes, setTotalLikes] = useState(0);
 
     const location = useLocation();
     const isPlaylistPage = location.pathname.includes('/playlists/');
@@ -31,9 +34,20 @@ function SongCard({song, likedSongs, text}){
     const navigate = useNavigate();
 
     useEffect(() => {
+        if(user){
+            async function getPlaylists(){
+                try{
+                    const pl = await getAllByUser(user);
+                } catch(error){
+                    console.error(error);
+                }
+            }
+            getPlaylists();
+        }
+    }, [user]);
+
+    useEffect(() => {
         const isLiked = likedSongs?.includes(song.id) || false;
-        console.log(likedSongs);
-        console.log(song);
         if(song.type == "album"){
             setDefaultValue("¡Me encanta este álbum!");
         } else if(song.type == "artist"){
@@ -45,6 +59,16 @@ function SongCard({song, likedSongs, text}){
         }
         setActive(isLiked);
     }, [likedSongs, song.id]);
+
+    useEffect(() => {
+        async function getLikes(){
+            const res = await getTotalLikesAndLiked(playlistId, song.id, user.id);
+            console.log(res);
+            setTotalLikes(res.totalLikes);
+            setTextLiked(res.liked);
+        }
+        getLikes();
+    }, [song]);
 
     async function handleClick(id){
         try{
@@ -85,23 +109,23 @@ function SongCard({song, likedSongs, text}){
         }
     }
 
-    useEffect(() => {
-        if(user){
-            async function getPlaylists(){
-                try{
-                    const pl = await getAllByUser(user);
-                } catch(error){
-                    console.error(error);
-                }
-            }
-            getPlaylists();
-        }
-    }, []);
-
     async function handleDeleteSong(id){
         try{
             const res = await removeSongPlaylist(id, playlistId);
             navigate(0);
+        } catch(error){
+            console.error(error);
+        }
+    }
+
+    async function handleLikeText(){
+        try{
+            const res = await likeText(playlistId, song.id, user.id);
+            const songCard = res.songs.find(s => s.songId === song.id);
+            if (songCard) {
+                setTextLiked(songCard.likedBy.includes(user.id));
+                setTotalLikes(songCard.likedBy.length);
+            }
         } catch(error){
             console.error(error);
         }
@@ -118,9 +142,14 @@ function SongCard({song, likedSongs, text}){
             <div className={`${isPlaylistPage ? 'flex flex-col justify-center' : ''}`}>
                 <p className="text-xl font-bold mt-2">{song.name}</p>
                 {text && isPlaylistPage && (
-                    <p className="text-xl text-gray-300 italic mt-2 mb-4">“{text}”</p>
+                    <div className="flex items-center mt-2">
+                        <p className="text-xl text-gray-300 italic">“{text}”</p>
+                        <button onClick={handleLikeText} className="ml-2 flex items-center text-white">
+                            <ThumbUpIcon className={`${textLiked ? 'text-rose-400' : 'text-rose-200' } mr-1`} />{totalLikes}
+                        </button>
+                    </div>
                 )}
-                <div className='mt-2 flex items-center'>
+                <div className='mt-5 flex items-center'>
                     <Heart className="w-6 h-6" isActive={active} inactiveColor="white" activeColor="red" onClick={() => handleClick(song.id)}/>
                     <svg onClick={() => setShowModal(true)} className="h-6 w-6 ml-2 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                         <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 

@@ -32,7 +32,6 @@ export const getPosts = async (req, res) => {
         .limit(max)
         .populate('user', 'username profilePic')
         .exec();
-        console.log(posts);
         res.json(posts);
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });
@@ -44,7 +43,6 @@ export const likePost = async (req, res) => {
         const postId = req.params.id;
         const userId = req.body.user.id;
         const post = await Post.findById(postId);
-        console.log(userId);
 
         if(!post){
             return res.status(404).json({message: "No se ha encontrado el post"});

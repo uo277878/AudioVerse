@@ -20,8 +20,8 @@ function Navbar(){
                 <>
                     <span className="md:text-xl text-red-200">¡Hola, {user?.username}!</span>
                     <Link to="/users/followed" className="text-white md:text-xl py-2 md:py-0">Mis seguidos</Link>
-                    <Link to="/search" className="text-white md:text-xl py-2 md:py-0">Buscar canciones</Link>
-                    <Link to="/users/search" className="text-white md:text-xl py-2 md:py-0">Buscar personas</Link>
+                    <Link to="/search" className="text-white md:text-xl py-2 md:py-0">Buscador Spotify</Link>
+                    <Link to="/users/search" className="text-white md:text-xl py-2 md:py-0">Explorar</Link>
                     <Link to={`/playlists/getAllByUser/${user.id}`} className="text-white md:text-xl py-2 md:py-0">Mi biblioteca</Link>
                     <Link to="/users/profile" className="text-white md:text-xl py-2 md:py-0">Mi perfil</Link>
                     <Link to="/login" onClick={() => logout()} 
