@@ -21,6 +21,7 @@ function SearchUsersPage(){
             const res = await searchUsers(searchInput);
             if(Array.isArray(res.users)){
                 setUsers(res.users.filter(u => u._id != user.id));
+                setCurrentPage(1);
             } else{
                 setUsers([]);
             }
@@ -37,7 +38,10 @@ function SearchUsersPage(){
 
     return (
         <div className='flex min-h-screen justify-center'>
-            <div className='bg-zinc-800 w-full p-10 rounded-md mx-8 my-8'>
+            <div className='bg-zinc-800 w-full p-10 rounded-md mx-8 my-8 flex flex-col'>
+                <div className="flex justify-center">
+                    <h1 className="text-2xl mb-4 font-bold">Buscador de Audioverse</h1>
+                </div>
                 <div className="relative">
                     <input className="w-full bg-transparent placeholder:text-white text-white text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
                         placeholder="Introduce tu búsqueda" onKeyDown={event => {
@@ -58,15 +62,22 @@ function SearchUsersPage(){
                     ))
                 }
                 {users.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
-                <div className="grid grid-cols-4 gap-3 mt-4">
-                {
-                    currentUsers.map(user => (
-                        <UserSearchCard userSearch={user} key={user._id} />
-                    ))
-                }
+                <div className="flex-grow">
+                    <div className="grid grid-cols-4 gap-3 mt-4">
+                        {
+                            currentUsers.map(user => (
+                                <UserSearchCard userSearch={user} key={user._id} />
+                            ))
+                        }
+                    </div>
                 </div>
-                <Pagination itemsPerPage={usersPerPage} currentPage={currentPage} 
-                setCurrentPage={setCurrentPage} totalItems={totalUsers}></Pagination>
+                
+                {users.length >= usersPerPage && (
+                    <div className="mt-6 self-center">
+                        <Pagination itemsPerPage={usersPerPage} currentPage={currentPage} 
+                        setCurrentPage={setCurrentPage} totalItems={totalUsers}></Pagination>
+                    </div>
+                )}
             </div>
         </div>
     )

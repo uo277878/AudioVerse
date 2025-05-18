@@ -26,7 +26,7 @@ function ProfilePage(){
     });
 
     return (
-        <div className="flex flex-col md:flex-row justify-center items-center">
+        <div className="flex flex-col md:h-screen md:flex-row justify-center items-center">
             <div className="bg-zinc-800 max-w-xl w-full p-10 rounded-md">
                 <h1 className='text-2xl mb-4 font-bold'>Información de su perfil</h1>
                 {

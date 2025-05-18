@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import PlaylistModal from "./PlaylistModal";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { usePosts } from "../context/PostContext";
+import { Link } from "react-router-dom";
 
 function PostCard({post}){
 
@@ -135,8 +136,8 @@ function PostCard({post}){
             <div className="flex items-start justify-between">
                 <div className="flex space-x-4">
                     <img src={post.user.profilePic} alt="Imagen de perfil" className="w-16 h-16 mt-4 rounded-full border-white border-2 border-opacity-100" />
-                    <div className="flex flex-col">
-                        <p className="text-lg">{post.user.username}</p>
+                    <div className="flex flex-col mt-3">
+                        <Link to={`/users/${post.user._id}`} className='text-lg font-bold hover:underline'>{post.user.username}</Link>
                         <p className="mt-2 text-lg">{post.text}</p>
                     </div>
                 </div>

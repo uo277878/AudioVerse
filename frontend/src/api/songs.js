@@ -61,5 +61,6 @@ export const likeTextRequest = (playlistId, songId, userId) => {
 }
 
 export const getTotalLikesAndLikedRequest = (playlistId, songId, userId) => {
+    console.log(playlistId, songId, userId);
     return axios.get(`${API}/playlists/getTotalLikesAndLiked`, {params: { playlistId, songId, userId}, withCredentials: true });
 }

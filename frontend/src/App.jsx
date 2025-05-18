@@ -5,7 +5,6 @@ import WelcomePage from "./pages/WelcomePage"
 import SignUpPage from "./pages/SignUpPage"
 import LoginPage from "./pages/LoginPage"
 import ProtectedRoutes from "./ProtectedRoutes"
-import TimeLinePage from "./pages/TimeLinePage"
 import UserAdminPage from "./pages/UserAdminPage"
 import ProfilePage from "./pages/ProfilePage"
 import Navbar from "./components/Navbar"
@@ -41,7 +40,6 @@ function App(){
                 <Route element={<ProtectedRoutes/>}>
                   <Route element={<AuthLayout/>}>
                     <Route path='/home' element={<HomePage/>}/>
-                    <Route path='/songs' element={<TimeLinePage/>}/>
                     <Route path='/search' element={<SearchPage/>}/>
                     <Route path='/users/getAllUsers' element={<UsersAdminPage/>}/>
                     <Route path='/users/followed' element={<FollowedPage/>}/>

@@ -67,6 +67,7 @@ function SearchPage(){
                 playlists: res.playlists?.items || [],
                 tracks: res.tracks?.items || []
             });
+            setCurrentPage(1);
         } catch (error) {
             console.error("Error en la búsqueda:", error);
         }
@@ -74,7 +75,10 @@ function SearchPage(){
 
     return (
         <div className='flex min-h-screen justify-center'>
-            <div className='bg-zinc-800 w-full p-10 rounded-md mx-8 my-8'>
+            <div className='bg-zinc-800 w-full p-10 rounded-md mx-8 my-8 flex flex-col'>
+                <div className="flex justify-center">
+                    <h1 className="text-2xl mb-4 font-bold">Buscador de Spotify</h1>
+                </div>
                 <div className="relative">
                     <input className="w-full bg-transparent placeholder:text-white text-white text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
                         placeholder="Introduce tu búsqueda" onKeyDown={event => {
@@ -119,15 +123,23 @@ function SearchPage(){
                         </button>
                     )}
                 </div>
-                <div className="grid grid-cols-4 gap-3 mt-4">
-                {
-                    currentItems.map(song => (
-                        <SongCard song={song} key={song.id} likedSongs={likedSongs}/>
-                    ))
-                }
+                <div className="flex-grow">
+                    <div className="grid grid-cols-4 gap-3 mt-4">
+                    {
+                        currentItems.map(song => (
+                            <SongCard song={song} key={song.id} likedSongs={likedSongs}/>
+                        ))
+                    }
                 </div>
-                <Pagination itemsPerPage={itemsPerPage} currentPage={currentPage} 
-            setCurrentPage={setCurrentPage} totalItems={totalItems}></Pagination>
+                
+                </div>
+                {filteredItems.length >= itemsPerPage &&  (
+                    <div className="mt-6 self-center">
+                        <Pagination itemsPerPage={itemsPerPage} currentPage={currentPage} 
+                        setCurrentPage={setCurrentPage} totalItems={totalItems}></Pagination>
+                    </div>
+                )}
+                
             </div>
         </div>
     )

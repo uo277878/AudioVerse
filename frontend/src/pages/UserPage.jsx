@@ -65,14 +65,12 @@ function UserPage(){
                 {gotUser ? (
                     <div>
                         <form className="flex flex-col md:flex-row items-center md:items-start mb-4" >
-                        <div className="w-full md:w-1/4 flex justify-center md:justify-start mr-4 mb-4 md:mb-0">
+                        <div className="flex justify-center md:justify-start mb-4 mr-4 md:mb-0">
                             <img src={gotUser.profilePic} alt="Imagen de perfil" className="w-32 h-32 mt-4 rounded-full border-white border-2 border-opacity-100" />
                         </div>
-                        <div className="w-full md:w-3/4">
-                            <input type="text" placeholder="Username" {... register("username")} 
-                            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2" readOnly></input>
-                            <input type="text" placeholder="Email" {... register("email")} 
-                            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2" readOnly></input>
+                        <div className="mt-4">
+                            <p className="text-white px-4 py-2 my-2 text-xl">Username: <span className="font-bold">{gotUser.username}</span></p>
+                            <p className="text-white px-4 py-2 my-2 text-xl">Email: <span className="font-bold">{gotUser.email}</span></p>
                         </div>
                         </form>
                         <h2 className="text-xl mt-6">Algunas canciones que me gustan...</h2>

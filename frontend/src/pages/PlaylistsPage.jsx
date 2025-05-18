@@ -31,17 +31,28 @@ function PlaylistsPage(){
     }, []);
     
     return (
-        <div className="mt-6">
-            <Link to={`/playlists/new`} className='bg-red-500 p-2 text-white ml-8'>+ Crear playlist</Link>
-            <div className="grid grid-cols-5 gap-3 p-4 mr-6">
-            {
-                currentPlaylists.map(playlist => (
-                    <PlaylistCard playlist={playlist} key={playlist._id}/>
-                ))
-            }
+        <div className="mt-4 ml-4">
+            <div className="flex justify-between items-center px-4 mb-2">
+                <h1 className='text-2xl my-4 ml-4 font-bold'>Biblioteca de playlists</h1>
+                <Link to={`/playlists/new`} className='bg-red-500 p-2 text-white ml-8'>+ Crear playlist</Link>
             </div>
-            <Pagination itemsPerPage={playlistsPerPage} currentPage={currentPage} 
-            setCurrentPage={setCurrentPage} totalItems={totalPlaylists}></Pagination>
+            <hr className="h-1 bg-zinc-700 border-0"></hr>
+            <div className="flex-grow">
+            <div className="grid grid-cols-4 gap-3 p-4 mr-6">
+                {
+                    currentPlaylists.map(playlist => (
+                        <PlaylistCard playlist={playlist} key={playlist._id}/>
+                    ))
+                }
+            </div>
+            </div>
+            {playlists.length >= playlistsPerPage && (
+                <div className="mt-6 self-center">
+                    <Pagination itemsPerPage={playlistsPerPage} currentPage={currentPage} 
+                    setCurrentPage={setCurrentPage} totalItems={totalPlaylists}></Pagination>
+                </div>
+            )}
+            
         </div>
     
     );

@@ -30,8 +30,9 @@ export const getPosts = async (req, res) => {
         .sort({ createdAt: -1 })
         .skip(p)
         .limit(max)
-        .populate('user', 'username profilePic')
+        .populate('user', '_id username profilePic')
         .exec();
+        console.log(posts);
         res.json(posts);
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });

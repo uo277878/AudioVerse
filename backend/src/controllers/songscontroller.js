@@ -137,20 +137,27 @@ export const likeText = async (req, res) => {
 export const getTotalLikesAndLiked = async (req, res) => {
     try{
         const {playlistId, songId, userId} = req.query;
+        console.log(playlistId);
+        console.log(songId);
+        console.log(userId);
         const playlist = await Playlist.findById(playlistId);
         if(!playlist){
             return res.status(404).json({ message: "Playlist no encontrada"});
         }
 
-        const song = playlist.songs.find(song => song.songId === songId);
+        const song = playlist.songs.find(song => song.songId.toString() === songId);
 
         if (!song) {
             return res.status(404).json({ message: 'No se encontró la canción en la playlist' });
         }
 
         const totalLikes = song.likedBy.length;
-        const liked = song.likedBy.includes(userId);
-
+        let liked = false;
+        if(totalLikes > 0){
+            liked = song.likedBy.includes(userId);
+        }
+        console.log(totalLikes);
+        console.log(liked);
         return res.status(200).json({liked, totalLikes});
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });

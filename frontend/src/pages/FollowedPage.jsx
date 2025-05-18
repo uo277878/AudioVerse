@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import UserCard from "../components/UserCard";
 import { useAuth } from "../context/AuthContext";
 import Pagination from "../components/Pagination";
 import { useUsers } from "../context/UserContext";
@@ -26,16 +25,26 @@ function FollowedPage(){
     }, [user]);
 
     return (
-        <div>
-            <div className="grid grid-cols-3 gap-3">
-            {
-                currentUsers.map((user) => (
-                    <FollowedCard user={user} key={user._id}/>
-                ))
-            }
+        <div className="ml-4 mt-4">
+            <h1 className='text-2xl my-4 ml-4 font-bold'>Personas a las que sigues</h1>
+            <hr className="h-1 bg-zinc-700 border-0"></hr>
+            <div className="flex-grow">
+                <div className="grid grid-cols-4 gap-3">
+                {
+                    currentUsers.map((user) => (
+                        <FollowedCard user={user} key={user._id}/>
+                    ))
+                }
+                </div>
             </div>
-            <Pagination itemsPerPage={usersPerPage} currentPage={currentPage} 
-            setCurrentPage={setCurrentPage} totalItems={totalUsers}></Pagination>
+            
+            {users.length >= usersPerPage && (
+                <div className="mt-6 self-center">
+                    <Pagination itemsPerPage={usersPerPage} currentPage={currentPage} 
+                    setCurrentPage={setCurrentPage} totalItems={totalUsers}></Pagination>
+                </div>
+            )}
+            
         </div>
     )
 }

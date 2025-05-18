@@ -30,6 +30,10 @@ function HomePage(){
 
     return (
         <div>
+            <div className="flex justify-center">
+                <h1 className="text-2xl my-4 font-bold">Para ti</h1>
+            </div>
+            <hr className="h-1 bg-zinc-700 border-0 mb-4"></hr>
             <form className='flex items-center justify-center' onSubmit={onSubmit}>
                 <div className='bg-zinc-800 max-w-2xl w-full p-6 rounded-md'>
                     <div className="flex items-center space-x-3">
@@ -39,7 +43,7 @@ function HomePage(){
                     </div>
                     <div className="flex justify-end">
                         <button type="submit" className="bg-rose-500 text-white px-4 py-2 mt-4 rounded-md">
-                            Guardar
+                            Publicar
                         </button>    
                     </div>
                 </div>

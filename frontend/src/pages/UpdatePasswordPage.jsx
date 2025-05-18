@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useUsers } from "../context/UserContext";
 import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 function UpdatePasswordPage(){
     const {register, handleSubmit, formState: {errors}} = useForm();
@@ -16,6 +17,7 @@ function UpdatePasswordPage(){
     return (
         <div className='flex justify-center'>
             <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
+                <h1 className='text-2xl mb-4 font-bold'>Edición de contraseña</h1>
                 {
                     updatePassErrors.map((error, i) => (
                         <div className='bg-red-500 p-2 text-white my-2' key={i}>
@@ -36,7 +38,10 @@ function UpdatePasswordPage(){
                     {
                         errors.repeatPassword && <p className='text-red-500'>Es necesario repetir la nueva contraseña</p>
                     }
-                    <div className="flex justify-end">
+                    <div className="flex justify-between">
+                        <Link to={`/users/profile`} className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
+                            Cancelar
+                        </Link>
                         <button type="submit" className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
                             Guardar
                         </button>

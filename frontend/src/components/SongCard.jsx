@@ -67,7 +67,9 @@ function SongCard({song, likedSongs, text}){
             setTotalLikes(res.totalLikes);
             setTextLiked(res.liked);
         }
-        getLikes();
+        if(isPlaylistPage){
+            getLikes();
+        }
     }, [song]);
 
     async function handleClick(id){

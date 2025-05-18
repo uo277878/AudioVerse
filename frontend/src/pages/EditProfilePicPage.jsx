@@ -65,6 +65,7 @@ function EditProfilePicPage(){
     return (
         <div className="flex justify-center">
             <div className="bg-zinc-800 max-w-xl w-full p-10 rounded-md">
+                <h1 className='text-2xl mb-4 font-bold'>Edición de foto de perfil</h1>
                 <form className="w-full flex flex-col justify-center items-center" onSubmit={onSubmit}>
                     <div className="w-full flex flex-col justify-center items-center mr-4 mb-4 md:mb-0">
                         {
