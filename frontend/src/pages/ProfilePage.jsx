@@ -13,6 +13,7 @@ function ProfilePage(){
 
     useEffect(() => {
         if(user){
+            console.log(user);
             setValue('username', user.username);
             setValue('email', user.email);
             setProfilePic(user.profilePic);
@@ -65,6 +66,7 @@ function ProfilePage(){
                                 Guardar
                             </button>
                         </div>
+                        <p className="text-white mt-2">Parte de Audioverse desde el <b>{new Date(user.createdAt).toLocaleDateString()}</b></p>
                     </div>
                     
                 </form>

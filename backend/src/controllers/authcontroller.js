@@ -94,7 +94,8 @@ export const login = async (req, res) => {
             role: userFound.role,
             profilePic: userFound.profilePic,
             followed: userFound.followed,
-            songsLiked: userFound.songsLiked
+            songsLiked: userFound.songsLiked,
+            createdAt: userFound.createdAt
         }); 
     } catch(error){
         res.status(500).json({ message: error.message});

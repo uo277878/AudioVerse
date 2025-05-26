@@ -7,10 +7,9 @@ function UserCard({user}){
     return(
         <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md ml-4 my-4 ">
             <div className="flex justify-between">
-                <h1 className="text-2xl font-bold">{user.username}</h1>
+                <Link to={`/users/edit/${user._id}`} className='text-2xl font-bold hover:underline'>{user.username}</Link>
                 <div className="flex gap-x-2 items-center">
                     <button className='bg-red-500 p-2 text-white my-2' onClick={() => deleteUser(user._id)}>Eliminar</button>
-                    <Link to={`/users/edit/${user._id}`} className='bg-red-500 p-2 text-white my-2'>Editar</Link>
                 </div>
             </div>
             <p className="text-white">{user.email}</p>

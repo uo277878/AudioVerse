@@ -36,7 +36,7 @@ function UserAdminPage(){
     });
 
     return (
-        <div className="flex flex-col md:flex-row justify-center items-center">
+        <div className="flex flex-col md:h-screen md:flex-row justify-center items-center">
             <div className="bg-zinc-800 max-w-xl w-full p-10 rounded-md">
                 <h1 className='text-2xl mb-4 font-bold'>Edición del perfil</h1>
                 {
@@ -46,8 +46,8 @@ function UserAdminPage(){
                         </div>
                     ))
                 }
-                <form className="flex flex-col md:flex-row items-center md:items-start mb-4" onSubmit={onSubmit}>
-                    <div className="w-full md:w-3/4">
+                <form className="flex flex-col items-center mb-4" onSubmit={onSubmit}>
+                    <div className="w-full">
                         <input type="text" placeholder="Username" {... register("username", {required: true})} 
                         className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></input>
                         {
