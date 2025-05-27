@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 
 function PlaylistCard({playlist}){
-
+    if (!playlist || !Array.isArray(playlist.songs)) {
+        return null; 
+    }
     return(
         <div className="flex flex-col bg-zinc-700 max-w-xs w-full p-10 rounded-md mx-4 my-4 justify-between h-72 relative">
             <img src={playlist.pic} className="w-full h-40 object-cover rounded-md"/>

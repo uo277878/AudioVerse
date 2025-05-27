@@ -3,28 +3,44 @@ import Pagination from "../components/Pagination";
 import { useUsers } from "../context/UserContext";
 import UserSearchCard from "../components/UserSearchCard";
 import { useAuth } from "../context/AuthContext";
+import { useSongs } from "../context/SongContext";
+import PlaylistCard from "../components/PlaylistCard";
  
 function SearchUsersPage(){
     const {searchUsers, errors: searchErrors} = useUsers();
+    const {searchPlaylists} = useSongs();
     const [searchInput, setSearchInput] = useState("");
-    const [users, setUsers] = useState([]);
+    const [items, setItems] = useState([]);
     const {user} = useAuth();
-    const [usersPerPage, setUsersPerPage] = useState(10);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
-    const totalUsers = users.length;
-    const lastIndex = currentPage * usersPerPage;
-    const firstIdex = lastIndex - usersPerPage;
-    const currentUsers = users.slice(firstIdex, lastIndex);
+    const totalItems = items.length;
+    const lastIndex = currentPage * itemsPerPage;
+    const firstIdex = lastIndex - itemsPerPage;
+    const currentItems = items.slice(firstIdex, lastIndex);
+    const [filter, setFilter] = useState("users");
 
-    async function handleSearch(){
+    async function handleSearch(filtro){
         try {
-            const res = await searchUsers(searchInput);
-            if(Array.isArray(res.users)){
-                setUsers(res.users.filter(u => u._id != user.id));
-                setCurrentPage(1);
+            if(filtro == "users"){
+                const res = await searchUsers(searchInput);
+                if(Array.isArray(res.users)){
+                    setItems(res.users.filter(u => u._id != user.id));
+                    setCurrentPage(1);
+                } else{
+                    setItems([]);
+                }
             } else{
-                setUsers([]);
+                const res = await searchPlaylists(searchInput);
+                console.log(res);
+                if(Array.isArray(res)){
+                    setItems(res);
+                    setCurrentPage(1);
+                } else{
+                    setItems([]);
+                }
             }
+            
         } catch (error) {
             console.error(error);
         }
@@ -32,7 +48,7 @@ function SearchUsersPage(){
 
     useEffect(() => {
         if(searchErrors.length > 0){
-            setUsers([]);
+            setItems([]);
         }
     }, [searchErrors]);
 
@@ -46,10 +62,10 @@ function SearchUsersPage(){
                     <input className="w-full bg-transparent placeholder:text-white text-white text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
                         placeholder="Introduce tu búsqueda" onKeyDown={event => {
                             if(event.key == "Enter"){
-                                handleSearch();
+                                handleSearch(filter);
                             }
                         }}  onChange={event => setSearchInput(event.target.value)}/>
-                    <button onClick={handleSearch} className="absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-xl text-white hover:shadow focus:bg-slate-700 focus:shadow-none hover:bg-slate-700"
+                    <button onClick={() => {handleSearch(filter)}} className="absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-xl text-white hover:shadow focus:bg-slate-700 focus:shadow-none hover:bg-slate-700"
                         type="button">
                         Buscar
                     </button> 
@@ -61,21 +77,43 @@ function SearchUsersPage(){
                         </div>
                     ))
                 }
-                {users.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
+                {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
+                <div className="flex flex-row justify-center mt-4">
+                    <p className="mt-3 text-xl">Filtrar por:</p>
+                    <button onClick={() => {
+                        setFilter("users"); 
+                        handleSearch("users");
+                    }} className={`${filter === "users" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Usuarios</button>
+                    <button onClick={() => {
+                        setFilter("playlists"); 
+                        handleSearch("playlists");
+                    }} className={`${filter === "playlists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Playlists</button>
+                </div>
                 <div className="flex-grow">
                     <div className="grid grid-cols-4 gap-3 mt-4">
-                        {
-                            currentUsers.map(user => (
-                                <UserSearchCard userSearch={user} key={user._id} />
-                            ))
-                        }
+                        {filter == "users" ? (
+                            <>
+                                {
+                                    currentItems.map(user => (
+                                        <UserSearchCard userSearch={user} key={user._id} />
+                                    ))
+                                }
+                            </>
+                        ) : (
+                            <>
+                                {
+                                    currentItems.map(playlist => (
+                                        <PlaylistCard playlist={playlist} key={playlist._id} />
+                                    ))
+                                }
+                            </>
+                        )}
                     </div>
                 </div>
-                
-                {users.length >= usersPerPage && (
+                {items.length >= itemsPerPage && (
                     <div className="mt-6 self-center">
-                        <Pagination itemsPerPage={usersPerPage} currentPage={currentPage} 
-                        setCurrentPage={setCurrentPage} totalItems={totalUsers}></Pagination>
+                        <Pagination itemsPerPage={itemsPerPage} currentPage={currentPage} 
+                        setCurrentPage={setCurrentPage} totalItems={totalItems}></Pagination>
                     </div>
                 )}
             </div>

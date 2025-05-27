@@ -102,6 +102,24 @@ export const getPlaylist = async (req, res) => {
     }
 };
 
+export const searchPlaylist = async (req, res) => {
+    try{
+        const {input} = req.body;
+        console.log(input);
+        if (!input) {
+            return res.status(400).json({ message: "El texto de búsqueda es necesario" });
+        }
+        const playlists = await Playlist.find({ name: { $regex: input, $options: 'i' } });
+        if(!playlists || playlists.length == 0){
+            return res.status(404).json({ message: "No se encuentran playlists para ese input"});
+        } else{
+            res.json(playlists);
+        }
+    } catch(error){
+        return res.status(500).json({ message: "Se ha producido un error" });
+    }
+};
+
 export const likeText = async (req, res) => {
     try{
         const {playlistId, songId, userId} = req.body;

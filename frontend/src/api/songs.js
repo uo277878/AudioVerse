@@ -10,6 +10,11 @@ export const searchRequest = (token, input, orderBy) => {
     return axios.post(`${API}/search`, {token, input, orderBy}, {withCredentials: true});
 }
 
+export const searchPlaylistsRequest = (input) => {
+    console.log(input);
+    return axios.post(`${API}/searchPlaylist`, {input}, {withCredentials: true});
+}
+
 export const getTrackRequest = (token, id) => {
     return axios.get(`${API}/getTrack/${id}`, {headers: { Authorization: `Bearer ${token}` }, withCredentials: true});
 }

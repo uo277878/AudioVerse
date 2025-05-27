@@ -1,7 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { getTokenRequest, searchRequest, getTrackRequest, getAlbumRequest, getArtistRequest, 
     getPlaylistSpotifyRequest, createPlaylistRequest, getAllByUserRequest, getPlaylistRequest, 
-    addSongToPlaylistRequest, removeSongPlaylistRequest, likeTextRequest, getTotalLikesAndLikedRequest } from "../api/songs";
+    addSongToPlaylistRequest, removeSongPlaylistRequest, likeTextRequest, getTotalLikesAndLikedRequest,
+    searchPlaylistsRequest } from "../api/songs";
 
 const SongContext = createContext();
 
@@ -29,6 +30,20 @@ export const SongProvider = ({children}) => {
     const search = async (access_token, searchInput, orderBy) => {
         try{
             const res = await searchRequest(access_token, searchInput, orderBy);
+            return res.data;
+        } catch(error){
+            if(Array.isArray(error.response.data)){
+                return setErrors(error.response.data);
+            }
+            setErrors([error.response.data]);
+        }
+    }
+
+    
+    const searchPlaylists = async (searchInput) => {
+        try{
+            const res = await searchPlaylistsRequest(searchInput);
+            console.log(res);
             return res.data;
         } catch(error){
             if(Array.isArray(error.response.data)){
@@ -151,7 +166,7 @@ export const SongProvider = ({children}) => {
         }, [errors])
 
     return (
-        <SongContext.Provider value={{songs, errors, playlists, getToken, search, getTrack, getPlaylistSpotify, getArtist, getAlbum, 
+        <SongContext.Provider value={{songs, errors, playlists, getToken, search, searchPlaylists, getTrack, getPlaylistSpotify, getArtist, getAlbum, 
         createPlaylist, getAllByUser, getPlaylist, addSongToPlaylist, removeSongPlaylist, likeText, getTotalLikesAndLiked}}>
             {children}
         </SongContext.Provider>
