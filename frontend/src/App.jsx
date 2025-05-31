@@ -7,7 +7,6 @@ import LoginPage from "./pages/LoginPage"
 import ProtectedRoutes from "./ProtectedRoutes"
 import UserAdminPage from "./pages/UserAdminPage"
 import ProfilePage from "./pages/ProfilePage"
-import Navbar from "./components/Navbar"
 import { UserProvider } from "./context/UserContext"
 import UpdatePasswordPage from "./pages/UpdatePasswordPage"
 import EditProfilePicPage from "./pages/EditProfilePicPage"
@@ -24,12 +23,15 @@ import SearchUsersPage from "./pages/SearchUsersPage"
 import HomePage from "./pages/HomePage"
 import { PostProvider } from "./context/PostContext"
 import AuthLayout from "./components/AuthLayout"
+import { PlayerProvider } from "./context/PlayerContext";
+import PlayerBar from "./components/PlayerBar";
 
 function App(){
   return (
-    <AuthProvider>
-      <UserProvider>
-        <SongProvider>
+    <SongProvider>
+    <PlayerProvider>
+      <AuthProvider>
+        <UserProvider>
           <PostProvider>
             <BrowserRouter>
               <Routes>
@@ -57,9 +59,10 @@ function App(){
               </Routes>
             </BrowserRouter>
           </PostProvider>
-        </SongProvider>
-      </UserProvider>
-    </AuthProvider>
+        </UserProvider>
+      </AuthProvider>
+    </PlayerProvider>
+    </SongProvider>
     
   )
 }

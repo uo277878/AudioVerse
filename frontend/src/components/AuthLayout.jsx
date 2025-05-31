@@ -1,5 +1,6 @@
 import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
+import PlayerBar from "./PlayerBar";
 
 function AuthLayout() {
   return (
@@ -8,6 +9,7 @@ function AuthLayout() {
       <main className="p-6">
         <Outlet />
       </main>
+      <PlayerBar />
     </div>
   );
 }
