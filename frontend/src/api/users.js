@@ -46,8 +46,8 @@ export const getFollowedUsersRequest = (user) => {
 
 export const deleteUserRequest = (id) => axios.delete(`${API}/users/${id}`, { withCredentials: true });
 
-export const searchUserRequest = async (input) => {
-    return await axios.post(`${API}/users/search`, {input}, {withCredentials: true});
+export const searchUserRequest = async (input, orderBy, userAuth) => {
+    return await axios.post(`${API}/users/search`, {input, orderBy, userAuth}, {withCredentials: true});
 }
 
 export const followRequest = async (user, id) => {

@@ -19,30 +19,34 @@ function SearchUsersPage(){
     const firstIdex = lastIndex - itemsPerPage;
     const currentItems = items.slice(firstIdex, lastIndex);
     const [filter, setFilter] = useState("users");
+    const [orderBy, setOrderBy] = useState("");
 
     async function handleSearch(filtro){
-        try {
-            if(filtro == "users"){
-                const res = await searchUsers(searchInput);
-                if(Array.isArray(res.users)){
-                    setItems(res.users.filter(u => u._id != user.id));
-                    setCurrentPage(1);
+        if(searchInput){
+            try {
+                if(filtro == "users"){
+                    const res = await searchUsers(searchInput, orderBy, user);
+                    console.log(res);
+                    if(Array.isArray(res.users)){
+                        setItems(res.users.filter(u => u._id != user.id));
+                        setCurrentPage(1);
+                    } else{
+                        setItems([]);
+                    }
                 } else{
-                    setItems([]);
+                    const res = await searchPlaylists(searchInput);
+                    console.log(res);
+                    if(Array.isArray(res)){
+                        setItems(res);
+                        setCurrentPage(1);
+                    } else{
+                        setItems([]);
+                    }
                 }
-            } else{
-                const res = await searchPlaylists(searchInput);
-                console.log(res);
-                if(Array.isArray(res)){
-                    setItems(res);
-                    setCurrentPage(1);
-                } else{
-                    setItems([]);
-                }
+                
+            } catch (error) {
+                console.error(error);
             }
-            
-        } catch (error) {
-            console.error(error);
         }
     }
 
@@ -51,6 +55,13 @@ function SearchUsersPage(){
             setItems([]);
         }
     }, [searchErrors]);
+
+    useEffect(() => {
+        if (searchInput !== "") {
+            console.log(searchInput);
+            handleSearch(filter);
+        }
+    }, [orderBy]);
 
     return (
         <div className='flex min-h-screen justify-center'>
@@ -79,15 +90,27 @@ function SearchUsersPage(){
                 }
                 {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
                 <div className="flex flex-row justify-center mt-4">
-                    <p className="mt-3 text-xl">Filtrar por:</p>
-                    <button onClick={() => {
-                        setFilter("users"); 
-                        handleSearch("users");
-                    }} className={`${filter === "users" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Usuarios</button>
-                    <button onClick={() => {
-                        setFilter("playlists"); 
-                        handleSearch("playlists");
-                    }} className={`${filter === "playlists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Playlists</button>
+                    <div className="flex items-center gap-2">
+                        <p className="text-xl">Filtrar por:</p>
+                        <button onClick={() => {
+                            setFilter("users"); 
+                            handleSearch("users");
+                        }} className={`${filter === "users" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Usuarios</button>
+                        <button onClick={() => {
+                            setFilter("playlists"); 
+                            handleSearch("playlists");
+                        }} className={`${filter === "playlists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mr-2 rounded-3xl`}>Playlists</button>
+                    </div>
+                    {(filter == "users") && (
+                        <div className="flex items-center gap-2 ml-4">
+                            <p className="text-xl">Ordenar por:</p>
+                            <button
+                                onClick={() => setOrderBy(orderBy === "matches" ? "" : "matches")}
+                                className={`${orderBy === "matches" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>
+                                Matches
+                            </button>
+                        </div>
+                    )}
                 </div>
                 <div className="flex-grow">
                     <div className="grid grid-cols-4 gap-3 mt-4">

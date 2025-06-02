@@ -2,11 +2,20 @@ import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { useUsers } from "../context/UserContext";
 import { useState } from "react";
+import { useMemo } from "react";
 
 function UserSearchCard({userSearch}){
     const {user} = useAuth();
     const {follow, unfollow} = useUsers();
     const [isFollowing, setIsFollowing] = useState(user.followed.includes(userSearch._id));
+
+    const matchCount = useMemo(() => {
+        if (!userSearch?.songsLiked || !user?.songsLiked) {
+            return 0;
+        }
+        const authUserLiked = new Set(user.songsLiked.map(id => id.toString()));
+        return userSearch.songsLiked.filter(songId => authUserLiked.has(songId.toString())).length;
+    }, [userSearch?.songsLiked, user?.songsLiked]);
 
     async function handleFollow(id){
         try {
@@ -46,6 +55,7 @@ function UserSearchCard({userSearch}){
                     
                 </div>
             </div>
+            <p className="text-white mt-2">Canciones en común: <span className="font-bold">{matchCount}</span></p>
         </div>
     );
 }

@@ -29,7 +29,6 @@ import PlayerBar from "./components/PlayerBar";
 function App(){
   return (
     <SongProvider>
-    <PlayerProvider>
       <AuthProvider>
         <UserProvider>
           <PostProvider>
@@ -61,7 +60,6 @@ function App(){
           </PostProvider>
         </UserProvider>
       </AuthProvider>
-    </PlayerProvider>
     </SongProvider>
     
   )

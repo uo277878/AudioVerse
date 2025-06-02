@@ -36,7 +36,6 @@ export const createUser = async (req, res) => {
 export const getUser = async (req, res) => {
     try{
         const user = await User.findById(req.params.id);
-        console.log(user);
         if(!user){
             return res.status(404).json({ message: "Usuario no encontrado"});
         } else{
@@ -129,7 +128,6 @@ export const updatePassword = async (req, res) => {
 export const getFollowedUsers = async(req, res) => {
     try{
         const user = await User.findById(req.params.id).populate("followed");
-        console.log(user);
         if(!user){
             return res.status(404).json({ message: "Usuario no encontrado"});
         } else{
@@ -198,22 +196,34 @@ export const passwordPage = async (req, res) => {
 export const searchUser = async (req, res) => {
     try{
         const input = req.body.input;
+        const orderBy = req.body.orderBy;
+        const authId = req.body.userAuth.id;
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
         }
 
-        const users = await User.find({
-            username: { $regex: new RegExp(input, 'i') }
-        });
+        const authUser = await User.findById(authId);
+        let users = await User.find({ username: { $regex: new RegExp(input, 'i') }, _id: { $ne: authId } });
 
-        if (users.length == 0) {
-            return res.json({});
+        if (orderBy == "matches") {
+            const likedIds = new Set(authUser.songsLiked.map(id => id.toString()));
+            users = users
+                .map(user => {
+                    const userObj = user.toJSON();
+                    const matchCount = Array.isArray(userObj.songsLiked)
+                    ? userObj.songsLiked.filter(songId => likedIds.has(songId.toString())).length
+                    : 0;
+                    console.log(matchCount);
+                    return { ...userObj, matchCount };
+                })
+                .sort((a, b) => b.matchCount - a.matchCount); 
         }
-
+        console.log(users);
         return res.json({users});
     } catch(error){
+        console.error(error);
         return res.status(500).json({ message: "Error al buscar el usuario" });
     }
 }
@@ -263,13 +273,17 @@ export const likeSong = async (req, res) => {
             await user.save();
         }
         const mgPlaylist = await Playlist.findOne({creator: user._id, name: "Canciones que me gustan"});
-        console.log(mgPlaylist);
         if (!mgPlaylist.songs.includes(idSong)) {
-            mgPlaylist.songs.push(idSong);
+            mgPlaylist.songs.push({
+                songId: idSong,
+                text: "",
+                likedBy: []
+            });
             await mgPlaylist.save();
         }
         return res.status(200).json({user});
     } catch(error){
+        console.error(error);
         return res.status(500).json({ message: "Se ha producido un error al darle me gusta a la canción" });
     }
 }
@@ -283,10 +297,12 @@ export const dislikeSong = async (req, res) => {
             await user.save();
         }
         const mgPlaylist = await Playlist.findOne({creator: user._id, name: "Canciones que me gustan"});
-        console.log(mgPlaylist);
-        if (mgPlaylist.songs.includes(idSong)) {
-            mgPlaylist.songs.pull(idSong);
-            await mgPlaylist.save();
+        if (mgPlaylist) {
+            const index = mgPlaylist.songs.findIndex(s => s.songId === idSong);
+            if (index !== -1) {
+                mgPlaylist.songs.splice(index, 1);
+                await mgPlaylist.save();
+            }
         }
         return res.status(200).json({user});
     } catch(error){

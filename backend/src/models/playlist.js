@@ -20,6 +20,14 @@ const PlaylistSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    followedBy: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            required: false,
+            ref: "User",
+            default: []
+        }
+    ],
     numFollows:{
         type: Number,
         required: true,
@@ -32,8 +40,7 @@ const PlaylistSchema = new mongoose.Schema({
                 required: true
             },
             text: {
-                type: String,
-                required: true
+                type: String
             },
             likedBy: [{ 
                 type: mongoose.Schema.Types.ObjectId, ref: 'User' 

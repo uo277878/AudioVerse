@@ -9,7 +9,6 @@ function AuthLayout() {
       <main className="p-6">
         <Outlet />
       </main>
-      <PlayerBar />
     </div>
   );
 }

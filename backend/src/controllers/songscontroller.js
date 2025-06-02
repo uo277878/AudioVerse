@@ -59,20 +59,66 @@ export const addSongToPlaylist = async (req, res) => {
 
 export const removeSongPlaylist = async (req, res) => {
     const {songId, playlistId} = req.body;
+    console.log("SongID: " + songId);
     const playlist = await Playlist.findById(playlistId);
     if (!playlist) {
         return res.status(404).json({ msg: "Playlist no encontrada" });
     } else if(!songId){
-        return res.status(403).json({ msg: "Id de canción inválido" });
+        return res.status(404).json({ msg: "Id de canción inválido" });
     } else{
-        const index = playlist.songs.findIndex(i => Array.isArray(i) && i[0] === songId);
-        if(index == -1){
-            return res.status(402).json({ msg: "La playlist no contiene esa canción" });
+        try{
+            const index = playlist.songs.findIndex(i => i.songId === songId);
+            console.log(playlist.songs);
+            if(index == -1){
+                return res.status(404).json({ msg: "La playlist no contiene esa canción" });
+            }
+            playlist.songs.splice(index, 1);
+            await playlist.save();
+            
+            return res.status(200).json({playlist});    
+        } catch(error){
+            console.error(error);
+            return res.status(500).json({ message: "Se ha producido un error al eliminar la canción dela playlist" });
         }
-        playlist.songs.splice(index, 1);
-        await playlist.save();
         
+    }
+}
+
+export const followPlaylist = async (req, res) => {
+    try{
+        const {playlistId, userId} = req.body;
+        const playlist = await Playlist.findById(playlistId);
+        if(!playlist){
+            return res.status(404).json({ message: "Playlist no encontrada"});
+        }
+        if (!playlist.followedBy.includes(userId)) {
+            playlist.followedBy.push(userId);
+            await playlist.save();
+        } else{
+            return res.status(402).json({ msg: "La playlist ya está seguida por este usuario" });
+        }
         return res.status(200).json({playlist});
+    } catch(error){
+        return res.status(500).json({ message: "Se ha producido un error" });
+    }
+}
+
+export const unfollowPlaylist = async (req, res) => {
+    try{
+        const {playlistId, userId} = req.body;
+        const playlist = await Playlist.findById(playlistId);
+        if(!playlist){
+            return res.status(404).json({ message: "Playlist no encontrada"});
+        }
+        if (playlist.followedBy.includes(userId)) {
+            playlist.followedBy.pull(userId);
+            await playlist.save();
+        } else{
+            return res.status(402).json({ msg: "La playlist no es seguida por este usuario" });
+        }
+        return res.status(200).json({playlist});
+    } catch(error){
+        return res.status(500).json({ message: "Se ha producido un error" });
     }
 }
 
@@ -82,7 +128,7 @@ export const getAllByUser = async (req, res) => {
         if(!user){
             return res.status(404).json({ message: "No se ha encontrado ningún usuario con ese id" });
         }
-        const playlists = await Playlist.find({creator: { $in: [user._id] }});
+        const playlists = await Playlist.find({$or: [{ creator: user._id }, { followedBy: user._id } ]});
         res.json(playlists);
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });
@@ -105,7 +151,6 @@ export const getPlaylist = async (req, res) => {
 export const searchPlaylist = async (req, res) => {
     try{
         const {input} = req.body;
-        console.log(input);
         if (!input) {
             return res.status(400).json({ message: "El texto de búsqueda es necesario" });
         }
@@ -155,9 +200,6 @@ export const likeText = async (req, res) => {
 export const getTotalLikesAndLiked = async (req, res) => {
     try{
         const {playlistId, songId, userId} = req.query;
-        console.log(playlistId);
-        console.log(songId);
-        console.log(userId);
         const playlist = await Playlist.findById(playlistId);
         if(!playlist){
             return res.status(404).json({ message: "Playlist no encontrada"});
@@ -174,8 +216,6 @@ export const getTotalLikesAndLiked = async (req, res) => {
         if(totalLikes > 0){
             liked = song.likedBy.includes(userId);
         }
-        console.log(totalLikes);
-        console.log(liked);
         return res.status(200).json({liked, totalLikes});
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });

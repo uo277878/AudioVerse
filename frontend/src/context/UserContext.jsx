@@ -108,9 +108,12 @@ export const UserProvider = ({children}) => {
         }
     }
 
-    const searchUsers = async (input) => {
+    const searchUsers = async (input, orderBy, userAuth) => {
         try{
-            const res = await searchUserRequest(input);
+            console.log(input);
+            console.log(orderBy);
+            console.log(userAuth);
+            const res = await searchUserRequest(input, orderBy, userAuth);
             return res.data;
         } catch(error){
             if(Array.isArray(error.response.data)){
