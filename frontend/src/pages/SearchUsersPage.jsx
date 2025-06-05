@@ -101,7 +101,7 @@ function SearchUsersPage(){
                             handleSearch("playlists");
                         }} className={`${filter === "playlists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mr-2 rounded-3xl`}>Playlists</button>
                     </div>
-                    {(filter == "users") && (
+                    {(filter == "users") && (user.role == "user") && (
                         <div className="flex items-center gap-2 ml-4">
                             <p className="text-xl">Ordenar por:</p>
                             <button

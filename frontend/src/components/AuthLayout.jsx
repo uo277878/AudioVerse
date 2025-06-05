@@ -1,6 +1,5 @@
 import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
-import PlayerBar from "./PlayerBar";
 
 function AuthLayout() {
   return (

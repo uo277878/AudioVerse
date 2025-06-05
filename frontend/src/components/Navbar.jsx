@@ -41,6 +41,8 @@ function Navbar(){
                     )}
                     <Link to="/users/search" className="text-white md:text-xl py-2 md:py-0 hover:underline">Explorar</Link>
                     <Link to="/users/profile" className="text-white md:text-xl py-2 md:py-0 hover:underline">Mi perfil</Link>
+                    <Link to="/player" className="text-white md:text-xl py-2 md:py-0 hover:underline">Reproductor</Link>
+                    <Link to="/spotifyLogin" className="text-white md:text-xl py-2 md:py-0 hover:underline">Spotify login</Link>
                     <Link to="/login" onClick={() => logout()} 
                     className="mt-auto bg-red-500 px-4 py-2 rounded-md text-white text-center md:text-xl hover:underline">
                         Cerrar sesión

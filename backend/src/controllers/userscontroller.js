@@ -149,7 +149,6 @@ export const deleteUser = async (req, res) => {
     } catch(error){
         return res.status(404).json({ message: "Usuario no encontrado"});
     }
-    
 }
 
 export const profile = async (req, res) => {
@@ -307,5 +306,21 @@ export const dislikeSong = async (req, res) => {
         return res.status(200).json({user});
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error al eliminar el me gusta de la canción" });
+    }
+}
+
+export const getLikedSongs = async(req, res) => {
+    console.log(req);
+    try{
+        const user = await User.findById(req.params.id).populate("songsLiked");
+        console.log(user);
+        if(!user){
+            return res.status(404).json({ message: "Usuario no encontrado"});
+        } else{
+            res.json({songsLiked: user.songsLiked});
+        }
+    } catch(error){
+        console.error(error);
+        return res.status(500).json({ message: "Usuario no encontrado"});
     }
 }

@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { getTokenRequest, searchRequest, getTrackRequest, getAlbumRequest, getArtistRequest, 
     getPlaylistSpotifyRequest, createPlaylistRequest, getAllByUserRequest, getPlaylistRequest, 
     addSongToPlaylistRequest, removeSongPlaylistRequest, likeTextRequest, getTotalLikesAndLikedRequest,
-    searchPlaylistsRequest, followPlaylistRequest, unfollowPlaylistRequest } from "../api/songs";
+    searchPlaylistsRequest, followPlaylistRequest, unfollowPlaylistRequest, removePlaylistRequest } from "../api/songs";
 
 const SongContext = createContext();
 
@@ -50,6 +50,15 @@ export const SongProvider = ({children}) => {
                 return setErrors(error.response.data);
             }
             setErrors([error.response.data]);
+        }
+    }
+
+    const removePlaylist = async (id) => {
+        try{
+            const res = await removePlaylistRequest(id);
+            return res;
+        } catch(error){
+            console.error(error);
         }
     }
 
@@ -183,7 +192,8 @@ export const SongProvider = ({children}) => {
 
     return (
         <SongContext.Provider value={{songs, errors, playlists, getToken, search, searchPlaylists, getTrack, getPlaylistSpotify, getArtist, getAlbum, 
-        createPlaylist, getAllByUser, getPlaylist, addSongToPlaylist, removeSongPlaylist, likeText, getTotalLikesAndLiked, followPlaylist, unfollowPlaylist}}>
+        createPlaylist, getAllByUser, getPlaylist, addSongToPlaylist, removeSongPlaylist, likeText, getTotalLikesAndLiked, followPlaylist, 
+        unfollowPlaylist, removePlaylist}}>
             {children}
         </SongContext.Provider>
     ) 

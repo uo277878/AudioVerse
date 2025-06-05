@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useSongs } from "../context/SongContext";
 import SongCard from "../components/SongCard";
 import Pagination from "../components/Pagination";
-import { useAuth } from "../context/AuthContext";
 import { useUsers } from "../context/UserContext";
+import { useAuth } from "../context/AuthContext";
  
 function SearchPage(){
     const {user} = useAuth();
-    const {likedSongs} = useUsers();
+    const {likedSongs, getLikedSongs} = useUsers();
     const [searchInput, setSearchInput] = useState("");
     const [accessToken, setAccessToken] = useState();
     const [filter, setFilter] = useState("tracks");
@@ -57,8 +57,14 @@ function SearchPage(){
         }
     }, [orderBy]);
 
+    useEffect(() => {
+        if(user){
+            getLikedSongs(user.id);
+        }
+        console.log(likedSongs);
+    }, [user.songsLiked]);
+
     async function handleSearch(){
-        console.log(orderBy);
         try {
             const res = await search(accessToken, searchInput, orderBy);
             setItems({

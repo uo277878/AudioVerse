@@ -1,15 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CiCirclePlus } from "react-icons/ci";
 import { CiCircleCheck } from "react-icons/ci";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useSongs } from "../context/SongContext";
+import RemoveIcon from '@mui/icons-material/Remove';
 
 function PlaylistCard({playlist}){
     const [isFollowed, setIsFollowed] = useState(false);
     const {user} = useAuth();
-    const {followPlaylist, unfollowPlaylist} = useSongs();
+    const {followPlaylist, unfollowPlaylist, removePlaylist} = useSongs();
+    const navigate = useNavigate();
 
     if (!playlist || !Array.isArray(playlist.songs)) {
         return null; 
@@ -43,10 +45,22 @@ function PlaylistCard({playlist}){
         }
     }
 
+    async function handleDeletePlaylist(id){
+        try{
+            const res = await removePlaylist(id);
+            navigate(0);
+        } catch(error){
+            console.error(error);
+        }
+    }
+
     return(
         <div className="flex flex-col bg-zinc-700 max-w-xs w-full p-10 rounded-md mx-4 my-4 justify-between h-72 relative">
             {playlist.creator == user.id ? 
             <>
+                <button className="absolute top-4 right-4 text-white hover:text-red-500" onClick={() => handleDeletePlaylist(playlist._id)}>
+                    <RemoveIcon />
+                </button>
             </> :
             <>
                 {isFollowed ? 

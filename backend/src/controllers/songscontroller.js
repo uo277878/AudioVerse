@@ -35,6 +35,19 @@ export const createPlaylist = async (req, res) => {
     }
 };
 
+export const removePlaylist = async (req, res) => {
+    try{
+        const playlist = await Playlist.findByIdAndDelete(req.params.id);
+        if(!playlist){
+            return res.status(404).json({ message: "Playlist no encontrada"});
+        } else{
+            return res.sendStatus(204);
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 export const addSongToPlaylist = async (req, res) => {
     const {playlistId, songId, txtSong} = req.body;
     const playlist = await Playlist.findById(playlistId);
@@ -210,8 +223,9 @@ export const getTotalLikesAndLiked = async (req, res) => {
         if (!song) {
             return res.status(404).json({ message: 'No se encontró la canción en la playlist' });
         }
+        console.log(song);
 
-        const totalLikes = song.likedBy.length;
+        const totalLikes = song.likedBy?.length || 0;
         let liked = false;
         if(totalLikes > 0){
             liked = song.likedBy.includes(userId);

@@ -47,7 +47,12 @@ function SongCard({song, likedSongs, text}){
     }, [user]);
 
     useEffect(() => {
-        const isLiked = likedSongs?.includes(song.id) || false;
+        let isLiked = false;
+        console.log("Me gusta en songCard");
+        console.log(likedSongs);
+        if(likedSongs.length > 0){
+            isLiked = likedSongs?.includes(song.id);
+        }
         if(song.type == "album"){
             setDefaultValue("¡Me encanta este álbum!");
         } else if(song.type == "artist"){

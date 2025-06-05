@@ -19,7 +19,10 @@ export const PostProvider = ({children}) => {
             const res = await createPostRequest(userId, text, songId, type);
             return res.data;
         } catch(error){
-            console.error(error);
+            if(Array.isArray(error.response.data)){
+                return setErrors(error.response.data);
+            }
+            setErrors([error.response.data])
         }
     }
 
@@ -59,7 +62,7 @@ export const PostProvider = ({children}) => {
             }, [errors])
     
         return (
-            <PostContext.Provider value={{posts, createPost, getPosts, likePost}}>
+            <PostContext.Provider value={{posts, errors, createPost, getPosts, likePost}}>
                 {children}
             </PostContext.Provider>
         ) 

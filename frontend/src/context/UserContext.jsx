@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { getUserRequest, updateProfileRequest, updatePasswordRequest, 
     updateProfilePicRequest, updateUserRequest, getUsersAdminRequest, 
     deleteUserRequest, getFollowedUsersRequest, 
-    searchUserRequest, followRequest, unfollowRequest, likeSongRequest, dislikeSongRequest} from "../api/users";
+    searchUserRequest, followRequest, unfollowRequest, likeSongRequest, dislikeSongRequest, getLikedSongsRequest} from "../api/users";
 
 const UserContext = createContext();
 
@@ -21,6 +21,17 @@ export const UserProvider = ({children}) => {
     const getUser = async (id) => {
         try{
             const res = await getUserRequest(id);
+            setLikedSongs(res.data.songsLiked);
+            return res.data;
+        } catch(error){
+            console.error(error);
+        }
+    }
+    
+    const getLikedSongs = async (id) => {
+        try{
+            const res = await getLikedSongsRequest(id);
+            console.log(res.data);
             setLikedSongs(res.data.songsLiked);
             return res.data;
         } catch(error){
@@ -172,7 +183,8 @@ export const UserProvider = ({children}) => {
 
     return (
         <UserContext.Provider value={{users, getUser, updateProfile, errors, updatePassword, updateProfilePic, 
-        updateUser, getUsersAdmin, deleteUser, getFollowedUsers, searchUsers, follow, unfollow, likeSong, dislikeSong, likedSongs}}>
+        updateUser, getUsersAdmin, deleteUser, getFollowedUsers, searchUsers, follow, unfollow, likeSong, dislikeSong, 
+        likedSongs, getLikedSongs}}>
             {children}
         </UserContext.Provider>
     ) 

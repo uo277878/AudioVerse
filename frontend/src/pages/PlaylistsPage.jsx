@@ -16,6 +16,12 @@ function PlaylistsPage(){
     const firstIdex = lastIndex - playlistsPerPage;
     const currentPlaylists = playlists.slice(firstIdex, lastIndex);
 
+    useEffect(() =>{
+        if(user.role != "user"){
+            navigate("/error");
+        }
+    }, []);
+
     useEffect(() => {
         if(user){
             async function getPlaylists(){

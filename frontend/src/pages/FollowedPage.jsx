@@ -16,6 +16,12 @@ function FollowedPage(){
     const firstIdex = lastIndex - usersPerPage;
     const currentUsers = users.slice(firstIdex, lastIndex);
 
+    useEffect(() =>{
+            if(user.role != "user"){
+                navigate("/error");
+            }
+        }, []);
+
     useEffect(() => {
         async function getFollowed(){
             const res = await getFollowedUsers(user);

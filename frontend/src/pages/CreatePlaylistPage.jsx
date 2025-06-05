@@ -13,6 +13,12 @@ function CreatePlaylistPage(){
     const [selectedFile, setSelectedFile] = useState(null);
     const navigate = useNavigate();
 
+    useEffect(() =>{
+        if(user.role != "user"){
+            navigate("/error");
+        }
+    }, []);
+
     useEffect(() => {
             setPlaylistPic(playlistPic);
             setPreviewPic(previewPic);

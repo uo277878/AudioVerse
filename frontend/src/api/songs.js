@@ -67,6 +67,10 @@ export const getPlaylistRequest = (id) => {
     return axios.get(`${API}/playlists/${id}`, { withCredentials: true });
 };
 
+export const removePlaylistRequest = (id) => {
+    axios.delete(`${API}/playlists/delete/${id}`, { withCredentials: true });
+}
+
 export const getAllByUserRequest = (id) => {
     return axios.get(`${API}/playlists/getAllByUser/${id}`, { withCredentials: true });
 }

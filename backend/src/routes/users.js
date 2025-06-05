@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import { tokenRequired } from '../middlewares/validateToken.js';
 import {getUsers, getUser, createUser, deleteUser, updateProfile, profile, updatePassword, updateUser, 
-    passwordPage, getFollowedUsers, searchUser, followUser, unfollowUser, likeSong, dislikeSong} from '../controllers/userscontroller.js';
+    passwordPage, getFollowedUsers, searchUser, followUser, unfollowUser, likeSong, dislikeSong, getLikedSongs} from '../controllers/userscontroller.js';
 import {updateProfileValidator, updatePasswordValidator} from '../middlewares/authValidator.js';
 import { uploadProfileImage } from '../controllers/upload.js';
 import { searchUserValidator } from '../middlewares/usersValidator.js';
@@ -23,6 +23,7 @@ router.post('/users/follow/:id', tokenRequired, followUser);
 router.post('/users/unfollow/:id', tokenRequired, unfollowUser);
 router.post('/users/like', tokenRequired, likeSong);
 router.post('/users/dislike', tokenRequired, dislikeSong);
+router.get('/users/getLikedSongs/:id', tokenRequired, getLikedSongs);
 router.get('/users/:id', tokenRequired, getUser);
 router.delete('/users/:id', tokenRequired, deleteUser);
 
