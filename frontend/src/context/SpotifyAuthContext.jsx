@@ -84,7 +84,7 @@ export const SpotifyProvider = ({children}) => {
         if (response.access_token) {
             localStorage.setItem("spotify_access_token", response.access_token);
             setAccessToken(response.access_token);
-            return response.accessToken;
+            return response.access_token;
         } else {
             console.error("Error obteniendo el token:", response);
             return null;
@@ -95,6 +95,22 @@ export const SpotifyProvider = ({children}) => {
         const token = localStorage.getItem("spotify_access_token");
         if (token) {
             setAccessToken(token);
+            /*
+            fetch("https://api.spotify.com/v1/me", {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            .then(res => {
+            if (res.ok) {
+                setAccessToken(token);
+            } else {
+                localStorage.removeItem("spotify_access_token");
+                redirectToSpotifyAuth();
+            }
+            })
+            .catch(err => {
+            console.error("Error validando token:", err);
+            redirectToSpotifyAuth();
+            });*/
         } else {
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get("code");
@@ -102,6 +118,8 @@ export const SpotifyProvider = ({children}) => {
             if (code) {
                 getAccessToken(code);
                 window.history.replaceState({}, null, window.location.pathname); 
+            } else{
+                redirectToSpotifyAuth();
             }
         }
     }, []);

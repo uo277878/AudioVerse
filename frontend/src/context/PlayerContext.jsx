@@ -16,6 +16,7 @@ export const PlayerProvider = ({ children }) => {
   const [isReady, setIsReady] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(null);
   const playerRef = useRef(null);
+  const [isPaused, setIsPaused] = useState(false);
 
   const { accessToken, setAccessToken } = useSpotify();
 
@@ -43,9 +44,10 @@ export const PlayerProvider = ({ children }) => {
 
   useEffect(() => {
     console.log(accessToken);
-    if (!accessToken || playerRef.current) return;
 
-    window.onSpotifyWebPlaybackSDKReady = () => {
+    const setupPlayer = () => {
+      if (!accessToken || playerRef.current) return;
+
       const player = new window.Spotify.Player({
         name: "AudioVerse Web Player",
         getOAuthToken: cb => cb(accessToken),
@@ -72,6 +74,7 @@ export const PlayerProvider = ({ children }) => {
         if (!state) return;
         const current = state.track_window.current_track;
         setCurrentTrack(current);
+        setIsPaused(state.paused);
       });
 
       player.addListener("initialization_error", e => console.error("init error", e));
@@ -81,10 +84,12 @@ export const PlayerProvider = ({ children }) => {
 
       player.connect();
       playerRef.current = player;
-    }
+    };
 
     if (window.Spotify) {
-      window.onSpotifyWebPlaybackSDKReady();
+      setupPlayer();
+    } else {
+      window.onSpotifyWebPlaybackSDKReady = setupPlayer;
     }
   }, [accessToken]);
 
@@ -119,7 +124,7 @@ export const PlayerProvider = ({ children }) => {
   };
 
   return (
-    <PlayerContext.Provider value={{ playTrack, currentTrack, togglePlay, isReady }}>
+    <PlayerContext.Provider value={{ playTrack, currentTrack, togglePlay, isReady, isPaused }}>
       {children}
     </PlayerContext.Provider>
   );

@@ -13,6 +13,8 @@ import { useLocation, useParams } from 'react-router-dom';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useNavigate } from 'react-router-dom';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import { FaPlay } from "react-icons/fa";
+
 
 function SongCard({song, likedSongs, text}){
     const {register, handleSubmit} = useForm();
@@ -138,6 +140,10 @@ function SongCard({song, likedSongs, text}){
         }
     }
 
+    async function handlePlay(){
+        navigate(`/player?uri=${encodeURIComponent(song.uri)}`);
+    }
+
     return(
         <div className={`relative bg-zinc-700 max-w-md w-full p-10 rounded-md ml-4 mb-4 ${isPlaylistPage ? 'flex items-center' : ''}`}>
             {isPlaylistPage && (
@@ -158,17 +164,20 @@ function SongCard({song, likedSongs, text}){
                 )}
                 <div className='mt-5 flex items-center'>
                     <Heart className="w-6 h-6" isActive={active} inactiveColor="white" activeColor="red" onClick={() => handleClick(song.id)}/>
-                    <svg onClick={() => setShowModal(true)} className="h-6 w-6 ml-2 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <svg onClick={() => setShowModal(true)} className="h-6 w-6 ml-2 text-rose-300 hover:text-rose-200" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                         <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 
                         0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/>
                     </svg>
-                    <svg onClick={() => setShowPostModal(true)} className="h-6 w-6 ml-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                    <svg onClick={() => setShowPostModal(true)} className="h-6 w-6 ml-2 text-rose-300 hover:text-rose-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                     strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/> 
                         <circle cx="18" cy="19" r="3" />  
                         <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />  
                         <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
                     </svg>
+                    <button onClick={handlePlay} className="text-xl px-6 py-3 rounded-lg text-rose-300 hover:text-rose-200">
+                        <FaPlay/>
+                    </button>
                     {song.popularity > 60 && 
                     <>
                         <FontAwesomeIcon icon={faFire} style={{color: "#ff7300",}} className='h-6 w-6 ml-auto'/>
