@@ -4,6 +4,8 @@ import Pagination from "../components/Pagination";
 import { useSongs } from "../context/SongContext";
 import PlaylistCard from "../components/PlaylistCard";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 function PlaylistsPage(){
     const { getAllByUser, playlists } = useSongs();
@@ -15,10 +17,17 @@ function PlaylistsPage(){
     const lastIndex = currentPage * playlistsPerPage;
     const firstIdex = lastIndex - playlistsPerPage;
     const currentPlaylists = playlists.slice(firstIdex, lastIndex);
+    const navigate = useNavigate();
+    const params = useParams();
 
     useEffect(() =>{
         if(user.role != "user"){
             navigate("/error");
+        }
+        if(params.id){
+            if(params.id != user.id){
+                navigate("/error");
+            }
         }
     }, []);
 

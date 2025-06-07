@@ -1,12 +1,22 @@
 import { usePlayer } from "../context/PlayerContext";
 import { FaPlay, FaPause } from "react-icons/fa";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
+import { useAuth } from "../context/AuthContext";
 
 function PlayerPage() {
   const { currentTrack, togglePlay, isReady, isPaused, playTrack } = usePlayer();
+  const {user} = useAuth();
   const location = useLocation();
   const started = useRef(false);
+
+  const navigate = useNavigate();
+  
+  useEffect(() =>{
+      if(user.role != "user"){
+          navigate("/error");
+      }
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

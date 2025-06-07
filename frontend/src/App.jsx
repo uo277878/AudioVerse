@@ -41,10 +41,10 @@ function App(){
                   <Route path='/' element={<WelcomePage/>}/>
                   <Route path='/login' element={<LoginPage/>}/>
                   <Route path='/signup' element={<SignUpPage/>}/>
-                  <Route path='/error' element={<ErrorPage/>}/>
                   <Route element={<ProtectedRoutes/>}>
                     <Route element={<AuthLayout/>}>
                       <Route path='/home' element={<HomePage/>}/>
+                      <Route path='/error' element={<ErrorPage/>}/>
                       <Route path='/spotifyLogin' element={<SpotifyLogin/>}/>
                       <Route path='/search' element={<SearchPage/>}/>
                       <Route path='/users/getAllUsers' element={<UsersAdminPage/>}/>

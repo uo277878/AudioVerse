@@ -3,7 +3,7 @@ import { tokenRequired } from '../middlewares/validateToken.js';
 import { getToken, getTrack, search, getAlbum, getArtist, getPlaylistSpotify } from '../controllers/spotify.js';
 import { createPlaylist, getAllByUser, getPlaylist, addSongToPlaylist, removeSongPlaylist, likeText, 
     getTotalLikesAndLiked, searchPlaylist, followPlaylist, unfollowPlaylist, removePlaylist } from '../controllers/songscontroller.js';
-import { searchSongValidator } from '../middlewares/songValidator.js';
+import { createPlaylistValidator, searchSongValidator } from '../middlewares/songValidator.js';
 
 const router = new Router();
 
@@ -14,7 +14,7 @@ router.get('/getTrack/:id', tokenRequired, getTrack);
 router.get('/getAlbum/:id', tokenRequired, getAlbum);
 router.get('/getArtist/:id', tokenRequired, getArtist);
 router.get('/getPlaylist/:id', tokenRequired, getPlaylistSpotify);
-router.post('/playlists/new', tokenRequired, createPlaylist);
+router.post('/playlists/new', createPlaylistValidator , tokenRequired, createPlaylist);
 router.post('/playlists/add', tokenRequired, addSongToPlaylist);
 router.delete('/playlists/remove', tokenRequired, removeSongPlaylist);
 router.delete('/playlists/delete/:id', tokenRequired, removePlaylist);

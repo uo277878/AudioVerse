@@ -92,36 +92,43 @@ export const SpotifyProvider = ({children}) => {
     };
 
     useEffect(() => {
+        const checkAuth = async () => {
         const token = localStorage.getItem("spotify_access_token");
+
         if (token) {
-            setAccessToken(token);
-            /*
-            fetch("https://api.spotify.com/v1/me", {
-                headers: { Authorization: `Bearer ${token}` }
-            })
-            .then(res => {
-            if (res.ok) {
-                setAccessToken(token);
-            } else {
-                localStorage.removeItem("spotify_access_token");
+            try {
+                const res = await fetch("https://api.spotify.com/v1/me", {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (res.ok) {
+                    setAccessToken(token);
+                } else {
+                    localStorage.removeItem("spotify_access_token");
+                    redirectToSpotifyAuth();
+                }
+            } catch (err) {
                 redirectToSpotifyAuth();
             }
-            })
-            .catch(err => {
-            console.error("Error validando token:", err);
-            redirectToSpotifyAuth();
-            });*/
         } else {
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get("code");
             console.log("Código recibido desde Spotify:", code);
+
             if (code) {
-                getAccessToken(code);
-                window.history.replaceState({}, null, window.location.pathname); 
-            } else{
+                try {
+                    await getAccessToken(code);
+                    window.history.replaceState({}, null, window.location.pathname); 
+                } catch (err) {
+                    redirectToSpotifyAuth();
+                }
+            } else {
                 redirectToSpotifyAuth();
             }
         }
+    };
+
+    checkAuth();
     }, []);
 
     return (

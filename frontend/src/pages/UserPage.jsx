@@ -92,15 +92,23 @@ function UserPage(){
             <div className="bg-zinc-800 max-w-4xl w-full p-10 rounded-md">
                 <div className="flex justify-between items-center">
                     <h1 className='text-2xl mb-4 font-bold'>Información del perfil</h1>
-                    {isFollowing ? (
-                            <>
-                                <button className="bg-green-500 text-black p-2 rounded-md text-center" onClick={() => handleUnfollow(gotUser._id)}>Siguiendo</button>
-                            </>
-                        ) : (
-                            <>
-                                <button className="bg-white text-black p-2 rounded-md text-center" onClick={() => handleFollow(gotUser._id)}>Seguir</button>
-                            </>
-                        )}      
+                    {user.role == "user" ? (
+                        <>
+                            {isFollowing ? (
+                                <>
+                                    <button className="bg-green-500 text-black p-2 mt-4 rounded-md text-center" onClick={() => handleUnfollow(userSearch._id)}>Siguiendo</button>
+                                </>
+                            ) : (
+                                <>
+                                    <button className="bg-white text-black p-2 mt-4 rounded-md text-center" onClick={() => handleFollow(userSearch._id)}>Seguir</button>
+                                </>
+                            )}
+                        </>) :
+                        (
+                        <>
+                        
+                        </>
+                        )}    
                 </div>
                 {gotUser ? (
                     <div>

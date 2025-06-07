@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import Pagination from "../components/Pagination";
 import { useUsers } from "../context/UserContext";
 import FollowedCard from "../components/FollowedCard";
+import { useNavigate } from 'react-router-dom';
 
 function FollowedPage(){
 
@@ -15,12 +16,13 @@ function FollowedPage(){
     const lastIndex = currentPage * usersPerPage;
     const firstIdex = lastIndex - usersPerPage;
     const currentUsers = users.slice(firstIdex, lastIndex);
+    const navigate = useNavigate();
 
     useEffect(() =>{
-            if(user.role != "user"){
-                navigate("/error");
-            }
-        }, []);
+        if(user.role != "user"){
+            navigate("/error");
+        }
+    }, []);
 
     useEffect(() => {
         async function getFollowed(){

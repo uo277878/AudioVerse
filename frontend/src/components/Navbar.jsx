@@ -33,16 +33,16 @@ function Navbar(){
                             <Link to="/users/followed" className="text-white md:text-xl py-2 md:py-0 hover:underline">Mis seguidos</Link>
                             <Link to="/search" className="text-white md:text-xl py-2 md:py-0 hover:underline">Buscador Spotify</Link>
                             <Link to={`/playlists/getAllByUser/${user.id}`} className="text-white md:text-xl py-2 md:py-0 hover:underline">Mi biblioteca</Link>
+                            <Link to="/player" className="text-white md:text-xl py-2 md:py-0 hover:underline">Reproductor</Link>
+                            <Link to="/spotifyLogin" className="text-white md:text-xl py-2 md:py-0 hover:underline">Spotify login</Link>
                         </>
                     ) : (
                         <>
-                            <Link to="/users/getAllUsers" className="text-white md:text-xl py-2 md:py-0 hover:underline">Usuarios</Link>
+                            
                         </>
                     )}
                     <Link to="/users/search" className="text-white md:text-xl py-2 md:py-0 hover:underline">Explorar</Link>
                     <Link to="/users/profile" className="text-white md:text-xl py-2 md:py-0 hover:underline">Mi perfil</Link>
-                    <Link to="/player" className="text-white md:text-xl py-2 md:py-0 hover:underline">Reproductor</Link>
-                    <Link to="/spotifyLogin" className="text-white md:text-xl py-2 md:py-0 hover:underline">Spotify login</Link>
                     <Link to="/login" onClick={() => logout()} 
                     className="mt-auto bg-red-500 px-4 py-2 rounded-md text-white text-center md:text-xl hover:underline">
                         Cerrar sesión

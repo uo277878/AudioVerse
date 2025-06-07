@@ -42,20 +42,28 @@ function UserSearchCard({userSearch}){
                     <img src={userSearch.profilePic} alt="Imagen de perfil" className="w-20 h-20 mt-4 rounded-full border-white border-2 border-opacity-100 mr-2" />
                     <div className="flex flex-col">
                         <Link to={`/users/${userSearch._id}`} className='text-2xl font-bold hover:underline'>{userSearch.username}</Link>
-                        {isFollowing ? (
+                        {user.role == "user" ? (
                             <>
-                                <button className="bg-green-500 text-black p-2 mt-4 rounded-md text-center" onClick={() => handleUnfollow(userSearch._id)}>Siguiendo</button>
+                            {isFollowing ? (
+                                <>
+                                    <button className="bg-green-500 text-black p-2 mt-4 rounded-md text-center" onClick={() => handleUnfollow(userSearch._id)}>Siguiendo</button>
+                                </>
+                            ) : (
+                                <>
+                                    <button className="bg-white text-black p-2 mt-4 rounded-md text-center" onClick={() => handleFollow(userSearch._id)}>Seguir</button>
+                                </>
+                            )}
                             </>
-                        ) : (
-                            <>
-                                <button className="bg-white text-black p-2 mt-4 rounded-md text-center" onClick={() => handleFollow(userSearch._id)}>Seguir</button>
-                            </>
-                        )}
+                        ) :
+                        (<></>)}
                     </div>
-                    
                 </div>
             </div>
-            <p className="text-white mt-2">Canciones en común: <span className="font-bold">{matchCount}</span></p>
+            {user.role == "user" ? (
+                <>
+                    <p className="text-white mt-2">Canciones en común: <span className="font-bold">{matchCount}</span></p>
+                </>
+            ) : (<></>)}
         </div>
     );
 }

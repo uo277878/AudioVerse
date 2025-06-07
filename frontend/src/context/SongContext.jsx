@@ -103,7 +103,10 @@ export const SongProvider = ({children}) => {
         try{
             const res = await createPlaylistRequest(user, data)
         } catch(error){
-            console.error(error);
+            if(Array.isArray(error.response.data)){
+                return setErrors(error.response.data);
+            }
+            setErrors([error.response.data]);
         }
     }
 

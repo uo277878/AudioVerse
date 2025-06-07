@@ -14,6 +14,11 @@ cloudinary.config({
 
 export const createPlaylist = async (req, res) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
+            return;
+        }
         let image = req.files?.pic ? req.files.pic.tempFilePath : "https://res.cloudinary.com/dtlhuysrz/image/upload/v1743524882/default_playlist_qv9jx6.png";
         const result = await cloudinary.uploader.upload(image, {
             folder: "playlist_pictures",
@@ -31,7 +36,7 @@ export const createPlaylist = async (req, res) => {
         const newPlaylist = await playlist.save();
         res.json({ newPlaylist });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ msg: error.message });
     }
 };
 
