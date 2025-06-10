@@ -58,16 +58,6 @@ export const PlayerProvider = ({ children }) => {
         console.log("Reproductor listo:", device_id);
         setDeviceId(device_id);
         setIsReady(true);
-        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
-          method: "PUT",
-          body: JSON.stringify({
-            uris: ["spotify:track:3z8h0TU7ReDPLIbEnYhWZb"]
-          }),
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }).catch(err => console.error("Error al reproducir:", err));
       });
 
       player.addListener("player_state_changed", (state) => {

@@ -34,6 +34,7 @@ export const createPlaylist = async (req, res) => {
         });
 
         const newPlaylist = await playlist.save();
+        console.log(newPlaylist);
         res.json({ newPlaylist });
     } catch (error) {
         res.status(500).json({ msg: error.message });

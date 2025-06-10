@@ -14,10 +14,12 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { useNavigate } from 'react-router-dom';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { FaPlay } from "react-icons/fa";
+import { toast, Zoom } from "react-toastify";
 
 
 function SongCard({song, likedSongs, text}){
-    const {register, handleSubmit} = useForm();
+    const { register: registerPlaylist, handleSubmit: handleSubmitPlaylist } = useForm();
+    const { register: registerPost, handleSubmit: handleSubmitPost } = useForm();
     const {createPost} = usePosts();
     const [active, setActive] = useState(false);
     const {user} = useAuth();
@@ -50,8 +52,6 @@ function SongCard({song, likedSongs, text}){
 
     useEffect(() => {
         let isLiked = false;
-        console.log("Me gusta en songCard");
-        console.log(likedSongs);
         if(likedSongs.length > 0){
             isLiked = likedSongs?.includes(song.id);
         }
@@ -111,8 +111,21 @@ function SongCard({song, likedSongs, text}){
 
     async function handleCreatePost(data){
         try {
-            const res = await createPost(user.id, data.txtPost, song.id, song.type);
-            console.log(song);
+            console.log(data);
+            const res = await createPost(user.id, data.text, song.id, song.type);
+            if(res.newPost){
+                toast.success('Post creado con éxito', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
+            }
         } catch (error) {
             console.error(error);
         }
@@ -203,9 +216,9 @@ function SongCard({song, likedSongs, text}){
                         </option>
                     ))}
                 </select>
-                <form onSubmit={handleSubmit(handleSaveToPlaylist)}>
+                <form onSubmit={handleSubmitPlaylist(handleSaveToPlaylist)}>
                     <span className="block my-2 text-sm text-gray-500 dark:text-neutral-500">50 caracteres</span>
-                    <textarea {...register("txtSong", {required: true})}  rows="3" maxLength={50} 
+                    <textarea {...registerPlaylist("txtSong", {required: true})}  rows="3" maxLength={50} 
                     className="resize-none p-3 w-full text-xl text-gray-900 bg-gray-50 rounded-lg border
                         dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                         placeholder="¿Por qué añades esta canción?"></textarea>
@@ -216,8 +229,8 @@ function SongCard({song, likedSongs, text}){
                 
             </PlaylistModal>
             <PostModal isVisible={showPostModal} onClose={() => setShowPostModal(false)}>
-                <form onSubmit={handleSubmit(handleCreatePost)}>
-                    <textarea {...register("txtPost")} id="txtPost" rows="4" className="resize-none p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border
+                <form onSubmit={handleSubmitPost(handleCreatePost)}>
+                    <textarea {...registerPost("text")} rows="4" className="resize-none p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border
                     dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" defaultValue={defaultValue}></textarea>
                     <div className="flex items-center mb-4">
                         <img src={song.images != null ? song.images[0].url : song.album.images[0].url} className="w-12 h-12 rounded mr-3" />

@@ -3,6 +3,7 @@ import { useSongs } from "../context/SongContext";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast, Zoom } from "react-toastify";
 
 function CreatePlaylistPage(){
     const {register, handleSubmit, formState: {errors}} = useForm();
@@ -20,9 +21,9 @@ function CreatePlaylistPage(){
     }, []);
 
     useEffect(() => {
-            setPlaylistPic(playlistPic);
-            setPreviewPic(previewPic);
-        }, []);
+        setPlaylistPic(playlistPic);
+        setPreviewPic(previewPic);
+    }, []);
 
     const onSubmit = handleSubmit(async (data) => {
         if(user){
@@ -35,7 +36,21 @@ function CreatePlaylistPage(){
             } else {
                 formData.append("pic", playlistPic);
             }
-            createPlaylist(user, data);
+            const res = await createPlaylist(user, data);
+            console.log(res);
+            if(res.newPlaylist){
+                toast.success('Playlist creada con éxito', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
+            }
         }
     });
 
@@ -54,7 +69,7 @@ function CreatePlaylistPage(){
     const handleCancelar= () => {
         setPreviewPic(playlistPic);
         setSelectedFile(null);
-        navigate("/playlists/getAll");
+        navigate("/playlists/getAllByUser/" + user.id);
     }
 
     return (

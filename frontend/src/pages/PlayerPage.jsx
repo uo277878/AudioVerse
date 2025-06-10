@@ -3,10 +3,12 @@ import { FaPlay, FaPause } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useSpotify } from "../context/SpotifyAuthContext";
 
 function PlayerPage() {
   const { currentTrack, togglePlay, isReady, isPaused, playTrack } = usePlayer();
   const {user} = useAuth();
+  const { accessToken, getAccessToken } = useSpotify();
   const location = useLocation();
   const started = useRef(false);
 
@@ -17,6 +19,25 @@ function PlayerPage() {
           navigate("/error");
       }
   }, []);
+
+  useEffect(() => {
+    const checkCode = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+
+      if (code) {
+        const token = await getAccessToken(code);
+        if (token) {
+          navigate("/player");
+          window.history.replaceState({}, null, window.location.pathname);
+        }
+      }
+    };
+
+    if (!accessToken) {
+      checkCode();
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

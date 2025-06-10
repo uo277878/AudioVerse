@@ -27,6 +27,7 @@ import { SpotifyProvider } from "./context/SpotifyAuthContext"
 import PlayerPage from "./pages/PlayerPage"
 import { PlayerProvider } from "./context/PlayerContext"
 import SpotifyLogin from "./pages/SpotifyLogin"
+import { ToastContainer, Zoom } from 'react-toastify';
 
 function App(){
   return (
@@ -62,6 +63,19 @@ function App(){
                     </Route>
                   </Route>
                 </Routes>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="colored"
+                    transition={Zoom}
+                    />
               </BrowserRouter>
             </PostProvider>
           </UserProvider>

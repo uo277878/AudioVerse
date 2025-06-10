@@ -1,4 +1,5 @@
 import { createContext,useContext,useState, useEffect } from "react";
+
 const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 const REDIRECT_URI = "http://localhost:5173/player"; 
 const SCOPES = [
@@ -105,10 +106,9 @@ export const SpotifyProvider = ({children}) => {
                     setAccessToken(token);
                 } else {
                     localStorage.removeItem("spotify_access_token");
-                    redirectToSpotifyAuth();
                 }
             } catch (err) {
-                redirectToSpotifyAuth();
+                localStorage.removeItem("spotify_access_token");
             }
         } else {
             const urlParams = new URLSearchParams(window.location.search);
@@ -116,14 +116,8 @@ export const SpotifyProvider = ({children}) => {
             console.log("Código recibido desde Spotify:", code);
 
             if (code) {
-                try {
-                    await getAccessToken(code);
-                    window.history.replaceState({}, null, window.location.pathname); 
-                } catch (err) {
-                    redirectToSpotifyAuth();
-                }
-            } else {
-                redirectToSpotifyAuth();
+                await getAccessToken(code);
+                window.history.replaceState({}, null, window.location.pathname); 
             }
         }
     };
@@ -132,7 +126,7 @@ export const SpotifyProvider = ({children}) => {
     }, []);
 
     return (
-        <SpotifyAuthContext.Provider value={{accessToken, redirectToSpotifyAuth}}>
+        <SpotifyAuthContext.Provider value={{accessToken, redirectToSpotifyAuth, getAccessToken}}>
             {children}
         </SpotifyAuthContext.Provider>
     )

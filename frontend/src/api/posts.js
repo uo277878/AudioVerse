@@ -14,3 +14,7 @@ export const likePostRequest = (id, user) => {
     console.log(user);
     return axios.put(`${API}/home/like/${id}`, {user}, { withCredentials: true })
 }
+
+export const deletePostRequest = (id) => {
+    return axios.delete(`${API}/home/delete/${id}`, { withCredentials: true })
+}

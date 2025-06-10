@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import {createPostRequest, getPostsRequest, likePostRequest}  from "../api/posts";
+import {createPostRequest, getPostsRequest, likePostRequest, deletePostRequest}  from "../api/posts";
 
 const PostContext = createContext();
 
@@ -16,6 +16,10 @@ export const PostProvider = ({children}) => {
     
     const createPost = async (userId, text, songId, type) => {
         try{
+            console.log(userId);
+            console.log(text);
+            console.log(songId);
+            console.log(type);
             const res = await createPostRequest(userId, text, songId, type);
             return res.data;
         } catch(error){
@@ -52,6 +56,15 @@ export const PostProvider = ({children}) => {
         }
     }
 
+    const deletePost = async (id) => {
+        try{
+            const res = await deletePostRequest(id);
+            return res;
+        } catch(error){
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
                 if(errors.length > 0){
                     const timer = setTimeout(() => {
@@ -62,7 +75,7 @@ export const PostProvider = ({children}) => {
             }, [errors])
     
         return (
-            <PostContext.Provider value={{posts, errors, createPost, getPosts, likePost}}>
+            <PostContext.Provider value={{posts, errors, createPost, getPosts, likePost, deletePost}}>
                 {children}
             </PostContext.Provider>
         ) 

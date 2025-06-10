@@ -6,12 +6,13 @@ import { useAuth } from "../context/AuthContext";
 import PlaylistModal from "./PlaylistModal";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { usePosts } from "../context/PostContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 function PostCard({post}){
 
     const {getToken, getTrack, getArtist, getPlaylistSpotify, getAlbum} = useSongs();
-    const {likePost} = usePosts();
+    const {likePost, deletePost} = usePosts();
     const [accessToken, setAccessToken] = useState(null);
     const [song, setSong] = useState(null);
     const {likeSong, dislikeSong} = useUsers();
@@ -23,6 +24,7 @@ function PostCard({post}){
     const { getAllByUser, playlists, addSongToPlaylist } = useSongs();
     const [color, setColor] = useState("");
     const [likedPost, setLikedPost] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getTokenFromSpotify = async () => {
@@ -131,6 +133,15 @@ function PostCard({post}){
         }
     }
 
+    async function handleDeletePost(id){
+        try{
+            const res = await deletePost(id);
+            navigate(0);
+        } catch(error){
+            console.error(error);
+        }
+    }
+
     return(
         <div className='bg-zinc-800 max-w-2xl w-full p-6 rounded-md mt-2'>
             <div className="flex items-start justify-between">
@@ -141,12 +152,14 @@ function PostCard({post}){
                         <p className="mt-2 text-lg">{post.text}</p>
                     </div>
                 </div>
-                <button className="text-white flex items-center space-x-1" onClick={() => handleLike(post._id, user)}>
-                    <ThumbUpIcon className={`${likedPost ? 'text-rose-400 mr-2' : 'text-rose-200 mr-2' }`}/> {post.likes}
-                </button>
+                {post.user._id == user.id && (
+                    <button className=" text-white hover:text-red-500" onClick={() => handleDeletePost(post._id)}>
+                        <FaRegTrashAlt className="w-5 h-5" />
+                    </button>
+                )}
             </div>
             {song && (
-                    <div className={`relative flex items-center space-x-4 mt-4 p-4 ${color} rounded`}>
+                    <div className={`relative flex items-center space-x-4 my-4 p-4 ${color} rounded`}>
                         <img src={song.images != null ? song.images[0].url : song.album.images[0].url} alt="Portada de la canción" className="w-20 h-20 rounded" />
                         <div className="flex flex-col">
                             <p className="text-white font-semibold text-lg">{song.name}</p>
@@ -167,6 +180,12 @@ function PostCard({post}){
                         </div>
                     </div>
                 )}
+                <div className="flex justify-end">
+                    <button className="text-white flex items-center space-x-1" onClick={() => handleLike(post._id, user)}>
+                        <ThumbUpIcon className={`${likedPost ? 'text-rose-400 mr-2' : 'text-rose-200 mr-2' }`}/> {post.likes}
+                    </button>
+                </div>
+                
             <PlaylistModal isVisible={showModal} onClose={() => setShowModal(false)}>
                 <select className="w-full p-2 rounded bg-zinc-700 text-white" value={selectedPlaylist} 
                 onChange={(e) => setSelectedPlaylist(e.target.value)}>

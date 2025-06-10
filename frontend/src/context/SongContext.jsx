@@ -102,6 +102,7 @@ export const SongProvider = ({children}) => {
     const createPlaylist = async (user, data) => {
         try{
             const res = await createPlaylistRequest(user, data)
+            return res.data;
         } catch(error){
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);

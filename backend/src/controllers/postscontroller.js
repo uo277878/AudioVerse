@@ -6,6 +6,7 @@ export const createPost = async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            console.log(errors);
             res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
             return;
         }
@@ -65,5 +66,18 @@ export const likePost = async (req, res) => {
         res.json(updated);
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error al darle like al post" });
+    }
+}
+
+export const deletePost = async (req, res) => {
+    try{
+        const post = await Post.findByIdAndDelete(req.params.id);
+        if(!post){
+            return res.status(404).json({ message: "Post no encontrado"});
+        } else{
+            return res.sendStatus(204);
+        }
+    } catch(error){
+        return res.status(404).json({ message: "Post no encontrado"});
     }
 }
