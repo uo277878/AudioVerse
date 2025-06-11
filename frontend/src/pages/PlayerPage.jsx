@@ -30,6 +30,8 @@ function PlayerPage() {
         if (token) {
           navigate("/player");
           window.history.replaceState({}, null, window.location.pathname);
+        } else{
+          navigate("/spotifyLogin");
         }
       }
     };

@@ -114,6 +114,7 @@ export const SongProvider = ({children}) => {
     const addSongToPlaylist = async (playlist, id, txtSong) => {
         try{
             const res = await addSongToPlaylistRequest(playlist, id, txtSong)
+            return res.data;
         } catch(error){
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);

@@ -99,10 +99,18 @@ function SongCard({song, likedSongs, text}){
         try {
             console.log(data.txtSong);
             const res = await addSongToPlaylist(selectedPlaylist, song.id, data.txtSong);
-            if(res.status == 200){
-                setShowModal(false);
-            } else{
-
+            if(res.playlist){
+                toast.success('Canción añadida a la playlist con éxito', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
             }
         } catch (error) {
             console.error(error);
