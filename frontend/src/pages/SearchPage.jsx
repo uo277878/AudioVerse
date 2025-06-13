@@ -4,6 +4,7 @@ import SongCard from "../components/SongCard";
 import Pagination from "../components/Pagination";
 import { useUsers } from "../context/UserContext";
 import { useAuth } from "../context/AuthContext";
+import { toast, Zoom } from "react-toastify";
  
 function SearchPage(){
     const {user} = useAuth();
@@ -34,7 +35,17 @@ function SearchPage(){
                 const token = await getToken();
                 setAccessToken(token);
             } catch(error){
-                console.error(error);
+                toast.error('Se ha producido un error al obtener el token de Spotify', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
             }
         }
         getTokenFromSpotify();
@@ -75,7 +86,17 @@ function SearchPage(){
             });
             setCurrentPage(1);
         } catch (error) {
-            console.error("Error en la búsqueda:", error);
+            toast.error('Se ha producido un error al buscar', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 

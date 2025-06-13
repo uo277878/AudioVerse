@@ -6,6 +6,7 @@ import PlaylistCard from "../components/PlaylistCard";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import { toast, Zoom } from "react-toastify";
 
 function PlaylistsPage(){
     const { getAllByUser, playlists } = useSongs();
@@ -37,7 +38,17 @@ function PlaylistsPage(){
                 try{
                     const pl = await getAllByUser(user);
                 } catch(error){
-                    console.error(error);
+                    toast.error('Se ha producido un error al obtener las playlists', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: false,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                        transition: Zoom,
+                    });
                 }
             }
             getPlaylists();

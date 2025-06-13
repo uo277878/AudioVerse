@@ -42,6 +42,7 @@ export const UserProvider = ({children}) => {
     const updateProfile = async (user, userData) => {
         try{
             const res = await updateProfileRequest(user, userData);
+            return res.data;
         } catch(error){
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);
@@ -53,6 +54,7 @@ export const UserProvider = ({children}) => {
     const updatePassword = async (userData) => {
         try{
             const res = await updatePasswordRequest(userData);
+            return res.data;
         } catch(error){
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);
@@ -125,8 +127,10 @@ export const UserProvider = ({children}) => {
             console.log(orderBy);
             console.log(userAuth);
             const res = await searchUserRequest(input, orderBy, userAuth);
+            console.log(res);
             return res.data;
         } catch(error){
+            console.log(error);
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);
             }

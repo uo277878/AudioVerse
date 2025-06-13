@@ -8,6 +8,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { usePosts } from "../context/PostContext";
 import { Link, useNavigate } from "react-router-dom";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { toast, Zoom } from "react-toastify";
 
 function PostCard({post}){
 
@@ -32,7 +33,17 @@ function PostCard({post}){
                 const token = await getToken();
                 setAccessToken(token);
             } catch(error){
-                console.error(error);
+                toast.error('Se ha producido un error al obtener el token de Spotify', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
             }
         }
         getTokenFromSpotify();
@@ -81,7 +92,17 @@ function PostCard({post}){
                 try{
                     const pl = await getAllByUser(user);
                 } catch(error){
-                    console.error(error);
+                    toast.error('Se ha producido un error al obtener las playlists del usuario', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: false,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                        transition: Zoom,
+                    });
                 }
             }
             getPlaylists();
@@ -99,7 +120,17 @@ function PostCard({post}){
             }
 
         } catch(error){
-            console.error(error);
+            toast.error('Se ha producido un error al hacer click en el corazón', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -117,7 +148,17 @@ function PostCard({post}){
             const res = await likePost(id, user);
             setLikedPost(res.data.likedBy.includes(user.id));
         } catch(error){
-            console.error(error);
+            toast.error('Se ha producido un error al dar me gusta al post', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -129,7 +170,17 @@ function PostCard({post}){
                 setShowModal(false);
             } 
         } catch (error) {
-            console.error(error);
+            toast.error('Se ha producido un error al añadir la canción a la playlist', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -138,7 +189,17 @@ function PostCard({post}){
             const res = await deletePost(id);
             navigate(0);
         } catch(error){
-            console.error(error);
+            toast.error('Se ha producido un error al eliminar el post', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 

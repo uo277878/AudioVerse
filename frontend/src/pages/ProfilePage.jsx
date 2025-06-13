@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { HiOutlinePencilAlt } from "react-icons/hi";
+import { toast, Zoom } from "react-toastify";
 
 function ProfilePage(){
     const {register, handleSubmit, setValue, formState: {errors}} = useForm();
@@ -22,7 +23,33 @@ function ProfilePage(){
 
     const onSubmit = handleSubmit((data) => {
         if(user){
-            updateProfile(user, data);
+            const res = updateProfile(user, data);
+            console.log(res);
+            if(res){
+                toast.success('Perfil actualizado con éxito', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
+            } else {
+                toast.error('Se ha producido un error al actualizar el perfil', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
+            }
         }
     });
 

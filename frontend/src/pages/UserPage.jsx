@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useSongs } from "../context/SongContext";
 import SongCard from "../components/SongCard";
 import { useAuth } from "../context/AuthContext";
+import { toast, Zoom } from "react-toastify";
 
 function UserPage(){
     const {register, setValue} = useForm();
@@ -25,7 +26,17 @@ function UserPage(){
                 const token = await getToken();
                 setAccessToken(token);
             } catch(error){
-                console.error(error);
+                toast.error('Se ha producido un error al obtener el token de Spotify', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
             }
         }
         getTokenFromSpotify();
@@ -74,7 +85,17 @@ function UserPage(){
             const res = await follow(user, id);
             setIsFollowing(true);
         } catch (error) {
-            console.error(error);
+            toast.error('Se ha producido un error al seguir al usuario', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -83,7 +104,17 @@ function UserPage(){
             const res = await unfollow(user, id);
             setIsFollowing(false);
         } catch (error) {
-            console.error(error);
+            toast.error('Se ha producido un error al dejar de seguir al usuario', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -96,11 +127,11 @@ function UserPage(){
                         <>
                             {isFollowing ? (
                                 <>
-                                    <button className="bg-green-500 text-black p-2 mt-4 rounded-md text-center" onClick={() => handleUnfollow(userSearch._id)}>Siguiendo</button>
+                                    <button className="bg-green-500 text-black p-2 mt-4 rounded-md text-center" onClick={() => handleUnfollow(gotUser._id)}>Siguiendo</button>
                                 </>
                             ) : (
                                 <>
-                                    <button className="bg-white text-black p-2 mt-4 rounded-md text-center" onClick={() => handleFollow(userSearch._id)}>Seguir</button>
+                                    <button className="bg-white text-black p-2 mt-4 rounded-md text-center" onClick={() => handleFollow(gotUser._id)}>Seguir</button>
                                 </>
                             )}
                         </>) :

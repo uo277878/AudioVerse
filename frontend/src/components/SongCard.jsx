@@ -22,6 +22,7 @@ function SongCard({song, likedSongs, text}){
     const { register: registerPost, handleSubmit: handleSubmitPost } = useForm();
     const {createPost} = usePosts();
     const [active, setActive] = useState(false);
+    const [filteredPlaylists, setFilteredPlaylists] = useState([]);
     const {user} = useAuth();
     const {likeSong, dislikeSong} = useUsers();
     const [showModal, setShowModal] = useState(false);
@@ -42,8 +43,21 @@ function SongCard({song, likedSongs, text}){
             async function getPlaylists(){
                 try{
                     const pl = await getAllByUser(user);
+                    console.log(pl);
+                    const filtered = pl.filter(p => p.name != "Canciones que me gustan");
+                    setFilteredPlaylists(filtered);
                 } catch(error){
-                    console.error(error);
+                    toast.error('Se ha producido un error al obtener las playlists del usuario', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: false,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                        transition: Zoom,
+                    });
                 }
             }
             getPlaylists();
@@ -90,7 +104,17 @@ function SongCard({song, likedSongs, text}){
             }
 
         } catch(error){
-            console.error(error);
+            toast.error('Se ha producido un error al hacer click en el corazón', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -113,7 +137,17 @@ function SongCard({song, likedSongs, text}){
                 });
             }
         } catch (error) {
-            console.error(error);
+            toast.error('Se ha producido un error al guardar la canción en la playlist', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -135,7 +169,17 @@ function SongCard({song, likedSongs, text}){
                 });
             }
         } catch (error) {
-            console.error(error);
+            toast.error('Se ha producido un error al crear el post', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -144,7 +188,17 @@ function SongCard({song, likedSongs, text}){
             const res = await removeSongPlaylist(id, playlistId);
             navigate(0);
         } catch(error){
-            console.error(error);
+            toast.error('Se ha producido un error al eliminar la canción de la playlist', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -157,7 +211,17 @@ function SongCard({song, likedSongs, text}){
                 setTotalLikes(songCard.likedBy.length);
             }
         } catch(error){
-            console.error(error);
+            toast.error('Se ha producido un error al darle me gusta al texto', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -218,7 +282,7 @@ function SongCard({song, likedSongs, text}){
                 <select className="w-full p-2 rounded bg-zinc-700 text-white text-xl" value={selectedPlaylist} 
                 onChange={(e) => setSelectedPlaylist(e.target.value)}>
                     <option value="">-- Selecciona una playlist --</option>
-                    {playlists.map((playlist) => (
+                    {filteredPlaylists.map((playlist) => (
                         <option key={playlist._id} value={playlist._id}>
                             {playlist.name}
                         </option>

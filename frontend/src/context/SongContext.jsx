@@ -151,6 +151,7 @@ export const SongProvider = ({children}) => {
         try{
             const res = await getAllByUserRequest(user.id);
             setPlaylists(res.data);
+            return res.data;
         } catch(error){
             console.error(error);
         }

@@ -3,7 +3,7 @@ import { tokenRequired } from '../middlewares/validateToken.js';
 import {getUsers, getUser, createUser, deleteUser, updateProfile, profile, updatePassword, updateUser, 
     passwordPage, getFollowedUsers, searchUser, followUser, unfollowUser, likeSong, dislikeSong, getLikedSongs} from '../controllers/userscontroller.js';
 import {updateProfileValidator, updatePasswordValidator} from '../middlewares/authValidator.js';
-import { uploadProfileImage } from '../controllers/upload.js';
+import { uploadProfileImage } from '../controllers/uploadcontroller.js';
 import { searchUserValidator } from '../middlewares/usersValidator.js';
 
 const router = new Router();

@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import SongCard from "../components/SongCard";
 import { useUsers } from "../context/UserContext";
 import { useAuth } from "../context/AuthContext";
+import { toast, Zoom } from "react-toastify";
 
 function PlaylistPage(){
     const {getTrack, getToken, getPlaylist } = useSongs();
@@ -23,7 +24,17 @@ function PlaylistPage(){
                     setPlaylist(pl);
                 }
             } catch(error){
-                console.error(error);
+                toast.error('Se ha producido un error al obtener la playlist', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
             }
         }
         getAndSetPlaylist();
@@ -35,7 +46,17 @@ function PlaylistPage(){
                 const token = await getToken();
                 setAccessToken(token);
             } catch(error){
-                console.error(error);
+                toast.error('Se ha producido un error al obtener el token de Spotify', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
             }
         }
         getTokenFromSpotify();

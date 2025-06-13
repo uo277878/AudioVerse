@@ -5,10 +5,13 @@ import UserSearchCard from "../components/UserSearchCard";
 import { useAuth } from "../context/AuthContext";
 import { useSongs } from "../context/SongContext";
 import PlaylistCard from "../components/PlaylistCard";
+import { toast, Zoom } from "react-toastify";
+import { useForm } from "react-hook-form";
  
 function SearchUsersPage(){
+    const { register } = useForm();
     const {searchUsers, errors: searchErrors} = useUsers();
-    const {searchPlaylists} = useSongs();
+    const {searchPlaylists, errors: playlistErrors} = useSongs();
     const [searchInput, setSearchInput] = useState("");
     const [items, setItems] = useState([]);
     const {user} = useAuth();
@@ -22,46 +25,47 @@ function SearchUsersPage(){
     const [orderBy, setOrderBy] = useState("");
 
     async function handleSearch(filtro){
-        if(searchInput){
-            try {
-                if(filtro == "users"){
-                    const res = await searchUsers(searchInput, orderBy, user);
-                    console.log(res);
-                    if(Array.isArray(res.users)){
-                        setItems(res.users.filter(u => u._id != user.id));
-                        setCurrentPage(1);
-                    } else{
-                        setItems([]);
-                    }
+        try {
+            if(filtro == "users"){
+                const res = await searchUsers(searchInput, orderBy, user);
+                console.log(res);
+                if(Array.isArray(res.users)){
+                    setItems(res.users.filter(u => u._id != user.id));
+                    setCurrentPage(1);
                 } else{
-                    const res = await searchPlaylists(searchInput);
-                    console.log(res);
-                    if(Array.isArray(res)){
-                        setItems(res);
-                        setCurrentPage(1);
-                    } else{
-                        setItems([]);
-                    }
+                    setItems([]);
                 }
-                
-            } catch (error) {
-                console.error(error);
+            } else{
+                const res = await searchPlaylists(searchInput);
+                console.log(res);
+                if(Array.isArray(res)){
+                    setItems(res);
+                    setCurrentPage(1);
+                } else{
+                    setItems([]);
+                }
             }
+            
+        } catch (error) {
+            toast.error('Se ha producido un error al buscar', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
     useEffect(() => {
-        if(searchErrors.length > 0){
+        if(searchErrors.length > 0 || playlistErrors > 0){
             setItems([]);
         }
-    }, [searchErrors]);
-
-    useEffect(() => {
-        if (searchInput !== "") {
-            console.log(searchInput);
-            handleSearch(filter);
-        }
-    }, [orderBy]);
+    }, [searchErrors, playlistErrors]);
 
     return (
         <div className='flex min-h-screen justify-center'>
@@ -70,7 +74,7 @@ function SearchUsersPage(){
                     <h1 className="text-2xl mb-4 font-bold">Buscador de Audioverse</h1>
                 </div>
                 <div className="relative">
-                    <input className="w-full bg-transparent placeholder:text-white text-white text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
+                    <input {...register("input")} className="w-full bg-transparent placeholder:text-white text-white text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
                         placeholder="Introduce tu búsqueda" onKeyDown={event => {
                             if(event.key == "Enter"){
                                 handleSearch(filter);
@@ -83,6 +87,13 @@ function SearchUsersPage(){
                 </div>
                 {
                     searchErrors.map((error, i) => (
+                        <div className='bg-red-500 p-2 text-white  my-2' key={i}>
+                            {error.msg}
+                        </div>
+                    ))
+                }
+                {
+                    playlistErrors.map((error, i) => (
                         <div className='bg-red-500 p-2 text-white  my-2' key={i}>
                             {error.msg}
                         </div>
@@ -105,7 +116,11 @@ function SearchUsersPage(){
                         <div className="flex items-center gap-2 ml-4">
                             <p className="text-xl">Ordenar por:</p>
                             <button
-                                onClick={() => setOrderBy(orderBy === "matches" ? "" : "matches")}
+                                onClick={() => {
+                                        setOrderBy(orderBy === "matches" ? "" : "matches"); 
+                                        handleSearch(filter);
+                                    }
+                                }
                                 className={`${orderBy === "matches" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>
                                 Matches
                             </button>

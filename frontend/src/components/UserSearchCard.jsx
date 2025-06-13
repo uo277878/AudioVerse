@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useUsers } from "../context/UserContext";
 import { useState } from "react";
 import { useMemo } from "react";
+import { toast, Zoom } from "react-toastify";
 
 function UserSearchCard({userSearch}){
     const {user} = useAuth();
@@ -22,7 +23,17 @@ function UserSearchCard({userSearch}){
             const res = await follow(user, id);
             setIsFollowing(true);
         } catch (error) {
-            console.error(error);
+            toast.error('Se ha producido un error al seguir al usuario', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -31,7 +42,17 @@ function UserSearchCard({userSearch}){
             const res = await unfollow(user, id);
             setIsFollowing(false);
         } catch (error) {
-            console.error(error);
+            toast.error('Se ha producido un error al dejar de seguir al usuario', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 

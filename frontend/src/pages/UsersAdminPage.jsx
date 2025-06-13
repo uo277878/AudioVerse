@@ -4,6 +4,7 @@ import UserCard from "../components/UserCard";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
+import { toast, Zoom } from "react-toastify";
 
 function UsersAdminPage(){
     const { getUsersAdmin, users, searchUsers } = useUsers();
@@ -31,7 +32,17 @@ function UsersAdminPage(){
                     setItems([]);
                 }
             } catch (error) {
-                console.error(error);
+                toast.error('Se ha producido un error al buscar a los usuarios', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
             }
         }
     }

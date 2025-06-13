@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import { tokenRequired } from '../middlewares/validateToken.js';
-import { getToken, getTrack, search, getAlbum, getArtist, getPlaylistSpotify } from '../controllers/spotify.js';
+import { getToken, getTrack, search, getAlbum, getArtist, getPlaylistSpotify } from '../controllers/spotifycontroller.js';
 import { createPlaylist, getAllByUser, getPlaylist, addSongToPlaylist, removeSongPlaylist, likeText, 
     getTotalLikesAndLiked, searchPlaylist, followPlaylist, unfollowPlaylist, removePlaylist } from '../controllers/songscontroller.js';
 import { createPlaylistValidator, searchSongValidator } from '../middlewares/songValidator.js';

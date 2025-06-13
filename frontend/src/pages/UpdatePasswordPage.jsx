@@ -2,15 +2,42 @@ import { useForm } from "react-hook-form";
 import { useUsers } from "../context/UserContext";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import { toast, Zoom } from "react-toastify";
 
 function UpdatePasswordPage(){
     const {register, handleSubmit, formState: {errors}} = useForm();
     const {updatePassword, errors: updatePassErrors} = useUsers();
     const { user } = useAuth();
 
-    const onSubmit = handleSubmit((data) => {
+    const onSubmit = handleSubmit(async (data) => {
         if(user){
-            updatePassword(data);
+            const res = await updatePassword(data);
+            console.log(res);
+            if(res){
+                toast.success('Contraseña actualizada con éxito', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
+            } else{
+                toast.error('Se ha producido un error al actualizar la contraseña', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
+            }
         }
     });
 

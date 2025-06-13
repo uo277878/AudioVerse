@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import { toast, Zoom } from "react-toastify";
 
 function EditProfilePicPage(){
     const {register, handleSubmit, setValue} = useForm();
@@ -32,14 +33,34 @@ function EditProfilePicPage(){
                     const res = await updateProfilePic(selectedFile);
                     if (res.data.profilePic) {
                         newProfilePic = res.data.profilePic;
+                        toast.success('Foto de perfil actualizada con éxito', {
+                            position: "top-right",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: false,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "colored",
+                            transition: Zoom,
+                        });
                     }
                 }
 
                 await updateProfile(user, { ...data, profilePic: newProfilePic });
                 setUser((prevUser) => ({ ...prevUser, profilePic: newProfilePic }));
-                navigate('/users/profile');
             } catch (error) {
-                navigate('/users/profile/image');
+                toast.error('Se ha producido un error al actualizar la foto de perfil', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
             }
         }
     });

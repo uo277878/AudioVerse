@@ -32,7 +32,17 @@ function PlaylistCard({playlist}){
             const res = await followPlaylist(playlistId, userId);
             setIsFollowed(true);
         } catch(error){
-            console.error(error);
+            toast.error('Se ha producido un error al seguir la playlist', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -41,7 +51,17 @@ function PlaylistCard({playlist}){
             const res = await unfollowPlaylist(playlistId, userId);
             setIsFollowed(false);
         } catch(error){
-            console.error(error);
+            toast.error('Se ha producido un error al dejar de seguir la playlist', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -50,7 +70,17 @@ function PlaylistCard({playlist}){
             const res = await removePlaylist(id);
             navigate(0);
         } catch(error){
-            console.error(error);
+            toast.error('Se ha producido un error al eliminar la playlist', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 

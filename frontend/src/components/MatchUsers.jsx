@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useUsers } from "../context/UserContext";
 import { Link } from "react-router-dom";
+import { toast, Zoom } from "react-toastify";
 
 function MatchUsers(){
     const {user} = useAuth();
@@ -29,7 +30,17 @@ function MatchUsers(){
             .filter(u => u.matchCount >= 2);
             setMatchUsers(matched);
         } catch (error) {
-            console.error(error);
+            toast.error('Se ha producido un error al obtener usuarios recomendados', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }, [user, users]);
     return (

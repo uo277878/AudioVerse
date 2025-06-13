@@ -27,12 +27,15 @@ function PlayerPage() {
 
       if (code) {
         const token = await getAccessToken(code);
+        console.log("token en playerpage: " + token);
         if (token) {
           navigate("/player");
           window.history.replaceState({}, null, window.location.pathname);
         } else{
           navigate("/spotifyLogin");
         }
+      } else{
+        navigate("/spotifyLogin");
       }
     };
 
