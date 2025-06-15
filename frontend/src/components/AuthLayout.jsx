@@ -3,9 +3,9 @@ import { Outlet } from "react-router-dom";
 
 function AuthLayout() {
   return (
-    <div className="pl-64 min-h-screen bg-zinc-900">
+    <div className="flex flex-col md:pl-64 md:flex-row min-h-screen bg-zinc-900">
       <Navbar />
-      <main className="p-6">
+      <main className="flex-1 ml-0 md:ml-50 p-4">
         <Outlet />
       </main>
     </div>

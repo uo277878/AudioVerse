@@ -7,7 +7,7 @@ import PlaylistModal from "./PlaylistModal";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { usePosts } from "../context/PostContext";
 import { Link, useNavigate } from "react-router-dom";
-import { FaRegTrashAlt } from "react-icons/fa";
+import { FaRegTrashAlt, FaPlay } from "react-icons/fa";
 import { toast, Zoom } from "react-toastify";
 
 function PostCard({post}){
@@ -203,6 +203,10 @@ function PostCard({post}){
         }
     }
 
+    async function handlePlay(){
+        navigate(`/player?uri=${encodeURIComponent(song.uri)}`);
+    }
+
     return(
         <div className='bg-zinc-800 max-w-2xl w-full p-6 rounded-md mt-2'>
             <div className="flex items-start justify-between">
@@ -210,7 +214,7 @@ function PostCard({post}){
                     <img src={post.user.profilePic} alt="Imagen de perfil" className="w-16 h-16 mt-4 rounded-full border-white border-2 border-opacity-100" />
                     <div className="flex flex-col mt-3">
                         <Link to={`/users/${post.user._id}`} className='text-lg font-bold hover:underline'>{post.user.username}</Link>
-                        <p className="mt-2 text-lg">{post.text}</p>
+                        <p className="mt-2 text-lg break-words whitespace-pre-wrap w-full">{post.text}</p>
                     </div>
                 </div>
                 {post.user._id == user.id && (
@@ -230,7 +234,10 @@ function PostCard({post}){
                             {
                                 post.item_type == "track" && (
                                 <div className='absolute bottom-4 right-4 flex'>
-                                    <svg onClick={() => setShowModal(true)} className="h-6 w-6 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <button onClick={handlePlay} className="mr-2 rounded-lg text-white hover:text-rose-200">
+                                        <FaPlay/>
+                                    </button>
+                                    <svg onClick={() => setShowModal(true)} className="h-6 w-6 text-white hover:text-rose-200" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 
                                     0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/>
                                     </svg>

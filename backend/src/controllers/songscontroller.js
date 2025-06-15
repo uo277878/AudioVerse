@@ -62,7 +62,9 @@ export const addSongToPlaylist = async (req, res) => {
     } else if(!songId){
         return res.status(403).json({ msg: "Id de canción inválido" });
     } else{
-        if (!playlist.songs.includes(songId)) {
+        console.log(songId);
+        console.log(playlist.songs);
+        if (!playlist.songs.some(song => song.songId == songId)) {
             playlist.songs.push({
                 songId: songId,
                 text: txtSong,
@@ -92,6 +94,11 @@ export const removeSongPlaylist = async (req, res) => {
                 return res.status(404).json({ msg: "La playlist no contiene esa canción" });
             }
             playlist.songs.splice(index, 1);
+            if(playlist.name == "Canciones que me gustan"){
+                const user = await User.findById(playlist.creator);
+                user.songsLiked.pull(songId);
+                await user.save();
+            }
             await playlist.save();
             
             return res.status(200).json({playlist});    

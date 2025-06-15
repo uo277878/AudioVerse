@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { toast, Zoom } from "react-toastify";
 
 function UserAdminPage(){
     const {register, handleSubmit, setValue, formState: {errors}} = useForm();
@@ -28,10 +29,34 @@ function UserAdminPage(){
         loadUser();
     }, []);
 
-    const onSubmit = handleSubmit((data) => {
+    const onSubmit = handleSubmit(async (data) => {
         if(params.id){
-            updateUser(params.id, data);
-            navigate("/users/getAllUsers");
+            const res = await updateUser(params.id, data);
+            if(res){
+                toast.success('Usuario actualizado con éxito', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
+            } else{
+                toast.error('Se ha producido un error al actualizar el usuario', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
+            }
         }
     });
 

@@ -4,16 +4,36 @@ import { usePosts } from "../context/PostContext";
 import { useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
 import MatchUsers from "../components/MatchUsers";
+import { toast, Zoom } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 function HomePage(){
     const {user} = useAuth();
     const {register, handleSubmit} = useForm();
     const {createPost, posts, getPosts, errors: postErrors} = usePosts();
     const [page, setPage] = useState(1);
+    const navigate = useNavigate();
 
     const onSubmit = handleSubmit(async (data) => {
         try{
-            createPost(user.id, data.txtPost, null, null);
+            const res = await createPost(user.id, data.txtPost, null, null);
+            console.log(res);
+            if(res.newPost){
+                toast.success('Post creado con éxito', { 
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
+                setTimeout(() => {
+                    navigate(0);
+                }, 3000);
+            }
         } catch(error){
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);
@@ -25,6 +45,7 @@ function HomePage(){
 
     useEffect(() =>{
         getPosts(user, page);
+        console.log(posts);
     }, [page]);
 
     const handleScroll = () => {
@@ -56,8 +77,8 @@ function HomePage(){
                     <div className='bg-zinc-800 max-w-2xl w-full p-6 rounded-md'>
                         <div className="flex items-center space-x-3">
                             <img src={user.profilePic} alt="Imagen de perfil" className="w-16 h-16 mt-4 rounded-full border-white border-2 border-opacity-100" />
-                            <textarea {...register("txtPost")} id="txtPost" rows="4" className="resize-none p-3 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border
-                            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="¿En qué estás pensando?"></textarea>
+                            <input {...register("txtPost")} id="txtPost" className="p-3 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border
+                            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="¿En qué estás pensando?"></input>
                         </div>
                         <div className="flex justify-end">
                             <button type="submit" className="bg-rose-500 text-white px-4 py-2 mt-4 rounded-md">
@@ -66,8 +87,8 @@ function HomePage(){
                         </div>
                     </div>
                 </form>
-                {user?.followed?.length == 0 && <h1 className='text-xl mt-6 font-bold flex flex-col items-center justify-center'>¡Empieza a seguir a gente para ver sus posts aquí!</h1>}
-                {user?.followed?.length > 0 && (
+                {(user?.followed?.length == 0 && posts?.length == 0) && <h1 className='text-xl mt-6 font-bold flex flex-col items-center justify-center'>¡Empieza a seguir a gente para ver sus posts aquí!</h1>}
+                {posts && (
                     <>
                         <div className="flex flex-col items-center justify-center">
                         {

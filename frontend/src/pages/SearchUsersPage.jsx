@@ -99,7 +99,6 @@ function SearchUsersPage(){
                         </div>
                     ))
                 }
-                {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
                 <div className="flex flex-row justify-center mt-4">
                     <div className="flex items-center gap-2">
                         <p className="text-xl">Filtrar por:</p>
@@ -127,6 +126,7 @@ function SearchUsersPage(){
                         </div>
                     )}
                 </div>
+                {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
                 <div className="flex-grow">
                     <div className="grid grid-cols-4 gap-3 mt-4">
                         {filter == "users" ? (

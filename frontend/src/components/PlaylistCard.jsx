@@ -87,25 +87,25 @@ function PlaylistCard({playlist}){
     return(
         <div className="flex flex-col bg-zinc-700 max-w-xs w-full p-10 rounded-md mx-4 my-4 justify-between h-72 relative">
             {playlist.creator == user.id ? 
-            <>
-                <button className="absolute top-4 right-4 text-white hover:text-red-500" onClick={() => handleDeletePlaylist(playlist._id)}>
+                (<button className="absolute top-4 right-4 text-white hover:text-red-500" onClick={() => handleDeletePlaylist(playlist._id)}>
                     <RemoveIcon />
-                </button>
-            </> :
-            <>
-                {isFollowed ? 
-                (
-                    <button className="absolute top-2 right-2 text-white text-3xl hover:scale-110 transition-transform duration-200"
-                    onClick={() => handleUnfollow(playlist._id, user.id)}>
-                        <CiCircleCheck />
-                    </button>
-                ) : (
-                    <button className="absolute top-2 right-2 text-white text-3xl hover:scale-110 transition-transform duration-200"
-                    onClick={() => handleFollow(playlist._id, user.id)}>
-                        <CiCirclePlus />
-                    </button>
-                )}
-            </>}
+                </button>)
+            :
+            (user.role == "user" && (
+                isFollowed ? 
+                    (
+                        <button className="absolute top-2 right-2 text-white text-3xl hover:scale-110 transition-transform duration-200"
+                        onClick={() => handleUnfollow(playlist._id, user.id)}>
+                            <CiCircleCheck />
+                        </button>
+                    ) : (
+                        <button className="absolute top-2 right-2 text-white text-3xl hover:scale-110 transition-transform duration-200"
+                        onClick={() => handleFollow(playlist._id, user.id)}>
+                            <CiCirclePlus />
+                        </button>
+                    )
+                )
+            )}
             
             <img src={playlist.pic} className="w-full h-40 object-cover rounded-md"/>
             <div className="absolute mb-4 bottom-0 ">

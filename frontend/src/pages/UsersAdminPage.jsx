@@ -7,7 +7,7 @@ import Pagination from "../components/Pagination";
 import { toast, Zoom } from "react-toastify";
 
 function UsersAdminPage(){
-    const { getUsersAdmin, users, searchUsers } = useUsers();
+    const { getUsersAdmin, users, searchUsers, errors: searchErrors } = useUsers();
     const {user} = useAuth();
     const navigate = useNavigate();
 
@@ -21,29 +21,27 @@ function UsersAdminPage(){
     const currentUsers = items.slice(firstIdex, lastIndex);
 
     async function handleSearch(){
-        if(searchInput){
-            try {
-                const res = await searchUsers(searchInput, null, user);
-                console.log(res);
-                if(Array.isArray(res.users)){
-                    setItems(res.users);
-                    setCurrentPage(1);
-                } else{
-                    setItems([]);
-                }
-            } catch (error) {
-                toast.error('Se ha producido un error al buscar a los usuarios', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: false,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Zoom,
-                });
+        try {
+            const res = await searchUsers(searchInput, null, user);
+            console.log(res);
+            if(Array.isArray(res.users)){
+                setItems(res.users);
+                setCurrentPage(1);
+            } else{
+                setItems([]);
             }
+        } catch (error) {
+            toast.error('Se ha producido un error al buscar a los usuarios', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
         }
     }
 
@@ -67,7 +65,7 @@ function UsersAdminPage(){
     return (
         <div>
             <h1 className='text-2xl my-4 ml-4 font-bold'>Usuarios del sistema</h1>
-            <hr className="h-1 bg-zinc-700 border-0"></hr>
+            <hr className="h-1 bg-zinc-700 border-0 mb-6"></hr>
             <div className="relative">
                 <input className="w-full bg-transparent placeholder:text-white text-white text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
                     placeholder="Introduce tu búsqueda" onKeyDown={event => {
@@ -80,6 +78,14 @@ function UsersAdminPage(){
                     Buscar
                 </button> 
             </div>
+            {
+                searchErrors.map((error, i) => (
+                    <div className='bg-red-500 p-2 text-white  my-2' key={i}>
+                        {error.msg}
+                    </div>
+                ))
+            }
+            {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
             <div className="flex-grow">
                 <div className="grid grid-cols-3 gap-3">
                 {

@@ -67,7 +67,8 @@ function UserPage(){
                 let gotUser = await getUser(user.id);
                 console.log(gotUser);
                 setAuthUser(gotUser);
-                setAuthUserLikedSongs(authUser.songsLiked || []);
+                setAuthUserLikedSongs(gotUser.songsLiked || []);
+                console.log(authUser.songsLiked);
             }
         };
         loadAuthUser();
@@ -153,7 +154,7 @@ function UserPage(){
                         </div>
                         </form>
                         <h2 className="text-xl mt-6">Algunas canciones que le gustan...</h2>
-                        <div className="grid grid-cols-3 gap-3 mt-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
                         {
                             lastSongsLiked.map((song,i) => (
                                 <SongCard song={song} key={i} likedSongs={authUserLikedSongs}/>

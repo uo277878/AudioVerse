@@ -4,50 +4,93 @@ import { useState } from "react";
 
 function Navbar(){
     const { user, isAuthenticated, logout } = useAuth();
+    const [menuOpen, setMenuOpen] = useState(false);
     
     return (
-        <nav className="fixed top-0 left-0 h-screen bg-zinc-700 w-64 p-6 flex flex-col gap-6 z-50">
-            {isAuthenticated ? (
+        <nav className="bg-zinc-700 w-full md:w-64 md:h-screen p-4 md:p-6 z-50 md:fixed md:top-0 md:left-0">
+            <div className="flex justify-between items-center md:flex-col md:items-start">
+                {isAuthenticated ? (
                 <>
                     {user.role == "user" ? (
                         <>
-                            <Link to="/home"><img src="/logo.png" alt="Logo AudioVerse" className="h-9" /></Link>
+                            <div className="flex items-center space-x-2">
+                                <Link to="/home"><img src="/logo.png" alt="Logo AudioVerse" className="h-9" /></Link>
+                                <span className="md:text-xl text-red-200">¡Hola, {user?.username}!</span>
+                            </div>
                         </>
                     ) : (
                         <>
-                            <Link to="/users/getAllUsers"><img src="/logo.png" alt="Logo AudioVerse" className="h-9" /></Link>
+                            <div className="flex items-center space-x-2">
+                                <Link to="/users/getAllUsers"><img src="/logo.png" alt="Logo AudioVerse" className="h-9" /></Link>
+                                <span className="md:text-xl text-red-200">¡Hola, {user?.username}!</span>
+                            </div>
                         </>
                     )}
-                    
                 </>
             ) : (
                 <>
                     <Link to="/"><img src="/logo.png" alt="Logo AudioVerse" className="h-9" /></Link>
                 </>
             )}
+
+                {isAuthenticated && (
+                    <button className="md:hidden text-white text-2xl focus:outline-none" onClick={() => setMenuOpen(!menuOpen)} >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    </button>
+                )}
+            </div>
+            
             {isAuthenticated && (
-                <>
-                    <span className="md:text-xl text-red-200">¡Hola, {user?.username}!</span>
-                    {user.role == "user" ? (
+                <ul className={`mt-4 flex-col gap-3 md:flex md:gap-6 ${ menuOpen ? "flex" : "hidden" } md:flex`}>
+
+                    {user.role === "user" && (
                         <>
-                            <Link to="/users/followed" className="text-white md:text-xl py-2 md:py-0 hover:underline">Mis seguidos</Link>
-                            <Link to="/search" className="text-white md:text-xl py-2 md:py-0 hover:underline">Buscador Spotify</Link>
-                            <Link to={`/playlists/getAllByUser/${user.id}`} className="text-white md:text-xl py-2 md:py-0 hover:underline">Mi biblioteca</Link>
-                            <Link to="/player" className="text-white md:text-xl py-2 md:py-0 hover:underline">Reproductor</Link>
-                            <Link to="/spotifyLogin" className="text-white md:text-xl py-2 md:py-0 hover:underline">Spotify login</Link>
-                        </>
-                    ) : (
-                        <>
-                            
+                        <li>
+                            <Link to="/users/followed" className="text-white block md:text-xl hover:underline">
+                                Mis seguidos
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/search" className="text-white block md:text-xl hover:underline">
+                                Buscador Spotify
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to={`/playlists/getAllByUser/${user.id}`} className="text-white block md:text-xl hover:underline">
+                                Mi biblioteca
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/player" className="text-white block md:text-xl hover:underline">
+                                Reproductor
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/spotifyLogin" className="text-white block md:text-xl hover:underline">
+                                Spotify login
+                            </Link>
+                        </li>
                         </>
                     )}
-                    <Link to="/users/search" className="text-white md:text-xl py-2 md:py-0 hover:underline">Explorar</Link>
-                    <Link to="/users/profile" className="text-white md:text-xl py-2 md:py-0 hover:underline">Mi perfil</Link>
-                    <Link to="/login" onClick={() => logout()} 
-                    className="mt-auto bg-red-500 px-4 py-2 rounded-md text-white text-center md:text-xl hover:underline">
-                        Cerrar sesión
-                    </Link>
-                </>
+
+                    <li>
+                        <Link to="/users/search" className="text-white block md:text-xl hover:underline">
+                            Explorar AudioVerse
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/users/profile" className="text-white block md:text-xl hover:underline">
+                            Mi perfil
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/login" onClick={() => logout()} className="block bg-red-500 px-4 py-2 rounded-md text-white text-center md:text-xl hover:underline">
+                            Cerrar sesión
+                        </Link>
+                    </li>
+                </ul>
             )}
         </nav>
     )

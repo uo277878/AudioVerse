@@ -125,7 +125,6 @@ function SearchPage(){
                         </div>
                     ))
                 }
-                {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
                 <div className="flex flex-row justify-center mt-4">
                     <p className="mt-3 text-xl">Filtrar por:</p>
                     <button onClick={() => setFilter("artists")} className={`${filter === "artists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Artistas</button>
@@ -150,6 +149,7 @@ function SearchPage(){
                         </button>
                     )}
                 </div>
+                {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
                 <div className="flex-grow">
                     <div className="grid grid-cols-4 gap-3 mt-4">
                     {

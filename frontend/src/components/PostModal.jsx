@@ -13,8 +13,14 @@ const PostModal = ({isVisible, onClose, children}) => {
         <div id="wrapper" className="fixed inset-0 z-50 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center"
             onClick={handleClose}>
             <div className="w-[600px] flex flex-col">
-                <button className="text-white text-xl place-self-end" onClick={() => onClose()}>X</button>
-                <div className="bg-zinc-800 p-2 rounded">{children}</div>
+                <div className="bg-zinc-800 p-2 rounded">
+                    <div className="flex justify-end mb-2">
+                        <button className="text-white text-xl" onClick={() => onClose()}>X</button>
+                    </div>
+                    <div>
+                        {children}
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -86,6 +86,7 @@ export const login = async (req, res) => {
 
         const token = await createToken({ id: userFound._id });
         
+        console.log(userFound);
         res.cookie('token', token)
         res.json({
             id: userFound._id,
@@ -131,7 +132,8 @@ export const verifyToken = async (req, res) => {
                 role: userFound.role,
                 profilePic: userFound.profilePic,
                 followed: userFound.followed,
-                songsLiked: userFound.songsLiked
+                songsLiked: userFound.songsLiked,
+                createdAt: userFound.createdAt
             });
     });
 };

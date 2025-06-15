@@ -121,7 +121,6 @@ function SongCard({song, likedSongs, text}){
     async function handleSaveToPlaylist(data) {
         if (!selectedPlaylist) return;
         try {
-            console.log(data.txtSong);
             const res = await addSongToPlaylist(selectedPlaylist, song.id, data.txtSong);
             if(res.playlist){
                 toast.success('Canción añadida a la playlist con éxito', {
@@ -135,8 +134,10 @@ function SongCard({song, likedSongs, text}){
                     theme: "colored",
                     transition: Zoom,
                 });
+                setShowModal(false);
             }
         } catch (error) {
+            console.log(error);
             toast.error('Se ha producido un error al guardar la canción en la playlist', {
                 position: "top-right",
                 autoClose: 5000,
@@ -153,7 +154,6 @@ function SongCard({song, likedSongs, text}){
 
     async function handleCreatePost(data){
         try {
-            console.log(data);
             const res = await createPost(user.id, data.text, song.id, song.type);
             if(res.newPost){
                 toast.success('Post creado con éxito', {
@@ -167,6 +167,7 @@ function SongCard({song, likedSongs, text}){
                     theme: "colored",
                     transition: Zoom,
                 });
+                setShowPostModal(false);
             }
         } catch (error) {
             toast.error('Se ha producido un error al crear el post', {
@@ -247,28 +248,34 @@ function SongCard({song, likedSongs, text}){
                         </button>
                     </div>
                 )}
-                <div className='mt-5 flex items-center'>
-                    <Heart className="w-6 h-6" isActive={active} inactiveColor="white" activeColor="red" onClick={() => handleClick(song.id)}/>
-                    <svg onClick={() => setShowModal(true)} className="h-6 w-6 ml-2 text-rose-300 hover:text-rose-200" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                        <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 
-                        0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/>
-                    </svg>
-                    <svg onClick={() => setShowPostModal(true)} className="h-6 w-6 ml-2 text-rose-300 hover:text-rose-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/> 
-                        <circle cx="18" cy="19" r="3" />  
-                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />  
-                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                    </svg>
-                    <button onClick={handlePlay} className="text-xl px-6 py-3 rounded-lg text-rose-300 hover:text-rose-200">
-                        <FaPlay/>
-                    </button>
-                    {song.popularity > 60 && 
-                    <>
-                        <FontAwesomeIcon icon={faFire} style={{color: "#ff7300",}} className='h-6 w-6 ml-auto'/>
-                    </>
-                    }
-                </div>
+                {user.role != "admin" && (
+                    <div className='mt-5 flex items-center'>
+                        {song.type == "track"  && (
+                            <>
+                            <Heart className="w-6 h-6" isActive={active} inactiveColor="white" activeColor="red" onClick={() => handleClick(song.id)}/>
+                            <svg onClick={() => setShowModal(true)} className="h-6 w-6 ml-4 text-rose-300 hover:text-rose-200" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 
+                                0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/>
+                            </svg>
+                            <button onClick={handlePlay} className="px-6 py-3 rounded-lg text-rose-300 hover:text-rose-200">
+                                <FaPlay/>
+                            </button>
+                            </>
+                        )}
+                        <svg onClick={() => setShowPostModal(true)} className="h-6 w-6 text-rose-300 hover:text-rose-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/> 
+                            <circle cx="18" cy="19" r="3" />  
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />  
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                        </svg>
+                        {song.popularity > 60 && 
+                        <>
+                            <FontAwesomeIcon icon={faFire} style={{color: "#ff7300",}} className='h-6 w-6 ml-4'/>
+                        </>
+                        }
+                    </div>
+                )}
             </div>
 
             <PlaylistModal isVisible={showModal} onClose={() => setShowModal(false)}>

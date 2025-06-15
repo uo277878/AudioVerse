@@ -93,7 +93,7 @@ function ProfilePage(){
                                 Guardar
                             </button>
                         </div>
-                        <p className="text-white mt-2">Parte de Audioverse desde el <b>{new Date(user.createdAt).toLocaleDateString()}</b></p>
+                        <p className="text-white mt-2">Parte de AudioVerse desde el <b>{new Date(user.createdAt).toLocaleDateString()}</b></p>
                     </div>
                     
                 </form>

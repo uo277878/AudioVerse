@@ -3,6 +3,7 @@ import { getUserRequest, updateProfileRequest, updatePasswordRequest,
     updateProfilePicRequest, updateUserRequest, getUsersAdminRequest, 
     deleteUserRequest, getFollowedUsersRequest, 
     searchUserRequest, followRequest, unfollowRequest, likeSongRequest, dislikeSongRequest, getLikedSongsRequest} from "../api/users";
+import { useAuth } from "./AuthContext";
 
 const UserContext = createContext();
 
@@ -17,6 +18,7 @@ export const UserProvider = ({children}) => {
     const [errors, setErrors] = useState([]);
     const [users, setUsers] = useState([]);
     const [likedSongs, setLikedSongs] = useState([]);
+    const {setUser} = useAuth();
     
     const getUser = async (id) => {
         try{
@@ -42,6 +44,7 @@ export const UserProvider = ({children}) => {
     const updateProfile = async (user, userData) => {
         try{
             const res = await updateProfileRequest(user, userData);
+            setUser(res.data);
             return res.data;
         } catch(error){
             if(Array.isArray(error.response.data)){
@@ -83,6 +86,7 @@ export const UserProvider = ({children}) => {
     const updateUser = async (id, user) => {
         try{
             const res = await updateUserRequest(id, user);
+            return res.data;
         } catch(error){
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);

@@ -27,7 +27,6 @@ function PlayerPage() {
 
       if (code) {
         const token = await getAccessToken(code);
-        console.log("token en playerpage: " + token);
         if (token) {
           navigate("/player");
           window.history.replaceState({}, null, window.location.pathname);
@@ -39,7 +38,7 @@ function PlayerPage() {
       }
     };
 
-    if (!accessToken) {
+    if (accessToken == null) {
       checkCode();
     }
   }, [accessToken]);
@@ -53,17 +52,24 @@ function PlayerPage() {
     }
   }, [location.search, playTrack]);
 
+  if (!accessToken || !isReady) {
+    return (
+      <div className='flex h-screen items-center justify-center text-xl'>
+        Cargando reproductor...
+      </div>
+    );
+  }
+
   return (
     <div className='flex h-screen items-center text-center justify-center'>
       <div className='bg-zinc-800 max-w-lg w-full p-10 rounded-md flex flex-col items-center'>
-        {!isReady && <p>Cargando el reproductor...</p>}
-        {isReady && currentTrack && (
+        {currentTrack ? (
           <div className="space-y-4">
             <img src={currentTrack.album.images[0].url} alt="Portada de la canción" className="w-64 h-64 object-cover rounded-lg shadow-lg" />
             <h2 className="text-2xl">{currentTrack.name}</h2>
             <p>{currentTrack.artists.map(artist => artist.name).join(", ")}</p>
           </div>
-        )}
+        ) : (<p>No hay ninguna canción reproduciéndose</p>)}
         <button onClick={togglePlay} className="mt-6 text-xl px-6 py-3 rounded-lg bg-zinc-900 text-rose-300 hover:text-rose-200" >
           {isPaused ? <FaPlay/> : <FaPause/>}
         </button>

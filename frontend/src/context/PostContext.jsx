@@ -16,10 +16,6 @@ export const PostProvider = ({children}) => {
     
     const createPost = async (userId, text, songId, type) => {
         try{
-            console.log(userId);
-            console.log(text);
-            console.log(songId);
-            console.log(type);
             const res = await createPostRequest(userId, text, songId, type);
             return res.data;
         } catch(error){
@@ -33,6 +29,7 @@ export const PostProvider = ({children}) => {
     const getPosts = async (user, page) => {
         try{
             const res = await getPostsRequest(user, page);
+            console.log(res);
             setPosts(prev => {
                 const todos = [...prev, ...res.data];
                 const sinDuplicados = Array.from(new Map(todos.map(p => [p._id, p])).values());
