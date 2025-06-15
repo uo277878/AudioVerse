@@ -231,48 +231,54 @@ function SongCard({song, likedSongs, text}){
     }
 
     return(
-        <div className={`relative bg-zinc-700 max-w-md w-full p-10 rounded-md ml-4 mb-4 ${isPlaylistPage ? 'flex items-center' : ''}`}>
+        <div className={`relative bg-zinc-700 ${isPlaylistPage ? 'w-full max-w-full flex flex-col md:flex-row items-start gap-4' : 'max-w-md'} p-6 md:p-10 rounded-md ml-4 mb-4`}>
+            
             {isPlaylistPage && (
                 <button className="absolute top-4 right-4 text-white hover:text-red-500" onClick={() => handleDeleteSong(song.id)}>
                     <RemoveIcon />
                 </button>
             )}
-            <img src={song.images != null ? song.images[0].url : song.album.images[0].url} className={`rounded ${isPlaylistPage ? 'w-28 h-28 mr-4' : ''}`}/>
-            <div className={`${isPlaylistPage ? 'flex flex-col justify-center' : ''}`}>
+            <img src={song.images != null ? song.images[0].url : song.album.images[0].url} className={`rounded ${isPlaylistPage ? 'w-28 h-28 mr-4 flex-shrink-0' : ''}`}/>
+            <div className={`${isPlaylistPage ? 'flex flex-col justify-center space-y-2' : ''}`}>
                 <p className="text-xl font-bold mt-2">{song.name}</p>
                 {text && isPlaylistPage && (
-                    <div className="flex items-center mt-2">
-                        <p className="text-xl text-gray-300 italic">“{text}”</p>
-                        <button onClick={handleLikeText} className="ml-2 flex items-center text-white">
-                            <ThumbUpIcon className={`${textLiked ? 'text-rose-400' : 'text-rose-200' } mr-1`} />{totalLikes}
+                    <div className="flex flex-col gap-1 mt-2">
+                        <p className="text-xl text-gray-300 italic break-words">“{text}”</p>
+                        <button onClick={handleLikeText} className="flex items-center text-white w-fit">
+                            <ThumbUpIcon className={`${textLiked ? 'text-rose-400' : 'text-rose-200'} mr-1`} />
+                            <span>{totalLikes}</span>
                         </button>
                     </div>
                 )}
                 {user.role != "admin" && (
-                    <div className='mt-5 flex items-center'>
+                    <div className='mt-5 flex items-center space-x-4'>
                         {song.type == "track"  && (
                             <>
-                            <Heart className="w-6 h-6" isActive={active} inactiveColor="white" activeColor="red" onClick={() => handleClick(song.id)}/>
-                            <svg onClick={() => setShowModal(true)} className="h-6 w-6 ml-4 text-rose-300 hover:text-rose-200" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 
-                                0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/>
-                            </svg>
-                            <button onClick={handlePlay} className="px-6 py-3 rounded-lg text-rose-300 hover:text-rose-200">
-                                <FaPlay/>
+                            <Heart className="w-8 h-8" style={{ width: '24px', height: '24px', minWidth: '24px', minHeight: '24px'}} 
+                            isActive={active} inactiveColor="white" activeColor="red" onClick={() => handleClick(song.id)}/>
+                            <button onClick={() => setShowModal(true)} className="text-rose-300 hover:text-rose-200">
+                                <svg className="h-7 w-7" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 
+                                    0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/>
+                                </svg>
+                            </button>
+                            <button onClick={handlePlay} className="text-rose-300 hover:text-rose-200">
+                                <FaPlay className='w-6 h-6'/>
                             </button>
                             </>
                         )}
-                        <svg onClick={() => setShowPostModal(true)} className="h-6 w-6 text-rose-300 hover:text-rose-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/> 
-                            <circle cx="18" cy="19" r="3" />  
-                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />  
-                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                        </svg>
+                        <button onClick={() => setShowPostModal(true)} className='text-rose-300 hover:text-rose-200'>
+                            <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/> 
+                                    <circle cx="18" cy="19" r="3" />  
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />  
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                            </svg>
+                        </button>
+                        
                         {song.popularity > 60 && 
-                        <>
-                            <FontAwesomeIcon icon={faFire} style={{color: "#ff7300",}} className='h-6 w-6 ml-4'/>
-                        </>
+                        <FontAwesomeIcon icon={faFire} className='h-6 w-6 text-orange-500'/>
                         }
                     </div>
                 )}
@@ -309,7 +315,7 @@ function SongCard({song, likedSongs, text}){
             </PlaylistModal>
             <PostModal isVisible={showPostModal} onClose={() => setShowPostModal(false)}>
                 <form onSubmit={handleSubmitPost(handleCreatePost)}>
-                    <textarea {...registerPost("text")} rows="4" className="resize-none p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border
+                    <textarea {...registerPost("text")} rows="4" className="resize-none p-3 w-full text-md md:text-lg text-gray-900 bg-gray-50 rounded-lg border
                     dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" defaultValue={defaultValue}></textarea>
                     <div className="flex items-center mb-4">
                         <img src={song.images != null ? song.images[0].url : song.album.images[0].url} className="w-12 h-12 rounded mr-3" />

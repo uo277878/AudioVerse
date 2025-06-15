@@ -37,7 +37,7 @@ function FollowedPage(){
             <h1 className='text-2xl my-4 ml-4 font-bold'>Personas a las que sigues</h1>
             <hr className="h-1 bg-zinc-700 border-0"></hr>
             <div className="flex-grow">
-                <div className="grid md:grid-cols-4 grid-cols-1 gap-3 pr-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 pr-4">
                 {
                     currentUsers.map((user) => (
                         <FollowedCard user={user} key={user._id}/>

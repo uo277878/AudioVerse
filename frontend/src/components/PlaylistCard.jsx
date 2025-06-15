@@ -108,9 +108,10 @@ function PlaylistCard({playlist}){
             )}
             
             <img src={playlist.pic} className="w-full h-40 object-cover rounded-md"/>
-            <div className="absolute mb-4 bottom-0 ">
-                <Link to={`/playlists/${playlist._id}`} className="w-full text-lg font-bold mt-2 hover:underline">{playlist.name}</Link>
-                <p className="w-full text-lg mt-2">Nº de canciones: <span className="font-bold">{playlist.songs.length}</span></p>
+            <div className="absolute bottom-4 left-0 right-0 px-4">
+                <Link to={`/playlists/${playlist._id}`} 
+                className="block w-full text-md md:text-lg font-bold mt-2 hover:underline overflow-hidden text-ellipsis whitespace-nowrap">{playlist.name}</Link>
+                <p className="w-full text-md md:text-lg mt-2">Nº de canciones: <span className="font-bold">{playlist.songs.length}</span></p>
             </div>
         </div>
     );

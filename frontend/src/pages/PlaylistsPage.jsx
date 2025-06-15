@@ -64,7 +64,7 @@ function PlaylistsPage(){
             </div>
             <hr className="h-1 bg-zinc-700 border-0"></hr>
             <div className="flex-grow">
-            <div className="grid grid-cols-4 gap-3 p-4 mr-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 p-4 mr-6">
                 {
                     currentPlaylists.map(playlist => (
                         <PlaylistCard playlist={playlist} key={playlist._id}/>

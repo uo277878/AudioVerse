@@ -67,13 +67,13 @@ function UsersAdminPage(){
             <h1 className='text-2xl my-4 ml-4 font-bold'>Usuarios del sistema</h1>
             <hr className="h-1 bg-zinc-700 border-0 mb-6"></hr>
             <div className="relative">
-                <input className="w-full bg-transparent placeholder:text-white text-white text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
+                <input className="w-full bg-transparent placeholder:text-white text-white text-sm md:text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
                     placeholder="Introduce tu búsqueda" onKeyDown={event => {
                         if(event.key == "Enter"){
                             handleSearch();
                         }
                     }}  onChange={event => setSearchInput(event.target.value)}/>
-                <button onClick={() => {handleSearch()}} className="absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-xl text-white hover:shadow focus:bg-slate-700 focus:shadow-none hover:bg-slate-700"
+                <button onClick={() => {handleSearch()}} className="absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-sm md:text-xl text-white hover:shadow focus:bg-slate-700 focus:shadow-none hover:bg-slate-700"
                     type="button">
                     Buscar
                 </button> 
@@ -87,7 +87,7 @@ function UsersAdminPage(){
             }
             {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
             <div className="flex-grow">
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                 {
                     currentUsers.map(user => (
                         <UserCard user={user} key={user._id}/>

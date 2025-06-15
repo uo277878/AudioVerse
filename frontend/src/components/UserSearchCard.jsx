@@ -58,31 +58,29 @@ function UserSearchCard({userSearch}){
 
     return(
         <div className="bg-zinc-900 max-w-md w-full p-6 rounded-md ml-4 my-4 ">
-            <div className="flex justify-between">
-                <div className="flex gap-x-2 items-center">
-                    <img src={userSearch.profilePic} alt="Imagen de perfil" className="w-20 h-20 mt-4 rounded-full border-white border-2 border-opacity-100 mr-2" />
-                    <div className="flex flex-col">
-                        <Link to={`/users/${userSearch._id}`} className='text-2xl font-bold hover:underline'>{userSearch.username}</Link>
-                        {user.role == "user" ? (
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <img src={userSearch.profilePic} alt="Imagen de perfil" className="w-20 h-20 rounded-full border-white border-2 border-opacity-100" />
+                <div className="flex-1 min-w-0">
+                    <Link to={`/users/${userSearch._id}`} className='text-xl sm:text-2xl font-bold hover:underline text-white block truncate'>{userSearch.username}</Link>
+                    {user.role == "user" ? (
+                        <>
+                        {isFollowing ? (
                             <>
-                            {isFollowing ? (
-                                <>
-                                    <button className="bg-green-500 text-black p-2 mt-4 rounded-md text-center" onClick={() => handleUnfollow(userSearch._id)}>Siguiendo</button>
-                                </>
-                            ) : (
-                                <>
-                                    <button className="bg-white text-black p-2 mt-4 rounded-md text-center" onClick={() => handleFollow(userSearch._id)}>Seguir</button>
-                                </>
-                            )}
+                                <button className="bg-green-500 text-black mt-2 px-4 py-2 rounded-md text-sm sm:text-base" onClick={() => handleUnfollow(userSearch._id)}>Siguiendo</button>
                             </>
-                        ) :
-                        (<></>)}
-                    </div>
+                        ) : (
+                            <>
+                                <button className="bg-white text-black mt-2 px-4 py-2 rounded-md text-sm sm:text-base" onClick={() => handleFollow(userSearch._id)}>Seguir</button>
+                            </>
+                        )}
+                        </>
+                    ) :
+                    (<></>)}
                 </div>
             </div>
             {user.role == "user" ? (
                 <>
-                    <p className="text-white mt-2">Canciones en común: <span className="font-bold">{matchCount}</span></p>
+                    <p className="text-white mt-2">Matches: <span className="font-bold">{matchCount}</span></p>
                 </>
             ) : (<></>)}
         </div>

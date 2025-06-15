@@ -5,7 +5,7 @@ function UserCard({user}){
     const {deleteUser} = useUsers();
 
     return(
-        <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md ml-4 my-4 ">
+        <div className="bg-zinc-800 max-w-md p-10 rounded-md mx-auto my-4 ">
             <div className="flex justify-between">
                 <Link to={`/users/edit/${user._id}`} className='text-2xl font-bold hover:underline'>{user.username}</Link>
                 <div className="flex gap-x-2 items-center">

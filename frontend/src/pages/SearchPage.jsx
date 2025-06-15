@@ -107,13 +107,13 @@ function SearchPage(){
                     <h1 className="text-2xl mb-4 font-bold">Buscador de Spotify</h1>
                 </div>
                 <div className="relative">
-                    <input className="w-full bg-transparent placeholder:text-white text-white text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
+                    <input className="w-full bg-transparent placeholder:text-white text-white text-sm md:text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
                         placeholder="Introduce tu búsqueda" onKeyDown={event => {
                             if(event.key == "Enter"){
                                 handleSearch();
                             }
                         }}  onChange={event => setSearchInput(event.target.value)}/>
-                    <button onClick={handleSearch} className="absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-xl text-white hover:shadow focus:bg-slate-700 focus:shadow-none hover:bg-slate-700"
+                    <button onClick={handleSearch} className="absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-sm md:text-xl text-white hover:shadow focus:bg-slate-700 focus:shadow-none hover:bg-slate-700"
                         type="button">
                         Buscar
                     </button> 
@@ -125,33 +125,39 @@ function SearchPage(){
                         </div>
                     ))
                 }
-                <div className="flex flex-row justify-center mt-4">
-                    <p className="mt-3 text-xl">Filtrar por:</p>
-                    <button onClick={() => setFilter("artists")} className={`${filter === "artists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Artistas</button>
-                    <button onClick={() => setFilter("tracks")} className={`${filter === "tracks" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Canciones</button>
-                    <button onClick={() => setFilter("playlists")} className={`${filter === "playlists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Listas</button>
-                    <button onClick={() => setFilter("albums")} className={`${filter === "albums" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Álbumes</button>
+                <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
+                        <p className="mt-3 text-sm md:text-base">Filtrar por:</p>
+                        <button onClick={() => setFilter("artists")} className={`${filter === "artists" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>Artistas</button>
+                        <button onClick={() => setFilter("tracks")} className={`${filter === "tracks" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>Canciones</button>
+                        <button onClick={() => setFilter("playlists")} className={`${filter === "playlists" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>Listas</button>
+                        <button onClick={() => setFilter("albums")} className={`${filter === "albums" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>Álbumes</button>
+                    </div>
+                    
                     {(filter !== "playlists") && (
-                        <p className="ml-8 mt-3 text-xl">Ordenar por:</p>
-                    )}
-                    {(filter === "artists" || filter === "tracks") && (
-                        <button
-                            onClick={() => setOrderBy(orderBy === "popularity" ? "" : "popularity")}
-                            className={`${orderBy === "popularity" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>
-                            Popularidad
-                        </button>
-                    )}
-                    {(filter === "tracks" || filter === "albums") && (
-                        <button
-                            onClick={() => setOrderBy(orderBy === "releaseDate" ? "" : "releaseDate")}
-                            className={`${orderBy === "releaseDate" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>
-                            Fecha de publicación
-                        </button>
+                        <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
+                            <p className="mt-3 text-sm md:text-base">Ordenar por:</p>
+                            {(filter === "artists" || filter === "tracks") && (
+                                <button
+                                    onClick={() => setOrderBy(orderBy === "popularity" ? "" : "popularity")}
+                                    className={`${orderBy === "popularity" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>
+                                    Popularidad
+                                </button>
+                            )}
+                            {(filter === "tracks" || filter === "albums") && (
+                                <button
+                                    onClick={() => setOrderBy(orderBy === "releaseDate" ? "" : "releaseDate")}
+                                    className={`${orderBy === "releaseDate" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>
+                                    Fecha de publicación
+                                </button>
+                            )}
+                        </div>
+                        
                     )}
                 </div>
                 {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
                 <div className="flex-grow">
-                    <div className="grid grid-cols-4 gap-3 mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-3 mt-4">
                     {
                         currentItems.map(song => (
                             <SongCard song={song} key={song.id} likedSongs={likedSongs}/>

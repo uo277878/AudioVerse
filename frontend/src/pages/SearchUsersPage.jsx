@@ -74,13 +74,13 @@ function SearchUsersPage(){
                     <h1 className="text-2xl mb-4 font-bold">Buscador de Audioverse</h1>
                 </div>
                 <div className="relative">
-                    <input {...register("input")} className="w-full bg-transparent placeholder:text-white text-white text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
+                    <input {...register("input")} className="w-full bg-transparent placeholder:text-white text-white text-sm md:text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
                         placeholder="Introduce tu búsqueda" onKeyDown={event => {
                             if(event.key == "Enter"){
                                 handleSearch(filter);
                             }
                         }}  onChange={event => setSearchInput(event.target.value)}/>
-                    <button onClick={() => {handleSearch(filter)}} className="absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-xl text-white hover:shadow focus:bg-slate-700 focus:shadow-none hover:bg-slate-700"
+                    <button onClick={() => {handleSearch(filter)}} className="absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-sm md:text-xl text-white hover:shadow focus:bg-slate-700 focus:shadow-none hover:bg-slate-700"
                         type="button">
                         Buscar
                     </button> 
@@ -99,28 +99,28 @@ function SearchUsersPage(){
                         </div>
                     ))
                 }
-                <div className="flex flex-row justify-center mt-4">
-                    <div className="flex items-center gap-2">
-                        <p className="text-xl">Filtrar por:</p>
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div className="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-2">
+                        <p className="text-sm md:text-base">Filtrar por:</p>
                         <button onClick={() => {
                             setFilter("users"); 
                             handleSearch("users");
-                        }} className={`${filter === "users" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>Usuarios</button>
+                        }} className={`${filter === "users" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>Usuarios</button>
                         <button onClick={() => {
                             setFilter("playlists"); 
                             handleSearch("playlists");
-                        }} className={`${filter === "playlists" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mr-2 rounded-3xl`}>Playlists</button>
+                        }} className={`${filter === "playlists" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>Playlists</button>
                     </div>
                     {(filter == "users") && (user.role == "user") && (
-                        <div className="flex items-center gap-2 ml-4">
-                            <p className="text-xl">Ordenar por:</p>
+                        <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
+                            <p className="mt-3 text-sm md:text-base">Ordenar por:</p>
                             <button
                                 onClick={() => {
                                         setOrderBy(orderBy === "matches" ? "" : "matches"); 
                                         handleSearch(filter);
                                     }
                                 }
-                                className={`${orderBy === "matches" ? "bg-red-700" : "bg-red-500"} p-2 text-white my-2 mx-3 rounded-3xl`}>
+                                className={`${orderBy === "matches" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>
                                 Matches
                             </button>
                         </div>
@@ -128,7 +128,7 @@ function SearchUsersPage(){
                 </div>
                 {items.length == 0 && <h1 className='text-xl mt-4 font-bold'>No se encuentra ningún resultado</h1>}
                 <div className="flex-grow">
-                    <div className="grid grid-cols-4 gap-3 mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
                         {filter == "users" ? (
                             <>
                                 {
