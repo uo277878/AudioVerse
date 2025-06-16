@@ -1,5 +1,8 @@
 import jwt from 'jsonwebtoken';
 
+/**
+ * Comprueba que existe un token para permitir que la solicitud continúe
+ */
 export const tokenRequired = (req, res, next) => {
     const {token} = req.cookies;
 

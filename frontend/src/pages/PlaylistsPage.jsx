@@ -73,7 +73,7 @@ function PlaylistsPage(){
             </div>
             </div>
             {playlists.length >= playlistsPerPage && (
-                <div className="mt-6 self-center">
+                <div className="mt-6 self-center w-full max-w-sm sm:max-w-md text-sm scale-95">
                     <Pagination itemsPerPage={playlistsPerPage} currentPage={currentPage} 
                     setCurrentPage={setCurrentPage} totalItems={totalPlaylists}></Pagination>
                 </div>

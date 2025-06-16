@@ -4,7 +4,7 @@ import { useUsers } from "../context/UserContext";
 import { Link } from "react-router-dom";
 import { toast, Zoom } from "react-toastify";
 
-function MatchUsers(){
+function MatchUsers({visib  = ""}){
     const {user} = useAuth();
     const [matchUsers, setMatchUsers] = useState([]);
     const { getUsersAdmin, users } = useUsers();
@@ -44,12 +44,12 @@ function MatchUsers(){
         }
     }, [user, users]);
     return (
-        <div className="fixed top-20 right-4 w-64 h-[80vh] overflow-y-auto bg-zinc-800 p-4 rounded-lg shadow-lg border border-zinc-700">
+        <div className={`bg-zinc-800 p-4 rounded-lg border border-zinc-700 shadow-lg ${visib}`}>
             <h2 className="text-white text-xl font-semibold mb-4">Usuarios recomendados</h2>
             {matchUsers.length === 0 ? (
                 <p className="text-gray-400">Sin recomendaciones todavía</p>
             ) : (
-                matchUsers.map(u => (
+                matchUsers.slice(0, 6).map(u => (
                     <div key={u._id} className="flex items-center mb-4">
                         <img src={u.profilePic} alt={u.username} className="w-10 h-10 rounded-full mr-3 border border-white" />
                         <div className="text-white">

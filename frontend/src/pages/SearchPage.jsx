@@ -167,7 +167,7 @@ function SearchPage(){
                 
                 </div>
                 {filteredItems.length >= itemsPerPage &&  (
-                    <div className="mt-6 self-center">
+                    <div className="mt-6 self-center w-full max-w-sm sm:max-w-md text-sm scale-95">
                         <Pagination itemsPerPage={itemsPerPage} currentPage={currentPage} 
                         setCurrentPage={setCurrentPage} totalItems={totalItems}></Pagination>
                     </div>

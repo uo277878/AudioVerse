@@ -3,6 +3,12 @@ import Playlist from '../models/playlist.js';
 import bcrypt from 'bcryptjs'
 import {validationResult} from "express-validator";
 
+/**
+ * Obtiene todos los usuarios del sistema
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns todos los usuarios
+ */
 export const getUsers = async (req, res) => {
     try{
         const users = await User.find();
@@ -12,6 +18,12 @@ export const getUsers = async (req, res) => {
     }
 }
 
+/**
+ * Crea un usuario y lo guarda en la base de datos
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns el usuario creado
+ */
 export const createUser = async (req, res) => {
     const {username, email, password, role, dateBirth} = req.body
     try {
@@ -33,6 +45,12 @@ export const createUser = async (req, res) => {
     }
 }
 
+/**
+ * Obtiene un usuario dado su id
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns el usuario obtenido
+ */
 export const getUser = async (req, res) => {
     try{
         const user = await User.findById(req.params.id);
@@ -46,6 +64,12 @@ export const getUser = async (req, res) => {
     }
 }
 
+/**
+ * Actualiza la información de perfil de un usuario
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns el usuario actualizado
+ */
 export const updateProfile = async (req, res) => {
     try{
         const errors = validationResult(req);
@@ -81,6 +105,12 @@ export const updateProfile = async (req, res) => {
     }
 }
 
+/**
+ * Actualiza un usuario
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns el usuario actualizado
+ */
 export const updateUser = async (req, res) => {
     try{
         const errors = validationResult(req);
@@ -103,6 +133,12 @@ export const updateUser = async (req, res) => {
     }
 }
 
+/**
+ * Actualiza la contraseña de un usuario
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns el usuario actualizado
+ */
 export const updatePassword = async (req, res) => {
     try{
         const errors = validationResult(req);
@@ -127,6 +163,12 @@ export const updatePassword = async (req, res) => {
     }
 }
 
+/**
+ * Obtiene los usuarios a los que sigue un usuario concreto (dado su id)
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns la lista de ids de personas que se están siguiendo
+ */
 export const getFollowedUsers = async(req, res) => {
     try{
         const user = await User.findById(req.params.id).populate("followed");
@@ -140,6 +182,12 @@ export const getFollowedUsers = async(req, res) => {
     }
 }
 
+/**
+ * Elimina un usuario dado su id
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns un código de estado
+ */
 export const deleteUser = async (req, res) => {
     try{
         const user = await User.findByIdAndDelete(req.params.id);
@@ -153,6 +201,12 @@ export const deleteUser = async (req, res) => {
     }
 }
 
+/**
+ * Obtiene la información a mostrar en la pantalla de perfil de unusuario
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns el usuario a mostrar
+ */
 export const profile = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
@@ -174,6 +228,12 @@ export const profile = async (req, res) => {
     }
 };
 
+/**
+ * Obtiene la información necesaria para actualizar la contraseña de un usuario
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns la información del usuario
+ */
 export const passwordPage = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
@@ -195,6 +255,12 @@ export const passwordPage = async (req, res) => {
     }
 };
 
+/**
+ * Obtiene los usuarios que cumplen condiciones dadas
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns los usuarios que cumplen los criterios de búsqueda
+ */
 export const searchUser = async (req, res) => {
     try{
         const input = req.body.input;
@@ -230,6 +296,12 @@ export const searchUser = async (req, res) => {
     }
 }
 
+/**
+ * Hace que un usuario siga a otro usuario
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns el usuario autenticado con su estado actualizado
+ */
 export const followUser = async (req, res) => {
     try{
         const userToFollow = await User.findById(req.params.id);
@@ -248,6 +320,12 @@ export const followUser = async (req, res) => {
     }
 }
 
+/**
+ * Hace que un usuario deje de seguir a otro usuario
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns el usuario autenticado con su estado actualizado
+ */
 export const unfollowUser = async (req, res) => {
     try{
         const userToUnfollow = await User.findById(req.params.id);
@@ -266,6 +344,12 @@ export const unfollowUser = async (req, res) => {
     }
 }
 
+/**
+ * Hace que un usuario dé me gusta a una canción
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns el usuario autenticado con su estado actualizado
+ */
 export const likeSong = async (req, res) => {
     try{
         const user = await User.findById(req.body.user.id);
@@ -290,6 +374,12 @@ export const likeSong = async (req, res) => {
     }
 }
 
+/**
+ * Hace que un usuario quite el me gusta a una canción 
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns el usuario autenticado con su estado actualizado
+ */
 export const dislikeSong = async (req, res) => {
     try{
         const user = await User.findById(req.body.user.id);
@@ -312,6 +402,12 @@ export const dislikeSong = async (req, res) => {
     }
 }
 
+/**
+ * Obtiene las canciones que le gustan a un usuario
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns el listado de canciones que le gustan al usuario
+ */
 export const getLikedSongs = async(req, res) => {
     console.log(req);
     try{

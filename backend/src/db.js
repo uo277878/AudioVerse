@@ -1,5 +1,8 @@
 import mongoose from 'mongoose'
 
+/**
+ * Se conecta a la base de datos de MongoDB Atlas
+ */
 export const connectDb = async() => {
     try{
         await mongoose.connect('mongodb+srv://uo277878:ingenieriainformatica2001@cluster0.hjchjtv.mongodb.net/audioverse?retryWrites=true&w=majority');

@@ -6,6 +6,7 @@ import PostCard from "../components/PostCard";
 import MatchUsers from "../components/MatchUsers";
 import { toast, Zoom } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import { PiUsersThreeDuotone } from "react-icons/pi";
 
 function HomePage(){
     const {user} = useAuth();
@@ -13,6 +14,7 @@ function HomePage(){
     const {createPost, posts, getPosts, errors: postErrors} = usePosts();
     const [page, setPage] = useState(1);
     const navigate = useNavigate();
+    const [showMatch, setShowMatch] = useState(false);
 
     const onSubmit = handleSubmit(async (data) => {
         try{
@@ -60,8 +62,21 @@ function HomePage(){
 
     return (
         <div className="relative">
-            <MatchUsers/>
-            <div className="pr-72">
+            <MatchUsers visib="hidden lg:block fixed top-20 right-4"/>
+            <button onClick={() => setShowMatch(true)} className="fixed bottom-6 right-6 z-50 bg-rose-500 text-white p-4 rounded-full shadow-lg lg:hidden">
+                <PiUsersThreeDuotone size={24} />
+            </button>
+            {showMatch && (
+                <div className="fixed inset-0 z-40 bg-black bg-opacity-50 flex items-center justify-center lg:hidden">
+                    <div className="bg-zinc-800 w-72 p-4 max-h-[90vh] overflow-y-auto shadow-lg border-l border-zinc-700">
+                        <div className="flex justify-end items-center mb-4">
+                            <button onClick={() => setShowMatch(false)} className="text-white text-lg">X</button>
+                        </div>
+                        <MatchUsers visib=""/>
+                    </div>
+                </div>
+            )}
+            <div className="lg:pr-72">
                 <div className="flex justify-center">
                     <h1 className="text-2xl my-4 font-bold">Para ti</h1>
                 </div>

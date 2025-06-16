@@ -154,7 +154,7 @@ function UserPage(){
                         </div>
                         </form>
                         <h2 className="text-xl mt-6">Algunas canciones que le gustan...</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 mt-4">
                         {
                             lastSongsLiked.map((song,i) => (
                                 <SongCard song={song} key={i} likedSongs={authUserLikedSongs}/>

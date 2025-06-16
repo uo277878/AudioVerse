@@ -10,6 +10,12 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+/**
+ * Sube una imagen de perfil a cloudinary
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns la foto de perfil
+ */
 export const uploadProfileImage = async (req, res) => {
     try {
         if (!req.files || !req.files.image) {

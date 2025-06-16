@@ -6,6 +6,12 @@ dotenv.config();
 const CLIENT_ID = process.env.SPOTIFY_API_KEY;
 const CLIENT_SECRET = process.env.SPOTIFY_API_SECRET;
 
+/**
+ * Obtiene un token válido de Spotify dado un client_id y un client_secret
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns token de spotify
+ */
 export const getToken = async (req, res) => {
     const authParams = new URLSearchParams();
     authParams.append("grant_type", "client_credentials");
@@ -29,6 +35,12 @@ export const getToken = async (req, res) => {
     
 };
 
+/**
+ * Busca unos elementos de Spotify dado unos criterios de búsqueda
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns elementos que cumplen las condiciones
+ */
 export const search = async (req, res) => {
     const {token, input, orderBy} = req.body;
     console.log(orderBy);
@@ -80,6 +92,12 @@ export const search = async (req, res) => {
     
 }
 
+/**
+ * Obtiene canciones dados unos criterios de búsqueda
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns las canciones encontradas
+ */
 export const getTrack = async (req, res) => {
     const token = req.headers.authorization?.split(" ")[1];
     const id = req.params.id;
@@ -104,6 +122,12 @@ export const getTrack = async (req, res) => {
     }
 }
 
+/**
+ * Obtiene álbumes dados unos criterios de búsqueda
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns los álbumes encontrados
+ */
 export const getAlbum = async (req, res) => {
     const token = req.headers.authorization?.split(" ")[1];
     const id = req.params.id;
@@ -128,6 +152,12 @@ export const getAlbum = async (req, res) => {
     }
 }
 
+/**
+ * Obtiene playlists dados unos criterios de búsqueda
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns las playlists encontradas
+ */
 export const getPlaylistSpotify = async (req, res) => {
     const token = req.headers.authorization?.split(" ")[1];
     const id = req.params.id;
@@ -152,6 +182,12 @@ export const getPlaylistSpotify = async (req, res) => {
     }
 }
 
+/**
+ * Obtiene artistas dados unos criterios de búsqueda
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns los artistas encontrados
+ */
 export const getArtist = async (req, res) => {
     const token = req.headers.authorization?.split(" ")[1];
     const id = req.params.id;

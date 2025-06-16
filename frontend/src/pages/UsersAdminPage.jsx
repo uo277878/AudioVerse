@@ -96,7 +96,7 @@ function UsersAdminPage(){
                 </div>
             </div>
             {users.length >= usersPerPage && (
-                <div className="mt-6 self-center">
+                <div className="mt-6 self-center w-full max-w-sm sm:max-w-md text-sm scale-95">
                     <Pagination itemsPerPage={usersPerPage} currentPage={currentPage} 
                     setCurrentPage={setCurrentPage} totalItems={totalUsers}></Pagination>
                 </div>

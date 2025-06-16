@@ -278,7 +278,7 @@ function SongCard({song, likedSongs, text}){
                         </button>
                         
                         {song.popularity > 60 && 
-                        <FontAwesomeIcon icon={faFire} className='h-6 w-6 text-orange-500'/>
+                            <FontAwesomeIcon icon={faFire} className='h-8 w-8 absolute top-3 left-1 text-orange-500'/>
                         }
                     </div>
                 )}

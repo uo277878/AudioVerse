@@ -5,6 +5,12 @@ import { createToken} from '../libs/jwt.js';
 import {validationResult} from "express-validator";
 import jwt from 'jsonwebtoken';
 
+/**
+ * Registra un usuario en la base de datos con la información dada
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns usuario registrado
+ */
 export const signup = async (req, res) => {
     const {username, email, password, dateBirth} = req.body
     try {
@@ -62,6 +68,12 @@ export const signup = async (req, res) => {
     }
 };
 
+/**
+ * Inicia sesión del usuario según la información dada
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns usuario logueado
+ */
 export const login = async (req, res) => {
     const {email, password} = req.body
 
@@ -72,13 +84,11 @@ export const login = async (req, res) => {
             return;
         }
         
-        // No existe usuario
         const userFound = await User.findOne({ email });
         if(!userFound){
             return res.status(400).json({ msg: "Credenciales incorrectas"});
         }
 
-        // La contraseña está mal
         const passwordMatch = await bcrypt.compare(password, userFound.password);
         if(!passwordMatch){
             return res.status(400).json({ msg: "Credenciales incorrectas"});
@@ -103,6 +113,12 @@ export const login = async (req, res) => {
     }
 };
 
+/**
+ * Cierra sesión
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns código de éxito 
+ */
 export const logout = (req, res) => {
     res.cookie('token', "", {
         expires: new Date(0)
@@ -110,6 +126,12 @@ export const logout = (req, res) => {
     return res.sendStatus(200);
 };
 
+/**
+ * Verifica que existe un token en las cookies
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns usuario en sesión
+ */
 export const verifyToken = async (req, res) => {
     const {token} = req.cookies;
 

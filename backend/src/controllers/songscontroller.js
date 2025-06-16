@@ -12,6 +12,12 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+/**
+ * Crea una playlist con una información dada
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns playlist creada
+ */
 export const createPlaylist = async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -41,6 +47,12 @@ export const createPlaylist = async (req, res) => {
     }
 };
 
+/**
+ * Elimina una playlist dada
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns un código de estado
+ */
 export const removePlaylist = async (req, res) => {
     try{
         const playlist = await Playlist.findByIdAndDelete(req.params.id);
@@ -54,6 +66,12 @@ export const removePlaylist = async (req, res) => {
     }
 }
 
+/**
+ * Añade una canción a una playlist concreta
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns la playlist actualizada
+ */
 export const addSongToPlaylist = async (req, res) => {
     const {playlistId, songId, txtSong} = req.body;
     const playlist = await Playlist.findById(playlistId);
@@ -78,6 +96,12 @@ export const addSongToPlaylist = async (req, res) => {
     }
 }
 
+/**
+ * Elimina una canción de una playlist concreta
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns la playlist actualizada
+ */
 export const removeSongPlaylist = async (req, res) => {
     const {songId, playlistId} = req.body;
     console.log("SongID: " + songId);
@@ -110,6 +134,12 @@ export const removeSongPlaylist = async (req, res) => {
     }
 }
 
+/**
+ * Hace que un usuario siga (y, por tanto, guarde en su biblioteca) una playlist concreta
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns la playlist actualizada
+ */
 export const followPlaylist = async (req, res) => {
     try{
         const {playlistId, userId} = req.body;
@@ -129,6 +159,12 @@ export const followPlaylist = async (req, res) => {
     }
 }
 
+/**
+ * Hace que un usuario deje de seguir (y, por tanto, elimine de su biblioteca) una playlist concreta
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns la playlist actualizada
+ */
 export const unfollowPlaylist = async (req, res) => {
     try{
         const {playlistId, userId} = req.body;
@@ -148,6 +184,12 @@ export const unfollowPlaylist = async (req, res) => {
     }
 }
 
+/**
+ * Obtiene todas las playlist de un usuario
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns todas las playlists
+ */
 export const getAllByUser = async (req, res) => {
     try{
         const user = await User.findById(req.params.id);
@@ -161,6 +203,12 @@ export const getAllByUser = async (req, res) => {
     }
 };
 
+/**
+ * Obtiene una playlist concreta
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns la playlist concreta
+ */
 export const getPlaylist = async (req, res) => {
     try{
         const playlist = await Playlist.findById(req.params.id);
@@ -174,6 +222,12 @@ export const getPlaylist = async (req, res) => {
     }
 };
 
+/**
+ * Busca las playlists que cumplen un criterio de búsqueda concreto
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns las playlists que coinciden con el criterio
+ */
 export const searchPlaylist = async (req, res) => {
     try{
         const errors = validationResult(req);
@@ -196,6 +250,12 @@ export const searchPlaylist = async (req, res) => {
     }
 };
 
+/**
+ * Da me gusta al texto asociado a una canción que forma parte de una playlist
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns la playlist actualizada
+ */
 export const likeText = async (req, res) => {
     try{
         const {playlistId, songId, userId} = req.body;
@@ -228,6 +288,12 @@ export const likeText = async (req, res) => {
     }
 };
 
+/**
+ * Obtiene los me gusta totales y si un usuario concreto le ha dado me gusta a una canción concreta
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns los me gusta totales y si le ha dado me gusta un usuario
+ */
 export const getTotalLikesAndLiked = async (req, res) => {
     try{
         const {playlistId, songId, userId} = req.query;

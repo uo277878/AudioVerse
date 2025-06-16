@@ -2,6 +2,12 @@ import Post from '../models/post.js';
 import User from '../models/user.js';
 import {validationResult} from "express-validator";
 
+/**
+ * Crea un post con la información dada
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns el post creado
+ */
 export const createPost = async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -24,6 +30,12 @@ export const createPost = async (req, res) => {
     }
 }
 
+/**
+ * Obtiene todos los posts de las personas que sigue el usuario
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns los posts obtenidos
+ */
 export const getPosts = async (req, res) => {
     try{
         const userId = req.query.userId;
@@ -46,6 +58,12 @@ export const getPosts = async (req, res) => {
     }
 }
 
+/**
+ * Da me gusta a un post concreto
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns el post actualizado
+ */
 export const likePost = async (req, res) => {
     try{
         const postId = req.params.id;
@@ -69,6 +87,12 @@ export const likePost = async (req, res) => {
     }
 }
 
+/**
+ * Elimina un post
+ * @param {*} req petición realizada
+ * @param {*} res respuesta devuelta
+ * @returns un código de estado
+ */
 export const deletePost = async (req, res) => {
     try{
         const post = await Post.findByIdAndDelete(req.params.id);
