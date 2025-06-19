@@ -32,6 +32,7 @@ export const updateUserRequest = async(id, user) => {
         email: user.email,
         role: user.rol
     };
+    console.log(userData);
 
     return axios.put(`${API}/users/edit/${id}`, userData, { withCredentials: true });
 };

@@ -68,7 +68,6 @@ function UserPage(){
                 console.log(gotUser);
                 setAuthUser(gotUser);
                 setAuthUserLikedSongs(gotUser.songsLiked || []);
-                console.log(authUser.songsLiked);
             }
         };
         loadAuthUser();

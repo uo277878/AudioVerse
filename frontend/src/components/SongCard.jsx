@@ -10,17 +10,17 @@ import { usePosts } from '../context/PostContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFire } from '@fortawesome/free-solid-svg-icons'
 import { useLocation, useParams } from 'react-router-dom';
-import RemoveIcon from '@mui/icons-material/Remove';
 import { useNavigate } from 'react-router-dom';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { FaPlay } from "react-icons/fa";
 import { toast, Zoom } from "react-toastify";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 
 function SongCard({song, likedSongs, text}){
     const { register: registerPlaylist, handleSubmit: handleSubmitPlaylist } = useForm();
     const { register: registerPost, handleSubmit: handleSubmitPost } = useForm();
-    const {createPost} = usePosts();
+    const {createPost, errors: postErrors} = usePosts();
     const [active, setActive] = useState(false);
     const [filteredPlaylists, setFilteredPlaylists] = useState([]);
     const {user} = useAuth();
@@ -119,7 +119,6 @@ function SongCard({song, likedSongs, text}){
     }
 
     async function handleSaveToPlaylist(data) {
-        if (!selectedPlaylist) return;
         try {
             const res = await addSongToPlaylist(selectedPlaylist, song.id, data.txtSong);
             if(res.playlist){
@@ -137,7 +136,6 @@ function SongCard({song, likedSongs, text}){
                 setShowModal(false);
             }
         } catch (error) {
-            console.log(error);
             toast.error('Se ha producido un error al guardar la canción en la playlist', {
                 position: "top-right",
                 autoClose: 5000,
@@ -235,7 +233,7 @@ function SongCard({song, likedSongs, text}){
             
             {isPlaylistPage && (
                 <button className="absolute top-4 right-4 text-white hover:text-red-500" onClick={() => handleDeleteSong(song.id)}>
-                    <RemoveIcon />
+                    <FaRegTrashAlt />
                 </button>
             )}
             <img src={song.images != null ? song.images[0].url : song.album.images[0].url} className={`rounded ${isPlaylistPage ? 'w-28 h-28 mr-4 flex-shrink-0' : ''}`}/>
@@ -314,6 +312,13 @@ function SongCard({song, likedSongs, text}){
                 
             </PlaylistModal>
             <PostModal isVisible={showPostModal} onClose={() => setShowPostModal(false)}>
+                {
+                    postErrors.map((error, i) => (
+                        <div className='bg-red-500 p-2 text-white my-2' key={i}>
+                            {error.msg}
+                        </div>
+                    ))
+                }
                 <form onSubmit={handleSubmitPost(handleCreatePost)}>
                     <textarea {...registerPost("text")} rows="4" className="resize-none p-3 w-full text-md md:text-lg text-gray-900 bg-gray-50 rounded-lg border
                     dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" defaultValue={defaultValue}></textarea>

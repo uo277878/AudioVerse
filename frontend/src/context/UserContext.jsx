@@ -51,6 +51,7 @@ export const UserProvider = ({children}) => {
                 return setErrors(error.response.data);
             }
             setErrors([error.response.data]);
+            throw error.response.data;
         }
     }
 
@@ -182,6 +183,7 @@ export const UserProvider = ({children}) => {
 
     useEffect(() => {
             if(errors.length > 0){
+                console.log(errors);
                 const timer = setTimeout(() => {
                     setErrors([]);
                 }, 5000)

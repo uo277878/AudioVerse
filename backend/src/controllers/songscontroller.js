@@ -25,7 +25,20 @@ export const createPlaylist = async (req, res) => {
             res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
             return;
         }
+
+        const size = 2 * 1024 * 1024; 
+        if (req.files?.pic?.size > size) {
+            return res.status(400).json({ msg: "La imagen debe ser menor de 2MB" });
+        }
+        console.log(req.files);
         let image = req.files?.pic ? req.files.pic.tempFilePath : "https://res.cloudinary.com/dtlhuysrz/image/upload/v1743524882/default_playlist_qv9jx6.png";
+        
+        if(image != "https://res.cloudinary.com/dtlhuysrz/image/upload/v1743524882/default_playlist_qv9jx6.png"){
+            const ext = ["image/jpeg", "image/png"];
+            if (!ext.includes(req.files?.pic?.mimetype)) {
+                return res.status(400).json({ msg: "Formato de imagen no permitido. Solo JPG y PNG" });
+            }
+        }
         const result = await cloudinary.uploader.upload(image, {
             folder: "playlist_pictures",
         });
@@ -43,6 +56,7 @@ export const createPlaylist = async (req, res) => {
         console.log(newPlaylist);
         res.json({ newPlaylist });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ msg: error.message });
     }
 };
@@ -74,6 +88,12 @@ export const removePlaylist = async (req, res) => {
  */
 export const addSongToPlaylist = async (req, res) => {
     const {playlistId, songId, txtSong} = req.body;
+    if(!playlistId){
+        return res.status(402).json({ msg: "No se ha seleccionado ninguna playlist" });
+    }
+    if(!txtSong){
+        return res.status(402).json({ msg: "No se ha proporconado un texto para la canción" });
+    }
     const playlist = await Playlist.findById(playlistId);
     if (!playlist) {
         return res.status(404).json({ msg: "Playlist no encontrada" });

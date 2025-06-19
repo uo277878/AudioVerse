@@ -117,6 +117,17 @@ export const updateUser = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
         }
+        const usernameExists = await User.findOne({username: req.body.username, _id: { $ne: req.params.id } });
+
+        if (usernameExists) {
+            return res.status(401).json({ msg: "Nombre de usuario no disponible" });
+        }
+
+        const emailExists = await User.findOne({email: req.body.email, _id: { $ne: req.params.id }});
+
+        if (emailExists) {
+            return res.status(402).json({ msg: "Email no disponible" });
+        }
         const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true});
         if(!user){
             return res.status(404).json({ message: "Usuario no encontrado"});
@@ -273,7 +284,7 @@ export const searchUser = async (req, res) => {
         }
 
         const authUser = await User.findById(authId);
-        let users = await User.find({ username: { $regex: new RegExp(input, 'i') }, _id: { $ne: authId } });
+        let users = await User.find({ username: { $regex: new RegExp(input, 'i') }, _id: { $ne: authId }, role: {$ne: "admin"} });
 
         if (orderBy == "matches") {
             const likedIds = new Set(authUser.songsLiked.map(id => id.toString()));

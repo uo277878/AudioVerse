@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useSongs } from "../context/SongContext";
-import RemoveIcon from '@mui/icons-material/Remove';
+import { FaRegTrashAlt } from "react-icons/fa";
 
 function PlaylistCard({playlist}){
     const [isFollowed, setIsFollowed] = useState(false);
@@ -88,7 +88,7 @@ function PlaylistCard({playlist}){
         <div className="flex flex-col bg-zinc-700 max-w-xs w-full p-10 rounded-md mx-4 my-4 justify-between h-72 relative">
             {playlist.creator == user.id ? 
                 (<button className="absolute top-4 right-4 text-white hover:text-red-500" onClick={() => handleDeletePlaylist(playlist._id)}>
-                    <RemoveIcon />
+                    <FaRegTrashAlt />
                 </button>)
             :
             (user.role == "user" && (

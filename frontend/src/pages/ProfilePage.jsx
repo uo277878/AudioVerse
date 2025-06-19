@@ -21,11 +21,10 @@ function ProfilePage(){
         }
     }, [user]);
 
-    const onSubmit = handleSubmit((data) => {
+    const onSubmit = handleSubmit(async (data) => {
         if(user){
-            const res = updateProfile(user, data);
-            console.log(res);
-            if(res){
+            try{
+                const res = await updateProfile(user, data);
                 toast.success('Perfil actualizado con éxito', {
                     position: "top-right",
                     autoClose: 3000,
@@ -37,7 +36,7 @@ function ProfilePage(){
                     theme: "colored",
                     transition: Zoom,
                 });
-            } else {
+            } catch(error){
                 toast.error('Se ha producido un error al actualizar el perfil', {
                     position: "top-right",
                     autoClose: 5000,
