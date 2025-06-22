@@ -12,7 +12,6 @@ export const createPost = async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            console.log(errors);
             res.status(422).json(errors.array().map(error => ({ msg: error.msg })));
             return;
         }
@@ -51,7 +50,6 @@ export const getPosts = async (req, res) => {
         .limit(max)
         .populate('user', '_id username profilePic')
         .exec();
-        console.log(posts);
         res.json(posts);
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });

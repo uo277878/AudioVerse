@@ -23,9 +23,9 @@ function UsersAdminPage(){
     async function handleSearch(){
         try {
             const res = await searchUsers(searchInput, null, user);
-            console.log(res);
             if(Array.isArray(res.users)){
-                setItems(res.users);
+                let sinAdmin = res.users.filter(u => u.role != "admin");
+                setItems(sinAdmin);
                 setCurrentPage(1);
             } else{
                 setItems([]);
@@ -46,16 +46,18 @@ function UsersAdminPage(){
     }
 
     useEffect(() =>{
-        getUsersAdmin().then(() => {
-            setItems(users); 
-        });
         if(user.role != "admin"){
             navigate("/error");
         }
+        getUsersAdmin().then(() => {
+            const sinAdmin = users.filter(u => u.role != "admin");
+            setItems(sinAdmin);
+        });
     }, []);
 
     useEffect(() => {
-        setItems(users);
+        const sinAdmin = users.filter(u => u.role !== "admin");
+        setItems(sinAdmin);
     }, [users]);
 
     if(users.length == 0){
@@ -81,7 +83,7 @@ function UsersAdminPage(){
             </div>
             {
                 searchErrors.map((error, i) => (
-                    <div className='bg-red-500 p-2 text-white  my-2' key={i}>
+                    <div className='bg-red-600 p-2 text-white  my-2' key={i}>
                         {error.msg}
                     </div>
                 ))

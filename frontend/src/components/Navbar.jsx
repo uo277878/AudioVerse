@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import { useState } from "react";
+import { usePosts } from "../context/PostContext";
 
 function Navbar(){
     const { user, isAuthenticated, logout } = useAuth();
+    const {resetPosts} = usePosts();
     const [menuOpen, setMenuOpen] = useState(false);
     
     return (
@@ -87,7 +89,7 @@ function Navbar(){
                         </Link>
                     </li>
                     <li>
-                        <Link to="/login" onClick={() => logout()} className="block bg-red-500 px-4 py-2 rounded-md text-white text-center md:text-xl hover:underline">
+                        <Link to="/login" onClick={() => { logout(); resetPosts(); }} className="block bg-red-600 px-4 py-2 rounded-md text-white text-center md:text-xl hover:underline">
                             Cerrar sesión
                         </Link>
                     </li>

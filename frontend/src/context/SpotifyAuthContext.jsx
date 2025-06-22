@@ -80,7 +80,6 @@ export const SpotifyProvider = ({children}) => {
 
         const body = await fetch(url, payload);
         const response = await body.json();
-        console.log(response);
 
         if (response.access_token) {
             localStorage.setItem("spotify_access_token", response.access_token);
@@ -113,7 +112,6 @@ export const SpotifyProvider = ({children}) => {
         } else {
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get("code");
-            console.log("Código recibido desde Spotify:", code);
 
             if (code) {
                 await getAccessToken(code);

@@ -14,7 +14,6 @@ function ProfilePage(){
 
     useEffect(() => {
         if(user){
-            console.log(user);
             setValue('username', user.username);
             setValue('email', user.email);
             setProfilePic(user.profilePic);
@@ -58,7 +57,7 @@ function ProfilePage(){
                 <h1 className='text-2xl mb-4 font-bold'>Información de su perfil</h1>
                 {
                     updateErrors.map((error, i) => (
-                        <div className='bg-red-500 p-2 text-white my-2' key={i}>
+                        <div className='bg-red-600 p-2 text-white my-2' key={i}>
                             {error.msg}
                         </div>
                     ))
@@ -67,7 +66,7 @@ function ProfilePage(){
                     <div className="w-full md:w-1/4 flex justify-center md:justify-start mr-4 mb-4 md:mb-0">
                         <div className="relative inline-block">
                             <img src={user.profilePic} alt="Imagen de perfil" className="w-32 h-32 mt-4 rounded-full border-white border-2 border-opacity-100" />
-                            <Link to="/users/profile/image" className="absolute bottom-1 right-1 md:bottom-2 md:right-2 bg-rose-500 text-white p-2 rounded-full">
+                            <Link to="/users/profile/image" className="absolute bottom-1 right-1 md:bottom-2 md:right-2 bg-rose-600 text-white p-2 rounded-full">
                                 <HiOutlinePencilAlt className="w-6 h-6" />
                                 <span className="sr-only">Editar foto de perfil</span>
                             </Link>
@@ -88,10 +87,10 @@ function ProfilePage(){
                             errors.email && <p className='text-red-500'>Email es obligatorio</p>
                         }
                         <div className="flex justify-between">
-                            <Link to="/users/profile/password" className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
+                            <Link to="/users/profile/password" className="bg-rose-600 text-white px-4 py-2 rounded-md my-2">
                                 Editar contraseña
                             </Link>
-                            <button type="submit" className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
+                            <button type="submit" className="bg-rose-600 text-white px-4 py-2 rounded-md my-2">
                                 Guardar
                             </button>
                         </div>

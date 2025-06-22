@@ -60,7 +60,7 @@ function PlaylistsPage(){
         <div className="mt-4 ml-4">
             <div className="flex justify-between items-center px-4 mb-2">
                 <h1 className='text-2xl my-4 ml-4 font-bold'>Biblioteca de playlists</h1>
-                <Link to={`/playlists/new`} className='bg-red-500 p-2 text-white ml-8'>+ Crear playlist</Link>
+                <Link to={`/playlists/new`} className='bg-red-600 p-2 text-white ml-8'>+ Crear playlist</Link>
             </div>
             <hr className="h-1 bg-zinc-700 border-0"></hr>
             <div className="flex-grow">

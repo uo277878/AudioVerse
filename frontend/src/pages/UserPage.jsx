@@ -65,7 +65,6 @@ function UserPage(){
         const loadAuthUser = async () => {
             if (user) {
                 let gotUser = await getUser(user.id);
-                console.log(gotUser);
                 setAuthUser(gotUser);
                 setAuthUserLikedSongs(gotUser.songsLiked || []);
             }

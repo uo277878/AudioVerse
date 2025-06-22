@@ -11,7 +11,6 @@ export const searchRequest = (token, input, orderBy) => {
 }
 
 export const searchPlaylistsRequest = (input) => {
-    console.log(input);
     return axios.post(`${API}/searchPlaylist`, {input}, {withCredentials: true});
 }
 
@@ -52,14 +51,10 @@ export const removeSongPlaylistRequest = (songId, playlistId) => {
 }
 
 export const followPlaylistRequest = (playlistId, userId) => {
-    console.log(playlistId);
-    console.log(userId);
     return axios.put(`${API}/playlists/follow`, {playlistId, userId}, { withCredentials: true });
 }
 
 export const unfollowPlaylistRequest = (playlistId, userId) => {
-    console.log(playlistId);
-    console.log(userId);
     return axios.put(`${API}/playlists/unfollow`, {playlistId, userId}, { withCredentials: true });
 }
 
@@ -80,6 +75,5 @@ export const likeTextRequest = (playlistId, songId, userId) => {
 }
 
 export const getTotalLikesAndLikedRequest = (playlistId, songId, userId) => {
-    console.log(playlistId, songId, userId);
     return axios.get(`${API}/playlists/getTotalLikesAndLiked`, {params: { playlistId, songId, userId}, withCredentials: true });
 }

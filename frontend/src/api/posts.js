@@ -11,7 +11,6 @@ export const getPostsRequest = (user, page) => {
 };
 
 export const likePostRequest = (id, user) => {
-    console.log(user);
     return axios.put(`${API}/home/like/${id}`, {user}, { withCredentials: true })
 }
 

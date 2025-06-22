@@ -13,6 +13,8 @@ export const usePosts = () => {
 export const PostProvider = ({children}) => {
     const [errors, setErrors] = useState([]);
     const [posts, setPosts] = useState([]);
+
+    const resetPosts = () => setPosts([]);
     
     const createPost = async (userId, text, songId, type) => {
         try{
@@ -29,7 +31,6 @@ export const PostProvider = ({children}) => {
     const getPosts = async (user, page) => {
         try{
             const res = await getPostsRequest(user, page);
-            console.log(res);
             setPosts(prev => {
                 const todos = [...prev, ...res.data];
                 const sinDuplicados = Array.from(new Map(todos.map(p => [p._id, p])).values());
@@ -72,7 +73,7 @@ export const PostProvider = ({children}) => {
             }, [errors])
     
         return (
-            <PostContext.Provider value={{posts, errors, createPost, getPosts, likePost, deletePost}}>
+            <PostContext.Provider value={{posts, errors, createPost, getPosts, likePost, deletePost, resetPosts}}>
                 {children}
             </PostContext.Provider>
         ) 

@@ -91,7 +91,7 @@ function EditProfilePicPage(){
                     <div className="w-full flex flex-col justify-center items-center mr-4 mb-4 md:mb-0">
                         {
                             updateErrors.map((error, i) => (
-                                <div className='bg-red-500 p-2 text-white my-2' key={i}>
+                                <div className='bg-red-600 p-2 text-white my-2' key={i}>
                                     {error.msg}
                                 </div>
                             ))
@@ -100,10 +100,10 @@ function EditProfilePicPage(){
                         <label htmlFor="foto" className="sr-only">Email:</label>
                         <input type="file" id="foto" {...register("image")} onChange={handleImageChange} className="w-full text-white md:ml-20 py-2 my-4 rounded-md"/>
                         <div className="flex">
-                            <button type="submit" onClick={handleCancelar} className="bg-rose-500 text-white px-4 py-2 rounded-md my-2 mr-4">
+                            <button type="submit" onClick={handleCancelar} className="bg-rose-600 text-white px-4 py-2 rounded-md my-2 mr-4">
                                 Cancelar
                             </button>
-                            <button type="submit" className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
+                            <button type="submit" className="bg-rose-600 text-white px-4 py-2 rounded-md my-2">
                                 Guardar
                             </button>
                         </div>

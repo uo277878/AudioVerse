@@ -28,12 +28,11 @@ export const PlayerProvider = ({ children }) => {
         script.src = "https://sdk.scdn.co/spotify-player.js";
         script.async = true;
         window.onSpotifyWebPlaybackSDKReady = () => {
-          console.log("Spotify SDK Ready (desde script load)");
+          console.log("Spotify SDK Ready");
         };
         document.body.appendChild(script);
       } else {
         if (window.Spotify) {
-          console.log("Spotify SDK ya estaba cargado");
           window.onSpotifyWebPlaybackSDKReady?.();
         }
       }
@@ -43,8 +42,6 @@ export const PlayerProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    console.log(accessToken);
-
     const setupPlayer = () => {
       if (!accessToken || playerRef.current) return;
 
@@ -55,7 +52,6 @@ export const PlayerProvider = ({ children }) => {
       });
 
       player.addListener("ready", ({ device_id }) => {
-        console.log("Reproductor listo:", device_id);
         setDeviceId(device_id);
         setIsReady(true);
       });
@@ -100,9 +96,7 @@ export const PlayerProvider = ({ children }) => {
   const pause = () => playerRef.current?.pause();
   const resume = () => playerRef.current?.resume();
   const togglePlay = async () => {
-    console.log(playerRef);
     const state = await playerRef.current.getCurrentState();
-    console.log("Estado: " + state);
     if (!state) {
         return;
     }

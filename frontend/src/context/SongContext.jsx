@@ -43,7 +43,6 @@ export const SongProvider = ({children}) => {
     const searchPlaylists = async (searchInput) => {
         try{
             const res = await searchPlaylistsRequest(searchInput);
-            console.log(res);
             return res.data;
         } catch(error){
             if(Array.isArray(error.response.data)){
@@ -65,7 +64,6 @@ export const SongProvider = ({children}) => {
     const getTrack = async (token, id) => {
         try{
             const res = await getTrackRequest(token, id);
-            console.log(res);
             return res.data;
         } catch(error){
             console.error(error);
@@ -170,7 +168,6 @@ export const SongProvider = ({children}) => {
     const likeText = async (playlistId, songId, userId) => {
         try{
             const res = await likeTextRequest(playlistId, songId, userId);
-            console.log(res);
             return res.data;
         } catch(error){
             console.error(error);
@@ -180,7 +177,6 @@ export const SongProvider = ({children}) => {
     const getTotalLikesAndLiked = async (playlistId, songId, userId) => {
         try{
             const res = await getTotalLikesAndLikedRequest(playlistId, songId, userId);
-            console.log(res);
             return res.data;
         } catch(error){
             console.error(error);

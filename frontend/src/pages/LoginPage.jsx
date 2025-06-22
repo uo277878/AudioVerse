@@ -30,7 +30,7 @@ function LoginPage(){
                 <h1 className='text-2xl font-bold'>Iniciar sesión</h1>
                 {
                     loginErrors.map((error, i) => (
-                        <div className='bg-red-500 p-2 text-white my-2' key={i}>
+                        <div className='bg-red-600 p-2 text-white my-2' key={i}>
                             {error.msg}
                         </div>
                     ))
@@ -52,7 +52,7 @@ function LoginPage(){
                     {
                         errors.password && <p className='text-red-500'>Password es obligatoria</p>
                     }
-                    <button type="submit" className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
+                    <button type="submit" className="bg-red-600 text-white px-4 py-2 rounded-md my-2">
                         Iniciar sesión
                     </button>
                 </form>

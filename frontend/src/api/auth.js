@@ -3,7 +3,6 @@ import axios from 'axios'
 const API = 'http://localhost:3000/api'
 
 export const signupRequest = user => {
-    console.log(user);
     const userData = {
         username: user.username,
         email: user.email,

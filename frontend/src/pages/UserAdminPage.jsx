@@ -66,7 +66,7 @@ function UserAdminPage(){
                 <h1 className='text-2xl mb-4 font-bold'>Edición del perfil</h1>
                 {
                     updateErrors.map((error, i) => (
-                        <div className='bg-red-500 p-2 text-white my-2' key={i}>
+                        <div className='bg-red-600 p-2 text-white my-2' key={i}>
                             {error.msg}
                         </div>
                     ))
@@ -93,7 +93,7 @@ function UserAdminPage(){
                             <input type="radio" id="userRadio" value="user" name="rol" {...register("rol")} />
                         </div>
                         <div className="flex justify-end">
-                            <button type="submit" className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
+                            <button type="submit" className="bg-rose-600 text-white px-4 py-2 rounded-md my-2">
                                 Guardar
                             </button>
                         </div>

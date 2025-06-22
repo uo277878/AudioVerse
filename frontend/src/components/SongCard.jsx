@@ -27,7 +27,7 @@ function SongCard({song, likedSongs, text}){
     const {likeSong, dislikeSong} = useUsers();
     const [showModal, setShowModal] = useState(false);
     const [showPostModal, setShowPostModal] = useState(false);
-    const { getAllByUser, playlists, addSongToPlaylist, removeSongPlaylist, likeText, getTotalLikesAndLiked ,errors: songErrors } = useSongs();
+    const { getAllByUser, playlists, addSongToPlaylist, removeSongPlaylist, likeText, getTotalLikesAndLiked, getPlaylist,  errors: songErrors } = useSongs();
     const [selectedPlaylist, setSelectedPlaylist] = useState('');
     const [defaultValue, setDefaultValue] = useState("");
     const [textLiked, setTextLiked] = useState(false);
@@ -36,6 +36,7 @@ function SongCard({song, likedSongs, text}){
     const location = useLocation();
     const isPlaylistPage = location.pathname.includes('/playlists/');
     const { id: playlistId } = useParams();
+    const [playlist, setPlaylist] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -43,7 +44,6 @@ function SongCard({song, likedSongs, text}){
             async function getPlaylists(){
                 try{
                     const pl = await getAllByUser(user);
-                    console.log(pl);
                     const filtered = pl.filter(p => p.name != "Canciones que me gustan");
                     setFilteredPlaylists(filtered);
                 } catch(error){
@@ -84,7 +84,6 @@ function SongCard({song, likedSongs, text}){
     useEffect(() => {
         async function getLikes(){
             const res = await getTotalLikesAndLiked(playlistId, song.id, user.id);
-            console.log(res);
             setTotalLikes(res.totalLikes);
             setTextLiked(res.liked);
         }
@@ -92,6 +91,16 @@ function SongCard({song, likedSongs, text}){
             getLikes();
         }
     }, [song]);
+
+    useEffect(() => {
+        async function getAndSetPlaylist(){
+            if(isPlaylistPage){
+                const playlist = await getPlaylist(playlistId);
+                setPlaylist(playlist);
+            }
+        }
+        getAndSetPlaylist();
+    }, playlistId);
 
     async function handleClick(id){
         try{
@@ -231,7 +240,7 @@ function SongCard({song, likedSongs, text}){
     return(
         <div className={`relative bg-zinc-700 ${isPlaylistPage ? 'w-full max-w-full flex flex-col md:flex-row items-start gap-4' : 'max-w-md'} p-6 md:p-10 rounded-md ml-4 mb-4`}>
             
-            {isPlaylistPage && (
+            {isPlaylistPage && user.id == playlist?.creator && (
                 <button className="absolute top-4 right-4 text-white hover:text-red-500" onClick={() => handleDeleteSong(song.id)}>
                     <FaRegTrashAlt />
                     <span className="sr-only">Eliminar canción</span>
@@ -240,7 +249,7 @@ function SongCard({song, likedSongs, text}){
             <img src={song.images != null ? song.images[0].url : song.album.images[0].url} alt="Foto de la canción" className={`rounded ${isPlaylistPage ? 'w-28 h-28 mr-4 flex-shrink-0' : ''}`}/>
             <div className={`${isPlaylistPage ? 'flex flex-col justify-center space-y-2' : ''}`}>
                 <p className="text-xl font-bold mt-2">{song.name}</p>
-                {text && isPlaylistPage && (
+                {text && isPlaylistPage && user.role == "user" && (
                     <div className="flex flex-col gap-1 mt-2">
                         <p className="text-xl text-gray-300 italic break-words">“{text}”</p>
                         <button onClick={handleLikeText} className="flex items-center text-white w-fit">
@@ -289,7 +298,7 @@ function SongCard({song, likedSongs, text}){
             <PlaylistModal isVisible={showModal} onClose={() => setShowModal(false)}>
                 {
                     songErrors.map((error, i) => (
-                        <div className='bg-red-500 p-2 text-white my-2' key={i}>
+                        <div className='bg-red-600 p-2 text-white my-2' key={i}>
                             {error.msg}
                         </div>
                     ))
@@ -310,7 +319,7 @@ function SongCard({song, likedSongs, text}){
                     className="resize-none p-3 w-full text-xl text-gray-900 bg-gray-50 rounded-lg border
                         dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                         placeholder="¿Por qué añades esta canción?"></textarea>
-                    <button type="submit" className="mt-4 bg-red-500 text-white py-2 px-4 rounded">
+                    <button type="submit" className="mt-4 bg-red-600 text-white py-2 px-4 rounded">
                         Guardar
                     </button>
                 </form>
@@ -319,7 +328,7 @@ function SongCard({song, likedSongs, text}){
             <PostModal isVisible={showPostModal} onClose={() => setShowPostModal(false)}>
                 {
                     postErrors.map((error, i) => (
-                        <div className='bg-red-500 p-2 text-white my-2' key={i}>
+                        <div className='bg-red-600 p-2 text-white my-2' key={i}>
                             {error.msg}
                         </div>
                     ))
@@ -332,7 +341,7 @@ function SongCard({song, likedSongs, text}){
                         <img src={song.images != null ? song.images[0].url : song.album.images[0].url} alt="Foto de la canción" className="w-12 h-12 rounded mr-3" />
                         <p className="text-white font-bold">{song.name}</p>
                     </div>
-                    <button type="submit" className="mt-4 bg-red-500 text-white py-2 px-4 rounded">
+                    <button type="submit" className="mt-4 bg-red-600 text-white py-2 px-4 rounded">
                         Guardar
                     </button>
                 </form>

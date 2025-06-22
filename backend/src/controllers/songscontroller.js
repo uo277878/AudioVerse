@@ -30,7 +30,6 @@ export const createPlaylist = async (req, res) => {
         if (req.files?.pic?.size > size) {
             return res.status(400).json({ msg: "La imagen debe ser menor de 2MB" });
         }
-        console.log(req.files);
         let image = req.files?.pic ? req.files.pic.tempFilePath : "https://res.cloudinary.com/dtlhuysrz/image/upload/v1743524882/default_playlist_qv9jx6.png";
         
         if(image != "https://res.cloudinary.com/dtlhuysrz/image/upload/v1743524882/default_playlist_qv9jx6.png"){
@@ -53,10 +52,8 @@ export const createPlaylist = async (req, res) => {
         });
 
         const newPlaylist = await playlist.save();
-        console.log(newPlaylist);
         res.json({ newPlaylist });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ msg: error.message });
     }
 };
@@ -100,8 +97,6 @@ export const addSongToPlaylist = async (req, res) => {
     } else if(!songId){
         return res.status(403).json({ msg: "Id de canción inválido" });
     } else{
-        console.log(songId);
-        console.log(playlist.songs);
         if (!playlist.songs.some(song => song.songId == songId)) {
             playlist.songs.push({
                 songId: songId,
@@ -124,7 +119,6 @@ export const addSongToPlaylist = async (req, res) => {
  */
 export const removeSongPlaylist = async (req, res) => {
     const {songId, playlistId} = req.body;
-    console.log("SongID: " + songId);
     const playlist = await Playlist.findById(playlistId);
     if (!playlist) {
         return res.status(404).json({ msg: "Playlist no encontrada" });
@@ -133,7 +127,6 @@ export const removeSongPlaylist = async (req, res) => {
     } else{
         try{
             const index = playlist.songs.findIndex(i => i.songId === songId);
-            console.log(playlist.songs);
             if(index == -1){
                 return res.status(404).json({ msg: "La playlist no contiene esa canción" });
             }
@@ -169,6 +162,7 @@ export const followPlaylist = async (req, res) => {
         }
         if (!playlist.followedBy.includes(userId)) {
             playlist.followedBy.push(userId);
+            playlist.numFollows = playlist.followedBy.length;
             await playlist.save();
         } else{
             return res.status(402).json({ msg: "La playlist ya está seguida por este usuario" });
@@ -194,6 +188,7 @@ export const unfollowPlaylist = async (req, res) => {
         }
         if (playlist.followedBy.includes(userId)) {
             playlist.followedBy.pull(userId);
+            playlist.numFollows = playlist.followedBy.length;
             await playlist.save();
         } else{
             return res.status(402).json({ msg: "La playlist no es seguida por este usuario" });
@@ -327,7 +322,6 @@ export const getTotalLikesAndLiked = async (req, res) => {
         if (!song) {
             return res.status(404).json({ message: 'No se encontró la canción en la playlist' });
         }
-        console.log(song);
 
         const totalLikes = song.likedBy?.length || 0;
         let liked = false;

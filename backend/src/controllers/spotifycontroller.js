@@ -43,7 +43,6 @@ export const getToken = async (req, res) => {
  */
 export const search = async (req, res) => {
     const {token, input, orderBy} = req.body;
-    console.log(orderBy);
 
     if (!token) {
         res.status(401).json({ msg: "Token inválido" });

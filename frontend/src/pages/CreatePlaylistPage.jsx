@@ -37,7 +37,6 @@ function CreatePlaylistPage(){
                 formData.append("pic", playlistPic);
             }
             const res = await createPlaylist(user, data);
-            console.log(res);
             if(res.newPlaylist){
                 toast.success('Playlist creada con éxito', {
                     position: "top-right",
@@ -82,7 +81,7 @@ function CreatePlaylistPage(){
                     <input type="file" id="pic" {...register("pic")} onChange={handleImageChange} className="w-full text-white md:ml-20 py-2 my-4 rounded-md"/>
                     {
                         createErrors.map((error, i) => (
-                            <div className='bg-red-500 p-2 text-white my-2' key={i}>
+                            <div className='bg-red-600 p-2 text-white my-2' key={i}>
                                 {error.msg}
                             </div>
                         ))
@@ -105,10 +104,10 @@ function CreatePlaylistPage(){
                         errors.description && <p className='text-red-500'>Descripción es obligatoria</p>
                     }
                     <div className="flex">
-                        <button type="submit" onClick={handleCancelar} className="bg-rose-500 text-white px-4 py-2 rounded-md my-2 mr-4">
+                        <button type="submit" onClick={handleCancelar} className="bg-rose-600 text-white px-4 py-2 rounded-md my-2 mr-4">
                             Cancelar
                         </button>
-                        <button type="submit" className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
+                        <button type="submit" className="bg-rose-600 text-white px-4 py-2 rounded-md my-2">
                             Guardar
                         </button>
                     </div>

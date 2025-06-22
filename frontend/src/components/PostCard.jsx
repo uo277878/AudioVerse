@@ -116,7 +116,6 @@ function PostCard({post}){
             setIsLiked(!isLiked);
             if(isLiked == false){
                 const res = await likeSong(user, id);
-                console.log(res);
             } else{
                 const res = await dislikeSong(user, id);
             }
@@ -146,7 +145,6 @@ function PostCard({post}){
 
     async function handleLike(id, user){
         try{
-            console.log(user);
             const res = await likePost(id, user);
             setLikedPost(res.data.likedBy.includes(user.id));
         } catch(error){
@@ -307,7 +305,7 @@ function PostCard({post}){
                     className="resize-none p-3 w-full text-xl text-gray-900 bg-gray-50 rounded-lg border
                         dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                         placeholder="¿Por qué añades esta canción?"></textarea>
-                    <button type="submit" className="mt-4 bg-red-500 text-white py-2 px-4 rounded">
+                    <button type="submit" className="mt-4 bg-red-600 text-white py-2 px-4 rounded">
                         Guardar
                     </button>
                 </form>

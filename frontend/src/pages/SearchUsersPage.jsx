@@ -28,7 +28,6 @@ function SearchUsersPage(){
         try {
             if(filtro == "users"){
                 const res = await searchUsers(searchInput, orderBy, user);
-                console.log(res);
                 if(Array.isArray(res.users)){
                     setItems(res.users.filter(u => u._id != user.id));
                     setCurrentPage(1);
@@ -37,7 +36,6 @@ function SearchUsersPage(){
                 }
             } else{
                 const res = await searchPlaylists(searchInput);
-                console.log(res);
                 if(Array.isArray(res)){
                     setItems(res);
                     setCurrentPage(1);
@@ -88,14 +86,14 @@ function SearchUsersPage(){
                 </div>
                 {
                     searchErrors.map((error, i) => (
-                        <div className='bg-red-500 p-2 text-white  my-2' key={i}>
+                        <div className='bg-red-600 p-2 text-white  my-2' key={i}>
                             {error.msg}
                         </div>
                     ))
                 }
                 {
                     playlistErrors.map((error, i) => (
-                        <div className='bg-red-500 p-2 text-white  my-2' key={i}>
+                        <div className='bg-red-600 p-2 text-white  my-2' key={i}>
                             {error.msg}
                         </div>
                     ))
@@ -106,11 +104,11 @@ function SearchUsersPage(){
                         <button onClick={() => {
                             setFilter("users"); 
                             handleSearch("users");
-                        }} className={`${filter === "users" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>Usuarios</button>
+                        }} className={`${filter === "users" ? "bg-red-800" : "bg-red-600"} px-3 py-1 text-white rounded-3xl text-sm`}>Usuarios</button>
                         <button onClick={() => {
                             setFilter("playlists"); 
                             handleSearch("playlists");
-                        }} className={`${filter === "playlists" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>Playlists</button>
+                        }} className={`${filter === "playlists" ? "bg-red-800" : "bg-red-600"} px-3 py-1 text-white rounded-3xl text-sm`}>Playlists</button>
                     </div>
                     {(filter == "users") && (user.role == "user") && (
                         <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
@@ -121,7 +119,7 @@ function SearchUsersPage(){
                                         handleSearch(filter);
                                     }
                                 }
-                                className={`${orderBy === "matches" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>
+                                className={`${orderBy === "matches" ? "bg-red-800" : "bg-red-600"} px-3 py-1 text-white rounded-3xl text-sm`}>
                                 Matches
                             </button>
                         </div>

@@ -12,7 +12,6 @@ function UpdatePasswordPage(){
     const onSubmit = handleSubmit(async (data) => {
         if(user){
             const res = await updatePassword(data);
-            console.log(res);
             if(res){
                 toast.success('Contraseña actualizada con éxito', {
                     position: "top-right",
@@ -47,7 +46,7 @@ function UpdatePasswordPage(){
                 <h1 className='text-2xl mb-4 font-bold'>Edición de contraseña</h1>
                 {
                     updatePassErrors.map((error, i) => (
-                        <div className='bg-red-500 p-2 text-white my-2' key={i}>
+                        <div className='bg-red-600 p-2 text-white my-2' key={i}>
                             {error.msg}
                         </div>
                     ))
@@ -69,10 +68,10 @@ function UpdatePasswordPage(){
                         errors.repeatPassword && <p className='text-red-500'>Es necesario repetir la nueva contraseña</p>
                     }
                     <div className="flex justify-between">
-                        <Link to={`/users/profile`} className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
+                        <Link to={`/users/profile`} className="bg-rose-600 text-white px-4 py-2 rounded-md my-2">
                             Cancelar
                         </Link>
-                        <button type="submit" className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
+                        <button type="submit" className="bg-rose-600 text-white px-4 py-2 rounded-md my-2">
                             Guardar
                         </button>
                     </div>

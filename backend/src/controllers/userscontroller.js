@@ -294,12 +294,10 @@ export const searchUser = async (req, res) => {
                     const matchCount = Array.isArray(userObj.songsLiked)
                     ? userObj.songsLiked.filter(songId => likedIds.has(songId.toString())).length
                     : 0;
-                    console.log(matchCount);
                     return { ...userObj, matchCount };
                 })
                 .sort((a, b) => b.matchCount - a.matchCount); 
         }
-        console.log(users);
         return res.json({users});
     } catch(error){
         console.error(error);
@@ -420,10 +418,8 @@ export const dislikeSong = async (req, res) => {
  * @returns el listado de canciones que le gustan al usuario
  */
 export const getLikedSongs = async(req, res) => {
-    console.log(req);
     try{
         const user = await User.findById(req.params.id).populate("songsLiked");
-        console.log(user);
         if(!user){
             return res.status(404).json({ message: "Usuario no encontrado"});
         } else{

@@ -72,7 +72,6 @@ function SearchPage(){
         if(user){
             getLikedSongs(user.id);
         }
-        console.log(likedSongs);
     }, [user.songsLiked]);
 
     async function handleSearch(){
@@ -121,7 +120,7 @@ function SearchPage(){
                 </div>
                 {
                     searchErrors.map((error, i) => (
-                        <div className='bg-red-500 p-2 text-white  my-2' key={i}>
+                        <div className='bg-red-600 p-2 text-white  my-2' key={i}>
                             {error.msg}
                         </div>
                     ))
@@ -129,10 +128,10 @@ function SearchPage(){
                 <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
                         <p className="mt-3 text-sm md:text-base">Filtrar por:</p>
-                        <button onClick={() => setFilter("artists")} className={`${filter === "artists" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>Artistas</button>
-                        <button onClick={() => setFilter("tracks")} className={`${filter === "tracks" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>Canciones</button>
-                        <button onClick={() => setFilter("playlists")} className={`${filter === "playlists" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>Listas</button>
-                        <button onClick={() => setFilter("albums")} className={`${filter === "albums" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>Álbumes</button>
+                        <button onClick={() => setFilter("artists")} className={`${filter === "artists" ? "bg-red-800" : "bg-red-600"} px-3 py-1 text-white rounded-3xl text-sm`}>Artistas</button>
+                        <button onClick={() => setFilter("tracks")} className={`${filter === "tracks" ? "bg-red-800" : "bg-red-600"} px-3 py-1 text-white rounded-3xl text-sm`}>Canciones</button>
+                        <button onClick={() => setFilter("playlists")} className={`${filter === "playlists" ? "bg-red-800" : "bg-red-600"} px-3 py-1 text-white rounded-3xl text-sm`}>Listas</button>
+                        <button onClick={() => setFilter("albums")} className={`${filter === "albums" ? "bg-red-800" : "bg-red-600"} px-3 py-1 text-white rounded-3xl text-sm`}>Álbumes</button>
                     </div>
                     
                     {(filter !== "playlists") && (
@@ -141,14 +140,14 @@ function SearchPage(){
                             {(filter === "artists" || filter === "tracks") && (
                                 <button
                                     onClick={() => setOrderBy(orderBy === "popularity" ? "" : "popularity")}
-                                    className={`${orderBy === "popularity" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>
+                                    className={`${orderBy === "popularity" ? "bg-red-800" : "bg-red-600"} px-3 py-1 text-white rounded-3xl text-sm`}>
                                     Popularidad
                                 </button>
                             )}
                             {(filter === "tracks" || filter === "albums") && (
                                 <button
                                     onClick={() => setOrderBy(orderBy === "releaseDate" ? "" : "releaseDate")}
-                                    className={`${orderBy === "releaseDate" ? "bg-red-700" : "bg-red-500"} px-3 py-1 text-white rounded-3xl text-sm`}>
+                                    className={`${orderBy === "releaseDate" ? "bg-red-800" : "bg-red-600"} px-3 py-1 text-white rounded-3xl text-sm`}>
                                     Fecha de publicación
                                 </button>
                             )}

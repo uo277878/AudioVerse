@@ -82,7 +82,7 @@ function PlaylistPage(){
 
     useEffect(() => {
         const loadCreator = async () => {
-            const userPlaylist = await getUser(playlist.creator);
+            const userPlaylist = await getUser(playlist?.creator);
             setCreator(userPlaylist);
         }
         loadCreator();
@@ -105,7 +105,7 @@ function PlaylistPage(){
                 <div className="mt-4">
                     {songs.length > 0 && likedSongs && (
                         <>
-                            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-3 p-4 mr-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 p-4 mr-6">
                             {
                                 songs.map(({track, text}) => (
                                     <SongCard song={track} key={track.id} likedSongs={likedSongs} text={text}/>

@@ -33,7 +33,6 @@ export const UserProvider = ({children}) => {
     const getLikedSongs = async (id) => {
         try{
             const res = await getLikedSongsRequest(id);
-            console.log(res.data);
             setLikedSongs(res.data.songsLiked);
             return res.data;
         } catch(error){
@@ -128,14 +127,9 @@ export const UserProvider = ({children}) => {
 
     const searchUsers = async (input, orderBy, userAuth) => {
         try{
-            console.log(input);
-            console.log(orderBy);
-            console.log(userAuth);
             const res = await searchUserRequest(input, orderBy, userAuth);
-            console.log(res);
             return res.data;
         } catch(error){
-            console.log(error);
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data);
             }
@@ -183,7 +177,6 @@ export const UserProvider = ({children}) => {
 
     useEffect(() => {
             if(errors.length > 0){
-                console.log(errors);
                 const timer = setTimeout(() => {
                     setErrors([]);
                 }, 5000)

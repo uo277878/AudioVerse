@@ -29,7 +29,7 @@ function SignUpPage(){
             <h1 className='text-2xl font-bold'>Registrarse</h1>
                 {
                     registerErrors.map((error, i) => (
-                        <div className='bg-red-500 p-2 text-white  my-2' key={i}>
+                        <div className='bg-red-600 p-2 text-white  my-2' key={i}>
                             {error.msg}
                         </div>
                     ))
@@ -41,7 +41,7 @@ function SignUpPage(){
                         placeholder='Username' id="username"
                     />
                     {
-                        errors.username && <p className='text-red-500'>Username es obligatorio</p>
+                        errors.username && <p className='text-red-600'>Username es obligatorio</p>
                     }
                     <label htmlFor="email" className="sr-only">Email:</label>
                     <input type="email" {... register("email", {required: true})}
@@ -49,7 +49,7 @@ function SignUpPage(){
                         placeholder='Email' id="email"
                     />
                     {
-                        errors.email && <p className='text-red-500'>Email es obligatorio</p>
+                        errors.email && <p className='text-red-600'>Email es obligatorio</p>
                     }
                     <label htmlFor="date" className="sr-only">Email:</label>
                     <input type="date" {... register("dateBirth", {required: true})}
@@ -57,7 +57,7 @@ function SignUpPage(){
                         placeholder='Fecha de nacimiento' id="date"
                     />
                     {
-                        errors.dateBirth && <p className='text-red-500'>Fecha de nacimiento es obligatoria</p>
+                        errors.dateBirth && <p className='text-red-600'>Fecha de nacimiento es obligatoria</p>
                     }
                     <label htmlFor="password" className="sr-only">Email:</label>
                     <input type="password" {... register("password", {required: true})}
@@ -65,9 +65,9 @@ function SignUpPage(){
                         placeholder='Password' id="password"
                     />
                     {
-                        errors.password && <p className='text-red-500'>Password es obligatoria</p>
+                        errors.password && <p className='text-red-600'>Password es obligatoria</p>
                     }
-                    <button type="submit" className="bg-rose-500 text-white px-4 py-2 rounded-md my-2">
+                    <button type="submit" className="bg-red-600 text-white px-4 py-2 rounded-md my-2">
                         Registrarse
                     </button>
                 </form>

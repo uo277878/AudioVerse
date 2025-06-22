@@ -19,7 +19,6 @@ function HomePage(){
     const onSubmit = handleSubmit(async (data) => {
         try{
             const res = await createPost(user.id, data.txtPost, null, null);
-            console.log(res);
             if(res.newPost){
                 toast.success('Post creado con éxito', { 
                     position: "top-right",
@@ -45,9 +44,17 @@ function HomePage(){
         
     });
 
-    useEffect(() =>{
-        getPosts(user, page);
-        console.log(posts);
+    useEffect(() => {
+        if (user) {
+            setPage(1);
+            getPosts(user, 1);
+        }
+    }, [user]);
+
+    useEffect(() => {
+        if (user && page > 1) {
+            getPosts(user, page);
+        }
     }, [page]);
 
     const handleScroll = () => {
@@ -63,7 +70,7 @@ function HomePage(){
     return (
         <div className="relative">
             <MatchUsers visib="hidden lg:block fixed top-20 right-4"/>
-            <button onClick={() => setShowMatch(true)} className="fixed bottom-6 right-6 z-50 bg-rose-500 text-white p-4 rounded-full shadow-lg lg:hidden">
+            <button onClick={() => setShowMatch(true)} className="fixed bottom-6 right-6 z-50 bg-rose-600 text-white p-4 rounded-full shadow-lg lg:hidden">
                 <PiUsersThreeDuotone size={24} />
                 <span className="sr-only">Abrir matches</span>
             </button>
@@ -84,7 +91,7 @@ function HomePage(){
                 <hr className="h-1 bg-zinc-700 border-0 mb-4"></hr>
                 {
                     postErrors.map((error, i) => (
-                        <div className='bg-red-500 p-2 text-white my-2' key={i}>
+                        <div className='bg-red-600 p-2 text-white my-2' key={i}>
                             {error.msg}
                         </div>
                     ))
@@ -98,7 +105,7 @@ function HomePage(){
                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="¿En qué estás pensando?"></input>
                         </div>
                         <div className="flex justify-end">
-                            <button type="submit" className="bg-rose-500 text-white px-4 py-2 mt-4 rounded-md">
+                            <button type="submit" className="bg-red-600 text-white px-4 py-2 mt-4 rounded-md">
                                 Publicar
                             </button>    
                         </div>
