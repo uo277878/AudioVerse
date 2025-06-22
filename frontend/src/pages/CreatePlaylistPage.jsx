@@ -78,7 +78,8 @@ function CreatePlaylistPage(){
                 <form className="w-full flex flex-col justify-center items-center" onSubmit={onSubmit}>
                     <h1 className='text-2xl font-bold'>Crea una playlist</h1>
                     <img src={previewPic} alt="Imagen de perfil" className="w-32 h-32 mt-4 rounded-full border-white border-2 border-opacity-100" />
-                    <input type="file" {...register("pic")} onChange={handleImageChange} className="w-full text-white md:ml-20 py-2 my-4 rounded-md"/>
+                    <label htmlFor="pic" className="sr-only">Email:</label>
+                    <input type="file" id="pic" {...register("pic")} onChange={handleImageChange} className="w-full text-white md:ml-20 py-2 my-4 rounded-md"/>
                     {
                         createErrors.map((error, i) => (
                             <div className='bg-red-500 p-2 text-white my-2' key={i}>
@@ -86,14 +87,16 @@ function CreatePlaylistPage(){
                             </div>
                         ))
                     }
+                    <label htmlFor="name" className="sr-only">Email:</label>
                     <input type="name" {... register("name", {required: true})}
                         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
-                        placeholder='Nombre'
+                        placeholder='Nombre' id="name"
                     />
                     {
                         errors.name && <p className='text-red-500'>Nombre es obligatorio</p>
                     }
-                    <textarea type="description" {... register("description", {required: true})}
+                    <label htmlFor="description" className="sr-only">Email:</label>
+                    <textarea type="description" id="description" {... register("description", {required: true})}
                         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2 resize-none'
                         placeholder='Descripción'
                         rows="4"

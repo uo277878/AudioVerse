@@ -9,10 +9,12 @@ import { usePosts } from "../context/PostContext";
 import { Link, useNavigate } from "react-router-dom";
 import { FaRegTrashAlt, FaPlay } from "react-icons/fa";
 import { toast, Zoom } from "react-toastify";
+import { useForm } from "react-hook-form";
 
 function PostCard({post}){
 
     const {getToken, getTrack, getArtist, getPlaylistSpotify, getAlbum} = useSongs();
+    const { register: registerPlaylist, handleSubmit: handleSubmitPlaylist } = useForm();
     const {likePost, deletePost} = usePosts();
     const [accessToken, setAccessToken] = useState(null);
     const [song, setSong] = useState(null);
@@ -203,6 +205,38 @@ function PostCard({post}){
         }
     }
 
+    async function handleSaveToPlaylist(data) {
+        try {
+            const res = await addSongToPlaylist(selectedPlaylist, song.id, data.txtSong);
+            if(res.playlist){
+                toast.success('Canción añadida a la playlist con éxito', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Zoom,
+                });
+                setShowModal(false);
+            }
+        } catch (error) {
+            toast.error('Se ha producido un error al guardar la canción en la playlist', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Zoom,
+            });
+        }
+    }
+
     async function handlePlay(){
         navigate(`/player?uri=${encodeURIComponent(song.uri)}`);
     }
@@ -220,12 +254,13 @@ function PostCard({post}){
                 {post.user._id == user.id && (
                     <button className=" text-white hover:text-red-500" onClick={() => handleDeletePost(post._id)}>
                         <FaRegTrashAlt className="w-5 h-5" />
+                        <span className="sr-only">Eliminar post</span>
                     </button>
                 )}
             </div>
             {song && (
                     <div className={`relative flex items-center space-x-4 my-4 p-4 ${color} rounded`}>
-                        <img src={song.images != null ? song.images[0].url : song.album.images[0].url} alt="Portada de la canción" className="w-20 h-20 rounded" />
+                        <img src={song.images != null ? song.images[0].url : song.album.images[0].url} alt="Imagen de la canción" className="w-20 h-20 rounded" />
                         <div className="flex flex-col">
                             <p className="text-white font-semibold text-lg">{song.name}</p>
                             { (post.item_type == "track" || post.item_type == "album") && (
@@ -236,6 +271,7 @@ function PostCard({post}){
                                 <div className='absolute bottom-4 right-4 flex'>
                                     <button onClick={handlePlay} className="mr-2 rounded-lg text-white hover:text-rose-200">
                                         <FaPlay/>
+                                        <span className="sr-only">Reproducir</span>
                                     </button>
                                     <svg onClick={() => setShowModal(true)} className="h-6 w-6 text-white hover:text-rose-200" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 
@@ -264,9 +300,17 @@ function PostCard({post}){
                         </option>
                     ))}
                 </select>
-                <button onClick={handleSaveToPlaylist} className="mt-4 bg-red-500 text-white py-2 px-4 rounded">
-                    Guardar
-                </button>
+                <form onSubmit={handleSubmitPlaylist(handleSaveToPlaylist)}>
+                    <span className="block my-2 text-sm text-gray-500 dark:text-neutral-500">50 caracteres</span>
+                    <label htmlFor="txt" className="sr-only">Texto canción en playlist:</label>
+                    <textarea {...registerPlaylist("txtSong", {required: true})} id="txt" rows="3" maxLength={50} 
+                    className="resize-none p-3 w-full text-xl text-gray-900 bg-gray-50 rounded-lg border
+                        dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                        placeholder="¿Por qué añades esta canción?"></textarea>
+                    <button type="submit" className="mt-4 bg-red-500 text-white py-2 px-4 rounded">
+                        Guardar
+                    </button>
+                </form>
             </PlaylistModal>
         </div>
     );

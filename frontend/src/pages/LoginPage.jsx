@@ -36,16 +36,18 @@ function LoginPage(){
                     ))
                 }
                 <form onSubmit={actionSubmit}>
+                    <label htmlFor="email" className="sr-only">Email:</label>
                     <input type="email" {... register("email", {required: true})}
                         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
-                        placeholder='Email'
+                        placeholder='Email' id="email"
                     />
                     {
                         errors.email && <p className='text-red-500'>Email es obligatorio</p>
                     }
+                    <label htmlFor="password" className="sr-only">Contraseña:</label>
                     <input type="password" {... register("password", {required: true})}
                         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
-                        placeholder='Password'
+                        placeholder='Password' id="password"
                     />
                     {
                         errors.password && <p className='text-red-500'>Password es obligatoria</p>

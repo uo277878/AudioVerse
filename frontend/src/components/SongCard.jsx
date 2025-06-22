@@ -234,9 +234,10 @@ function SongCard({song, likedSongs, text}){
             {isPlaylistPage && (
                 <button className="absolute top-4 right-4 text-white hover:text-red-500" onClick={() => handleDeleteSong(song.id)}>
                     <FaRegTrashAlt />
+                    <span className="sr-only">Eliminar canción</span>
                 </button>
             )}
-            <img src={song.images != null ? song.images[0].url : song.album.images[0].url} className={`rounded ${isPlaylistPage ? 'w-28 h-28 mr-4 flex-shrink-0' : ''}`}/>
+            <img src={song.images != null ? song.images[0].url : song.album.images[0].url} alt="Foto de la canción" className={`rounded ${isPlaylistPage ? 'w-28 h-28 mr-4 flex-shrink-0' : ''}`}/>
             <div className={`${isPlaylistPage ? 'flex flex-col justify-center space-y-2' : ''}`}>
                 <p className="text-xl font-bold mt-2">{song.name}</p>
                 {text && isPlaylistPage && (
@@ -259,9 +260,11 @@ function SongCard({song, likedSongs, text}){
                                     <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 
                                     0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/>
                                 </svg>
+                                <span className="sr-only">Añadir a playlist</span>
                             </button>
                             <button onClick={handlePlay} className="text-rose-300 hover:text-rose-200">
                                 <FaPlay className='w-6 h-6'/>
+                                <span className="sr-only">Reproducir</span>
                             </button>
                             </>
                         )}
@@ -273,6 +276,7 @@ function SongCard({song, likedSongs, text}){
                                     <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />  
                                     <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
                             </svg>
+                            <span className="sr-only">Crear post</span>
                         </button>
                         
                         {song.popularity > 60 && 
@@ -301,7 +305,8 @@ function SongCard({song, likedSongs, text}){
                 </select>
                 <form onSubmit={handleSubmitPlaylist(handleSaveToPlaylist)}>
                     <span className="block my-2 text-sm text-gray-500 dark:text-neutral-500">50 caracteres</span>
-                    <textarea {...registerPlaylist("txtSong", {required: true})}  rows="3" maxLength={50} 
+                    <label htmlFor="txt" className="sr-only">Email:</label>
+                    <textarea {...registerPlaylist("txtSong", {required: true})} id="txt" rows="3" maxLength={50} 
                     className="resize-none p-3 w-full text-xl text-gray-900 bg-gray-50 rounded-lg border
                         dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                         placeholder="¿Por qué añades esta canción?"></textarea>
@@ -320,10 +325,11 @@ function SongCard({song, likedSongs, text}){
                     ))
                 }
                 <form onSubmit={handleSubmitPost(handleCreatePost)}>
-                    <textarea {...registerPost("text")} rows="4" className="resize-none p-3 w-full text-md md:text-lg text-gray-900 bg-gray-50 rounded-lg border
+                    <label htmlFor="text" className="sr-only">Email:</label>
+                    <textarea {...registerPost("text")} id="text" rows="4" className="resize-none p-3 w-full text-md md:text-lg text-gray-900 bg-gray-50 rounded-lg border
                     dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" defaultValue={defaultValue}></textarea>
                     <div className="flex items-center mb-4">
-                        <img src={song.images != null ? song.images[0].url : song.album.images[0].url} className="w-12 h-12 rounded mr-3" />
+                        <img src={song.images != null ? song.images[0].url : song.album.images[0].url} alt="Foto de la canción" className="w-12 h-12 rounded mr-3" />
                         <p className="text-white font-bold">{song.name}</p>
                     </div>
                     <button type="submit" className="mt-4 bg-red-500 text-white py-2 px-4 rounded">

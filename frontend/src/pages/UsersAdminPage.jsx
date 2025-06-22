@@ -67,8 +67,9 @@ function UsersAdminPage(){
             <h1 className='text-2xl my-4 ml-4 font-bold'>Usuarios del sistema</h1>
             <hr className="h-1 bg-zinc-700 border-0 mb-6"></hr>
             <div className="relative">
+                <label htmlFor="busqueda" className="sr-only">Email:</label>
                 <input className="w-full bg-transparent placeholder:text-white text-white text-sm md:text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
-                    placeholder="Introduce tu búsqueda" onKeyDown={event => {
+                    placeholder="Introduce tu búsqueda" id="busqueda" onKeyDown={event => {
                         if(event.key == "Enter"){
                             handleSearch();
                         }

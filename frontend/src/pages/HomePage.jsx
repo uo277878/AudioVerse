@@ -65,6 +65,7 @@ function HomePage(){
             <MatchUsers visib="hidden lg:block fixed top-20 right-4"/>
             <button onClick={() => setShowMatch(true)} className="fixed bottom-6 right-6 z-50 bg-rose-500 text-white p-4 rounded-full shadow-lg lg:hidden">
                 <PiUsersThreeDuotone size={24} />
+                <span className="sr-only">Abrir matches</span>
             </button>
             {showMatch && (
                 <div className="fixed inset-0 z-40 bg-black bg-opacity-50 flex items-center justify-center lg:hidden">
@@ -92,6 +93,7 @@ function HomePage(){
                     <div className='bg-zinc-800 max-w-2xl w-full p-6 rounded-md'>
                         <div className="flex items-center space-x-3">
                             <img src={user.profilePic} alt="Imagen de perfil" className="w-16 h-16 mt-4 rounded-full border-white border-2 border-opacity-100" />
+                            <label htmlFor="txtPost" className="sr-only">Email:</label>
                             <input {...register("txtPost")} id="txtPost" className="p-3 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border
                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="¿En qué estás pensando?"></input>
                         </div>

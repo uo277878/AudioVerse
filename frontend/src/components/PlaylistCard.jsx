@@ -89,6 +89,7 @@ function PlaylistCard({playlist}){
             {playlist.creator == user.id ? 
                 (<button className="absolute top-4 right-4 text-white hover:text-red-500" onClick={() => handleDeletePlaylist(playlist._id)}>
                     <FaRegTrashAlt />
+                    <span className="sr-only">Eliminar canción</span>
                 </button>)
             :
             (user.role == "user" && (
@@ -97,17 +98,19 @@ function PlaylistCard({playlist}){
                         <button className="absolute top-2 right-2 text-white text-3xl hover:scale-110 transition-transform duration-200"
                         onClick={() => handleUnfollow(playlist._id, user.id)}>
                             <CiCircleCheck />
+                            <span className="sr-only">Eliminar playlist de biblioteca</span>
                         </button>
                     ) : (
                         <button className="absolute top-2 right-2 text-white text-3xl hover:scale-110 transition-transform duration-200"
                         onClick={() => handleFollow(playlist._id, user.id)}>
                             <CiCirclePlus />
+                            <span className="sr-only">Añadir playlist a biblioteca</span>
                         </button>
                     )
                 )
             )}
             
-            <img src={playlist.pic} className="w-full h-40 object-cover rounded-md"/>
+            <img src={playlist.pic} alt="Foto de la playlist" className="w-full h-40 object-cover rounded-md"/>
             <div className="absolute bottom-4 left-0 right-0 px-4">
                 <Link to={`/playlists/${playlist._id}`} 
                 className="block w-full text-md md:text-lg font-bold mt-2 hover:underline overflow-hidden text-ellipsis whitespace-nowrap">{playlist.name}</Link>

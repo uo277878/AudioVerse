@@ -69,17 +69,20 @@ function ProfilePage(){
                             <img src={user.profilePic} alt="Imagen de perfil" className="w-32 h-32 mt-4 rounded-full border-white border-2 border-opacity-100" />
                             <Link to="/users/profile/image" className="absolute bottom-1 right-1 md:bottom-2 md:right-2 bg-rose-500 text-white p-2 rounded-full">
                                 <HiOutlinePencilAlt className="w-6 h-6" />
+                                <span className="sr-only">Editar foto de perfil</span>
                             </Link>
                         </div>
                         
                     </div>
                     <div className="w-full md:w-3/4">
-                        <input type="text" placeholder="Username" {... register("username", {required: true})} 
+                        <label htmlFor="username" className="sr-only">Email:</label>
+                        <input type="text" id="username" placeholder="Username" {... register("username", {required: true})} 
                         className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></input>
                         {
                             errors.username && <p className='text-red-500'>Username es obligatorio</p>
                         }
-                        <input type="text" placeholder="Email" {... register("email", {required: true})} 
+                        <label htmlFor="email" className="sr-only">Email:</label>
+                        <input type="text" id="email" placeholder="Email" {... register("email", {required: true})} 
                         className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></input>
                         {
                             errors.email && <p className='text-red-500'>Email es obligatorio</p>

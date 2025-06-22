@@ -107,12 +107,13 @@ function SearchPage(){
                     <h1 className="text-2xl mb-4 font-bold">Buscador de Spotify</h1>
                 </div>
                 <div className="relative">
+                    <label htmlFor="busqueda" className="sr-only">Email:</label>
                     <input className="w-full bg-transparent placeholder:text-white text-white text-sm md:text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
-                        placeholder="Introduce tu búsqueda" onKeyDown={event => {
+                        placeholder="Introduce tu búsqueda" id="busqueda" onKeyDown={event => {
                             if(event.key == "Enter"){
                                 handleSearch();
                             }
-                        }}  onChange={event => setSearchInput(event.target.value)}/>
+                        }} onChange={event => setSearchInput(event.target.value)}/>
                     <button onClick={handleSearch} className="absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-sm md:text-xl text-white hover:shadow focus:bg-slate-700 focus:shadow-none hover:bg-slate-700"
                         type="button">
                         Buscar

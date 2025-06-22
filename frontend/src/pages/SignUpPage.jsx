@@ -35,30 +35,34 @@ function SignUpPage(){
                     ))
                 }
                 <form onSubmit={actionSubmit}>
+                    <label htmlFor="username" className="sr-only">Email:</label>
                     <input type="text" {... register("username", {required: true})} 
                         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
-                        placeholder='Username'
+                        placeholder='Username' id="username"
                     />
                     {
                         errors.username && <p className='text-red-500'>Username es obligatorio</p>
                     }
+                    <label htmlFor="email" className="sr-only">Email:</label>
                     <input type="email" {... register("email", {required: true})}
                         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
-                        placeholder='Email'
+                        placeholder='Email' id="email"
                     />
                     {
                         errors.email && <p className='text-red-500'>Email es obligatorio</p>
                     }
+                    <label htmlFor="date" className="sr-only">Email:</label>
                     <input type="date" {... register("dateBirth", {required: true})}
                         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
-                        placeholder='Fecha de nacimiento'
+                        placeholder='Fecha de nacimiento' id="date"
                     />
                     {
                         errors.dateBirth && <p className='text-red-500'>Fecha de nacimiento es obligatoria</p>
                     }
+                    <label htmlFor="password" className="sr-only">Email:</label>
                     <input type="password" {... register("password", {required: true})}
                         className='w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2'
-                        placeholder='Password'
+                        placeholder='Password' id="password"
                     />
                     {
                         errors.password && <p className='text-red-500'>Password es obligatoria</p>

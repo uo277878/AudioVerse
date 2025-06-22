@@ -74,8 +74,9 @@ function SearchUsersPage(){
                     <h1 className="text-2xl mb-4 font-bold">Buscador de Audioverse</h1>
                 </div>
                 <div className="relative">
+                    <label htmlFor="input" className="sr-only">Email:</label>
                     <input {...register("input")} className="w-full bg-transparent placeholder:text-white text-white text-sm md:text-xl border border-slate-200 rounded-md pl-3 pr-28 py-2 hover:border-slate-300"
-                        placeholder="Introduce tu búsqueda" onKeyDown={event => {
+                        placeholder="Introduce tu búsqueda" id="input" onKeyDown={event => {
                             if(event.key == "Enter"){
                                 handleSearch(filter);
                             }

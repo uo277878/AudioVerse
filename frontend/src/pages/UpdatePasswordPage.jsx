@@ -53,15 +53,18 @@ function UpdatePasswordPage(){
                     ))
                 }
                 <form onSubmit={onSubmit}>
-                    <input type="password" placeholder="Password" {... register("password", {required: true})} className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></input>
+                    <label htmlFor="password" className="sr-only">Email:</label>
+                    <input type="password" id="password" placeholder="Password" {... register("password", {required: true})} className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></input>
                     {
                         errors.password && <p className='text-red-500'>La contraseña es obligatoria</p>
                     }
-                    <input type="password" placeholder="Nueva password" {... register("newPassword", {required: true})} className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></input>
+                    <label htmlFor="newPassword" className="sr-only">Email:</label>
+                    <input type="password" id="newPassword" placeholder="Nueva password" {... register("newPassword", {required: true})} className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></input>
                     {
                         errors.newPassword && <p className='text-red-500'>La nueva contraseña es obligatoria</p>
                     }
-                    <input type="password" placeholder="Repita la password" {... register("repeatPassword", {required: true})} className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></input>
+                    <label htmlFor="repeatPassword" className="sr-only">Email:</label>
+                    <input type="password" id="repeatPassword" placeholder="Repita la password" {... register("repeatPassword", {required: true})} className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></input>
                     {
                         errors.repeatPassword && <p className='text-red-500'>Es necesario repetir la nueva contraseña</p>
                     }

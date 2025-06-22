@@ -73,12 +73,14 @@ function UserAdminPage(){
                 }
                 <form className="flex flex-col items-center mb-4" onSubmit={onSubmit}>
                     <div className="w-full">
-                        <input type="text" placeholder="Username" {... register("username", {required: true})} 
+                        <label htmlFor="username" className="sr-only">Email:</label>
+                        <input type="text" id="username" placeholder="Username" {... register("username", {required: true})} 
                         className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></input>
                         {
                             errors.username && <p className='text-red-500'>Username es obligatorio</p>
                         }
-                        <input type="text" placeholder="Email" {... register("email", {required: true})} 
+                        <label htmlFor="email" className="sr-only">Email:</label>
+                        <input type="text" id="email" placeholder="Email" {... register("email", {required: true})} 
                         className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"></input>
                         {
                             errors.email && <p className='text-red-500'>Email es obligatorio</p>
