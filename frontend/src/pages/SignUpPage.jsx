@@ -14,7 +14,7 @@ function SignUpPage(){
             if(user.role == "admin"){
                 navigate("/users/getAllUsers");
             } else{
-                navigate("/users/profile")
+                navigate("/home")
             }
         }
     }, [isAuthenticated, user])

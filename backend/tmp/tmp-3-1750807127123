@@ -1,0 +1,24 @@
+{
+    "name": "fiskaly SIGN ES Postman Environment",
+    "values": [
+        {
+            "key": "api_key",
+            "value": "test_74fvstu4nis9jpjscs6fa5ovg_test",
+            "type": "default",
+            "enabled": true
+        },
+        {
+            "key": "api_secret",
+            "value": "Mz9mp2uODkxDjcJ3Pe0ENi61nu4qOEWsK5guWiqKgyH",
+            "type": "default",
+            "enabled": true
+        },
+        {
+            "key": "baseUrl",
+            "value": "https://test.es.sign.fiskaly.com/api/v1/",
+            "type": "default",
+            "enabled": true
+        }
+    ],
+    "_postman_variable_scope": "environment"
+}
