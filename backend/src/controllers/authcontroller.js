@@ -20,8 +20,13 @@ export const signup = async (req, res) => {
             return;
         }
 
-        const userFound = await User.findOne({email});
-        if(userFound){
+        const usernameFound = await User.findOne({username});
+        if(usernameFound){
+            return res.status(401).json({msg: "El nombre de usuario ya existe"});
+        }
+
+        const emailFound = await User.findOne({email});
+        if(emailFound){
             return res.status(400).json({msg: "El email ya existe"});
         }
 
@@ -97,7 +102,7 @@ export const login = async (req, res) => {
         const token = await createToken({ id: userFound._id });
         
         res.cookie('token', token)
-        res.json({
+        res.status(200).json({
             id: userFound._id,
             username: userFound.username,
             email: userFound.email,
