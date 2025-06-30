@@ -50,7 +50,7 @@ export const getPosts = async (req, res) => {
         .limit(max)
         .populate('user', '_id username profilePic')
         .exec();
-        res.json(posts);
+        res.status(200).json(posts);
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });
     }
@@ -79,7 +79,7 @@ export const likePost = async (req, res) => {
             updated = await Post.findByIdAndUpdate(postId, {$push: {likedBy: userId}, $inc: {likes: 1}}, {new: true}).populate('user', 'username profilePic');
         }
 
-        res.json(updated);
+        res.status(200).json(updated);
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error al darle like al post" });
     }

@@ -89,13 +89,13 @@ export const addSongToPlaylist = async (req, res) => {
         return res.status(402).json({ msg: "No se ha seleccionado ninguna playlist" });
     }
     if(!txtSong){
-        return res.status(402).json({ msg: "No se ha proporconado un texto para la canción" });
+        return res.status(403).json({ msg: "No se ha proporcionado un texto para la canción" });
     }
     const playlist = await Playlist.findById(playlistId);
     if (!playlist) {
         return res.status(404).json({ msg: "Playlist no encontrada" });
     } else if(!songId){
-        return res.status(403).json({ msg: "Id de canción inválido" });
+        return res.status(405).json({ msg: "Id de canción inválido" });
     } else{
         if (!playlist.songs.some(song => song.songId == songId)) {
             playlist.songs.push({
@@ -105,7 +105,7 @@ export const addSongToPlaylist = async (req, res) => {
             });
             await playlist.save();
         } else{
-            return res.status(402).json({ msg: "La playlist ya contiene esa canción" });
+            return res.status(406).json({ msg: "La playlist ya contiene esa canción" });
         }
         return res.status(200).json({playlist});
     }

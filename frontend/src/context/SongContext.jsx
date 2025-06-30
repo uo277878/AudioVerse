@@ -4,7 +4,7 @@ import { getTokenRequest, searchRequest, getTrackRequest, getAlbumRequest, getAr
     addSongToPlaylistRequest, removeSongPlaylistRequest, likeTextRequest, getTotalLikesAndLikedRequest,
     searchPlaylistsRequest, followPlaylistRequest, unfollowPlaylistRequest, removePlaylistRequest } from "../api/songs";
 
-const SongContext = createContext();
+export const SongContext = createContext();
 
 export const useSongs = () => {
     const context = useContext(SongContext)

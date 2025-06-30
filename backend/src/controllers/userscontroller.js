@@ -363,18 +363,30 @@ export const likeSong = async (req, res) => {
     try{
         const user = await User.findById(req.body.user.id);
         const idSong = req.body.id;
+        if (!user) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
         if (!user.songsLiked.includes(idSong)) {
             user.songsLiked.push(idSong);
             await user.save();
         }
         const mgPlaylist = await Playlist.findOne({creator: user._id, name: "Canciones que me gustan"});
-        if (!mgPlaylist.songs.includes(idSong)) {
+
+        if (!mgPlaylist) {
+            return res.status(404).json({ message: "Playlist 'Canciones que me gustan' no encontrada" });
+        }
+
+        const songExists = mgPlaylist.songs.some(song => song.songId.toString() === idSong);
+
+        if (!songExists) {
             mgPlaylist.songs.push({
                 songId: idSong,
                 text: "",
                 likedBy: []
             });
             await mgPlaylist.save();
+        } else {
+            return res.status(406).json({ msg: "La playlist ya contiene esa canción" });
         }
         return res.status(200).json({user});
     } catch(error){
@@ -393,6 +405,9 @@ export const dislikeSong = async (req, res) => {
     try{
         const user = await User.findById(req.body.user.id);
         const idSong = req.body.id;
+        if(!user){
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
         if (user.songsLiked.includes(idSong)) {
             user.songsLiked.pull(idSong);
             await user.save();
@@ -423,7 +438,7 @@ export const getLikedSongs = async(req, res) => {
         if(!user){
             return res.status(404).json({ message: "Usuario no encontrado"});
         } else{
-            res.json({songsLiked: user.songsLiked});
+            res.status(200).json({songsLiked: user.songsLiked});
         }
     } catch(error){
         console.error(error);

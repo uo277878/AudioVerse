@@ -5,7 +5,7 @@ import { getUserRequest, updateProfileRequest, updatePasswordRequest,
     searchUserRequest, followRequest, unfollowRequest, likeSongRequest, dislikeSongRequest, getLikedSongsRequest} from "../api/users";
 import { useAuth } from "./AuthContext";
 
-const UserContext = createContext();
+export const UserContext = createContext();
 
 export const useUsers = () => {
     const context = useContext(UserContext)
