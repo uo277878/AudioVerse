@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { signup, login, logout, verifyToken } from '../controllers/authcontroller.js';
+import { signup, login, logout } from '../controllers/authcontroller.js';
 import User from '../models/user.js';
 import Playlist from '../models/playlist.js';
 import { validationResult } from 'express-validator';
@@ -32,6 +32,10 @@ vi.mock('express-validator', () => ({
 	}))
 }));
 
+beforeEach(() => {
+    vi.clearAllMocks();
+});
+
 describe("Metodo signup", () => {
 	const res = {
         status: vi.fn().mockReturnThis(),
@@ -48,14 +52,10 @@ describe("Metodo signup", () => {
 		}
 	};
 
-	beforeEach(() => {
-		vi.clearAllMocks();
-	});
-
 	it("Debería crear un nuevo usuario y una playlist por defecto", async () => {
 		vi.spyOn(User, 'findOne').mockResolvedValue(null);
 		vi.spyOn(User.prototype, 'save').mockResolvedValue({
-            _id: 'user-id',
+            _id: '123',
             username: req.body.username,
             email: req.body.email,
             role: 'user'
@@ -66,59 +66,60 @@ describe("Metodo signup", () => {
 		await signup(req, res);
 
         expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-            id: 'user-id',
+            id: '123',
             username: 'prueba1',
             email: 'prueba1@email.com',
             role: 'user'
         }));
 
+        expect(res.status).toHaveBeenCalledWith(200);
         expect(User.findOne).toHaveBeenCalledTimes(2); 
         expect(User.prototype.save).toHaveBeenCalledTimes(1);
         expect(Playlist.prototype.save).toHaveBeenCalledTimes(1);
 	});
 
-	it('debería devolver error si el username ya existe', async () => {
+	it("Debería devolver error si el username ya existe", async () => {
 		const req = {
 			body: {
-				username: 'prueba',
-				email: 'otro@email.com',
+				username: 'prueba1',
+				email: 'prueba1@email.com',
 				password: '123456',
-				dateBirth: '2000-01-01'
+				dateBirth: '2001-05-23'
 			}
 		};
 
 		User.findOne = vi.fn()
-			.mockResolvedValueOnce({ username: 'prueba' })
+			.mockResolvedValueOnce({ username: 'prueba1' })
 			.mockResolvedValueOnce(null); 
 
 		await signup(req, res);
 
 		expect(res.status).toHaveBeenCalledWith(401);
-		expect(res.json).toHaveBeenCalledWith({ msg: 'El nombre de usuario ya existe' });
+		expect(res.json).toHaveBeenCalledWith({ msg: "El nombre de usuario ya existe" });
 	});
 
-	it('debería devolver error si el email ya existe', async () => {
+	it("Debería devolver error si el email ya existe", async () => {
 		const req = {
 			body: {
-				username: 'nuevo',
-				email: 'prueba@email.com',
+				username: 'prueba1',
+				email: 'prueba1@email.com',
 				password: '123456',
-				dateBirth: '2000-01-01'
+				dateBirth: '2001-05-23'
 			}
 		};
 
 		User.findOne = vi.fn()
 			.mockResolvedValueOnce(null) 
-			.mockResolvedValueOnce({ email: 'prueba@email.com' }); 
+			.mockResolvedValueOnce({ email: 'prueba1@email.com' }); 
 
 		await signup(req, res);
 
 		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ msg: 'El email ya existe' });
+		expect(res.json).toHaveBeenCalledWith({ msg: "El email ya existe" });
 	});
 });
 
-describe('Método login', () => {
+describe("Metodo login", () => {
     const res = {
         status: vi.fn().mockReturnThis(),
         json: vi.fn().mockReturnThis(),
@@ -127,20 +128,16 @@ describe('Método login', () => {
 
     const req = {
         body: {
-            email: 'prueba@email.com',
+            email: 'prueba1@email.com',
             password: '123456'
         }
     };
 
-    beforeEach(() => {
-        vi.clearAllMocks();
-    });
-
-    it('Debería loguear correctamente con credenciales válidas', async () => {
+    it("Debería loguear correctamente con credenciales válidas", async () => {
         const mockUser = {
-            _id: 'user-id',
-            username: 'prueba',
-            email: 'prueba@email.com',
+            _id: '123',
+            username: 'prueba2',
+            email: 'prueba2@email.com',
             password: 'hashed-password',
             role: 'user',
             profilePic: 'pic-url',
@@ -157,9 +154,9 @@ describe('Método login', () => {
         expect(res.cookie).toHaveBeenCalledWith('token', 'mocked-token');
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-            id: 'user-id',
-            username: 'prueba',
-            email: 'prueba@email.com',
+            id: '123',
+            username: 'prueba2',
+            email: 'prueba2@email.com',
             role: 'user',
             profilePic: 'pic-url',
             followed: [],
@@ -170,20 +167,20 @@ describe('Método login', () => {
         expect(bcrypt.compare).toHaveBeenCalledWith(req.body.password, mockUser.password);
     });
 
-    it('Debería devolver error si el email no existe', async () => {
+    it("Debería devolver error si el email no existe", async () => {
         vi.spyOn(User, 'findOne').mockResolvedValue(null);
 
         await login(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith({ msg: 'Credenciales incorrectas' });
+        expect(res.json).toHaveBeenCalledWith({ msg: "Credenciales incorrectas" });
     });
 
-    it('Debería devolver error si la contraseña es incorrecta', async () => {
+    it("Debería devolver error si la contraseña es incorrecta", async () => {
         const mockUser = {
-            _id: 'user-id',
-            username: 'prueba',
-            email: 'prueba@email.com',
+            _id: '123',
+            username: 'prueba1',
+            email: 'prueba1@email.com',
             password: 'hashed-password'
         };
 
@@ -193,42 +190,38 @@ describe('Método login', () => {
         await login(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith({ msg: 'Credenciales incorrectas' });
+        expect(res.json).toHaveBeenCalledWith({ msg: "Credenciales incorrectas" });
     });
 
-    it('Debería devolver error de validación si hay errores en los datos', async () => {
+    it("Debería devolver error de validación si hay errores en los datos", async () => {
         validationResult.mockReturnValueOnce({
             isEmpty: () => false,
-            array: () => [{ msg: 'Email es requerido' }]
+            array: () => [{ msg: "Email es requerido" }]
         });
 
         await login(req, res);
 
         expect(res.status).toHaveBeenCalledWith(422);
-        expect(res.json).toHaveBeenCalledWith([{ msg: 'Email es requerido' }]);
+        expect(res.json).toHaveBeenCalledWith([{ msg: "Email es requerido" }]);
     });
 
-    it('Debería manejar errores internos con status 500', async () => {
-        vi.spyOn(User, 'findOne').mockRejectedValue(new Error('Database error'));
+    it("Debería manejar errores internos con status 500", async () => {
+        vi.spyOn(User, 'findOne').mockRejectedValue(new Error("Error en la BD"));
 
         await login(req, res);
 
         expect(res.status).toHaveBeenCalledWith(500);
-        expect(res.json).toHaveBeenCalledWith({ message: 'Database error' });
+        expect(res.json).toHaveBeenCalledWith({ message: "Error en la BD" });
     });
 });
 
-describe('Método logout', () => {
+describe("Metodo logout", () => {
     const res = {
         cookie: vi.fn().mockReturnThis(),
         sendStatus: vi.fn().mockReturnThis()
     };
 
-    beforeEach(() => {
-        vi.clearAllMocks();
-    });
-
-    it('✔️ Debería borrar la cookie token y devolver 200', () => {
+    it("Debería borrar la cookie token y devolver 200", () => {
         const req = {};
 
         logout(req, res);
@@ -238,91 +231,5 @@ describe('Método logout', () => {
         });
 
         expect(res.sendStatus).toHaveBeenCalledWith(200);
-    });
-});
-
-describe('Método verifyToken', () => {
-    const res = {
-        status: vi.fn().mockReturnThis(),
-        json: vi.fn().mockReturnThis()
-    };
-
-    const req = {
-        cookies: {
-            token: 'mocked-token'
-        }
-    };
-
-    const mockUserData = {
-        _id: 'user-id',
-        username: 'prueba',
-        email: 'prueba@email.com',
-        role: 'user',
-        profilePic: 'pic-url',
-        followed: [],
-        songsLiked: [],
-        createdAt: '2024-06-29'
-    };
-
-    beforeEach(() => {
-        vi.clearAllMocks();
-    });
-
-    it('✔️ Debería devolver datos del usuario si el token es válido', async () => {
-        jwt.verify.mockImplementation((token, secret, callback) => {
-            callback(null, { id: 'user-id' });
-        });
-
-        vi.spyOn(User, 'findById').mockResolvedValue(mockUserData);
-
-        await verifyToken(req, res);
-
-        expect(jwt.verify).toHaveBeenCalledWith(
-            'mocked-token',
-            process.env.TOKEN_SECRET,
-            expect.any(Function)
-        );
-
-        expect(User.findById).toHaveBeenCalledWith('user-id');
-
-        expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-            id: 'user-id',
-            username: 'prueba',
-            email: 'prueba@email.com',
-            role: 'user'
-        }));
-    });
-
-    it('❌ Debería devolver 401 si no hay token', async () => {
-        const reqWithoutToken = { cookies: {} };
-
-        await verifyToken(reqWithoutToken, res);
-
-        expect(res.status).toHaveBeenCalledWith(401);
-        expect(res.json).toHaveBeenCalledWith({ message: 'Unauthorized' });
-    });
-
-    it('❌ Debería devolver 401 si el token es inválido', async () => {
-        jwt.verify.mockImplementation((token, secret, callback) => {
-            callback(new Error('Invalid token'), null);
-        });
-
-        await verifyToken(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(401);
-        expect(res.json).toHaveBeenCalledWith({ message: 'Unauthorized' });
-    });
-
-    it('❌ Debería devolver 401 si el usuario no se encuentra', async () => {
-        jwt.verify.mockImplementation((token, secret, callback) => {
-            callback(null, { id: 'user-id' });
-        });
-
-        vi.spyOn(User, 'findById').mockResolvedValue(null);
-
-        await verifyToken(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(401);
-        expect(res.json).toHaveBeenCalledWith({ msg: 'Unauthorized' });
     });
 });

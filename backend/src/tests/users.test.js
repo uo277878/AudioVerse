@@ -50,6 +50,7 @@ describe("Metodo getUsers", () => {
 
 		await getUsers(req, res);
 
+		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalled();
 		const users = res.json.mock.calls[0][0];
 		expect(users).toHaveLength(2);
@@ -91,6 +92,7 @@ describe("Metodo createUser", () => {
 
 		await createUser(req, res);
 
+		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalled();
 		const respuesta = res.json.mock.calls[0][0];
 		expect(respuesta).toHaveProperty('newUser');
@@ -147,6 +149,7 @@ describe("Metodo getUser", () => {
 
 		await getUser(req, res);
 
+		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
 			username: 'prueba1',
 			email: 'prueba1@email.com'
@@ -154,9 +157,13 @@ describe("Metodo getUser", () => {
 	});
 
 	it("Debería responder 404 si el usuario no existe", async () => {
-		const idInexistente = new mongoose.Types.ObjectId();
+		const idNuevo = new mongoose.Types.ObjectId();
 
-		const req = { params: { id: idInexistente.toString() } };
+		const req = { 
+			params: { 
+				id: idNuevo.toString() 
+			} 
+		};
 
 		await getUser(req, res);
 
@@ -164,13 +171,17 @@ describe("Metodo getUser", () => {
 		expect(res.json).toHaveBeenCalledWith({ message: "Usuario no encontrado" });
 	});
 
-	it("Debería responder 404 si el id no es válido o hay un error", async () => {
-		const req = { params: { id: 'idInvalido' } };
+	it("Debería responder 500 si el id no es válido o hay un error", async () => {
+		const req = { 
+			params: { 
+				id: 'invalido' 
+			} 
+		};
 
 		await getUser(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(404);
-		expect(res.json).toHaveBeenCalledWith({ message: "Usuario no encontrado" });
+		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.json).toHaveBeenCalledWith({ message: "Se ha producido un error" });
 	});
 
 });
@@ -200,6 +211,7 @@ describe("Metodo updateProfile", () => {
 
 		await updateProfile(req, res);
 
+		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
 			username: 'prueba2',
 			email: 'prueba2@email.com'
@@ -327,6 +339,7 @@ describe("Metodo updateUser", () => {
 
 		await updateUser(req, res);
 
+		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
 			username: 'prueba2',
 			email: 'prueba2@email.com'
@@ -464,6 +477,7 @@ describe("Metodo updatePassword", () => {
 		const isMatch = await bcrypt.compare('nueva123', updatedUser.password);
 
 		expect(isMatch).toBe(true);
+		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
 			username: 'prueba1',
 			email: 'prueba1@email.com',
@@ -576,6 +590,7 @@ describe("Metodo getFollowedUsers", () => {
 
 		await getFollowedUsers(req, res);
 
+		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
 			followed: expect.arrayContaining([
 				expect.objectContaining({ _id: user2._id }),
@@ -624,7 +639,9 @@ describe("Metodo deleteUser", () => {
 		});
 
 		const req = {
-			params: { id: user._id },
+			params: { 
+				id: user._id 
+			},
 		};
 
 		await deleteUser(req, res);
@@ -636,7 +653,9 @@ describe("Metodo deleteUser", () => {
 
 	it("Debería devolver error 404 si el usuario no existe", async () => {
 		const req = {
-			params: { id: new mongoose.Types.ObjectId() },
+			params: { 
+				id: new mongoose.Types.ObjectId() 
+			},
 		};
 
 		await deleteUser(req, res);
@@ -647,7 +666,9 @@ describe("Metodo deleteUser", () => {
 
 	it("Debería devolver error 404 si ocurre un error (ID inválido)", async () => {
 		const req = {
-			params: { id: 'id' },
+			params: { 
+				id: 'id' 
+			},
 		};
 
 		await deleteUser(req, res);
@@ -678,6 +699,7 @@ describe("Metodo profile", () => {
 
 		await profile(req, res);
 
+		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
 			id: user._id,
 			username: 'prueba1',
@@ -687,7 +709,9 @@ describe("Metodo profile", () => {
 
 	it("Debería devolver error 404 si el usuario no existe", async () => {
 		const req = {
-			user: { id: new mongoose.Types.ObjectId() },
+			user: { 
+				id: new mongoose.Types.ObjectId() 
+			},
 		};
 
 		await profile(req, res);
@@ -698,7 +722,9 @@ describe("Metodo profile", () => {
 
 	it("Debería devolver error 500 si ocurre un error en la base de datos", async () => {
 		const req = {
-			user: { id: 'id' },
+			user: { 
+				id: 'id' 
+			},
 		};
 
 		await profile(req, res);
@@ -724,11 +750,14 @@ describe("Metodo passwordPage", () => {
 		});
 
 		const req = {
-			user: { id: user._id },
+			user: { 
+				id: user._id 
+			},
 		};
 
 		await passwordPage(req, res);
 
+		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
 			id: user._id,
 			username: 'prueba1',
@@ -740,7 +769,9 @@ describe("Metodo passwordPage", () => {
 
 	it("Debería devolver error 404 si el usuario no existe", async () => {
 		const req = {
-			user: { id: new mongoose.Types.ObjectId() },
+			user: { 
+				id: new mongoose.Types.ObjectId() 
+			},
 		};
 
 		await passwordPage(req, res);
@@ -751,7 +782,9 @@ describe("Metodo passwordPage", () => {
 
 	it("Debería devolver error 500 si ocurre un error en la base de datos", async () => {
 		const req = {
-			user: { id: 'id' },
+			user: { 
+				id: 'id' 
+			},
 		};
 
 		await passwordPage(req, res);
@@ -796,7 +829,9 @@ describe("Metodo searchUser", () => {
 			body: {
 				input: 'prueba',
 				orderBy: '',
-				userAuth: { id: user1._id }
+				userAuth: { 
+					id: user1._id 
+				}
 			}
 		};
 
@@ -805,6 +840,7 @@ describe("Metodo searchUser", () => {
 		const response = res.json.mock.calls[0][0].users;
 
 		expect(response.length).toBe(2);
+		expect(res.status).toHaveBeenCalledWith(200);
 	});
 
 	it("Debería ordenar los usuarios por matches en canciones", async () => {
@@ -847,6 +883,7 @@ describe("Metodo searchUser", () => {
 
 		await searchUser(req, res);
 
+		expect(res.status).toHaveBeenCalledWith(200);
 		const response = res.json.mock.calls[0][0].users;
 
 		expect(response.length).toBe(2);
@@ -865,7 +902,9 @@ describe("Metodo searchUser", () => {
 			body: {
 				input: '',
 				orderBy: '',
-				userAuth: { id: 'id' }
+				userAuth: { 
+					id: 'id' 
+				}
 			}
 		};
 
@@ -900,8 +939,14 @@ describe("Metodo followUser", () => {
 		});
 
 		const req = {
-			params: { id: userToFollow._id },
-			body: { user: { id: authUser._id } },
+			params: { 
+				id: userToFollow._id 
+			},
+			body: { 
+				user: { 
+					id: authUser._id 
+				} 
+			},
 		};
 
 		await followUser(req, res);
@@ -937,8 +982,14 @@ describe("Metodo followUser", () => {
 		});
 
 		const req = {
-			params: { id: userToFollow._id },
-			body: { user: { id: authUser._id } },
+			params: { 
+				id: userToFollow._id 
+			},
+			body: { 
+				user: { 
+					id: authUser._id 
+				} 
+			},
 		};
 
 		await followUser(req, res);
@@ -959,8 +1010,14 @@ describe("Metodo followUser", () => {
 		});
 
 		const req = {
-			params: { id: new mongoose.Types.ObjectId() }, 
-			body: { user: { id: authUser._id } },
+			params: { 
+				id: new mongoose.Types.ObjectId() 
+			}, 
+			body: { 
+				user: { 
+					id: authUser._id 
+				} 
+			},
 		};
 
 		await followUser(req, res);
@@ -971,8 +1028,14 @@ describe("Metodo followUser", () => {
 
 	it("Debería devolver error 500 si ocurre un problema en la base de datos", async () => {
 		const req = {
-			params: { id: 'id1' }, 
-			body: { user: { id: 'id2' } },
+			params: { 
+				id: 'id1' 
+			}, 
+			body: { 
+				user: { 
+					id: 'id2' 
+				} 
+			},
 		};
 
 		await followUser(req, res);
@@ -1007,8 +1070,14 @@ describe("Metodo unfollowUser", () => {
 		});
 
 		const req = {
-			params: { id: userToUnfollow._id },
-			body: { user: { id: authUser._id } },
+			params: { 
+				id: userToUnfollow._id 
+			},
+			body: { 
+				user: { 
+					id: authUser._id 
+				} 
+			},
 		};
 
 		await unfollowUser(req, res);
@@ -1044,8 +1113,14 @@ describe("Metodo unfollowUser", () => {
 		});
 
 		const req = {
-			params: { id: userToUnfollow._id },
-			body: { user: { id: authUser._id } },
+			params: { 
+				id: userToUnfollow._id 
+			},
+			body: { 
+				user: { 
+					id: authUser._id 
+				} 
+			},
 		};
 
 		await unfollowUser(req, res);
@@ -1067,8 +1142,14 @@ describe("Metodo unfollowUser", () => {
 		});
 
 		const req = {
-			params: { id: new mongoose.Types.ObjectId() }, 
-			body: { user: { id: authUser._id } },
+			params: { 
+				id: new mongoose.Types.ObjectId() 
+			}, 
+			body: { 
+				user: { 
+					id: authUser._id 
+				} 
+			},
 		};
 
 		await unfollowUser(req, res);
@@ -1079,8 +1160,14 @@ describe("Metodo unfollowUser", () => {
 
 	it("Debería devolver error 500 si ocurre un problema en la base de datos", async () => {
 		const req = {
-			params: { id: 'id' }, 
-			body: { user: { id: 'id2' } },
+			params: { 
+				id: 'id' 
+			}, 
+			body: { 
+				user: { 
+					id: 'id2' 
+				} 
+			},
 		};
 
 		await unfollowUser(req, res);
@@ -1118,7 +1205,9 @@ describe("Metodo likeSong", () => {
 
         const req = {
             body: {
-                user: { id: user._id },
+                user: { 
+					id: user._id 
+				},
                 id: songId
             }
         };
@@ -1161,7 +1250,9 @@ describe("Metodo likeSong", () => {
 
         const req = {
             body: {
-                user: { id: user._id },
+                user: { 
+					id: user._id 
+				},
                 id: songId
             }
         };
@@ -1180,7 +1271,9 @@ describe("Metodo likeSong", () => {
     it("Debería devolver error 404 si el usuario no existe", async () => {
         const req = {
             body: {
-                user: { id: new mongoose.Types.ObjectId() },
+                user: { 
+					id: new mongoose.Types.ObjectId() 
+				},
                 id: '1234'
             }
         };
@@ -1203,7 +1296,9 @@ describe("Metodo likeSong", () => {
 
         const req = {
             body: {
-                user: { id: user._id },
+                user: { 
+					id: user._id 
+				},
                 id: '1234'
             }
         };
@@ -1243,7 +1338,9 @@ describe("Metodo dislikeSong", () => {
 
         const req = {
             body: {
-                user: { id: user._id },
+                user: { 
+					id: user._id 
+				},
                 id: songId,
             },
         };
@@ -1279,7 +1376,9 @@ describe("Metodo dislikeSong", () => {
 
         const req = {
             body: {
-                user: { id: user._id  },
+                user: { 
+					id: user._id 
+				},
                 id: songId,
             },
         };
@@ -1306,7 +1405,9 @@ describe("Metodo dislikeSong", () => {
 
         const req = {
             body: {
-                user: { id: user._id },
+                user: { 
+					id: user._id 
+				},
                 id: "1234",
             }
         };
@@ -1336,7 +1437,9 @@ describe("Metodo getLikedSongs", () => {
         });
 
 		const req = {
-			params: { id: user._id },
+			params: { 
+				id: user._id 
+			},
 		};
 
 		await getLikedSongs(req, res);
@@ -1349,13 +1452,28 @@ describe("Metodo getLikedSongs", () => {
         expect(result.songsLiked).toContain('5678');
 	});
 
+	it("Debería devolver 404 si el usuario no existe", async () => {
+		const req = {
+			params: { 
+				id: new mongoose.Types.ObjectId() 
+			},
+		};
+
+		await getLikedSongs(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(404);
+		expect(res.json).toHaveBeenCalledWith({ message: "Usuario no encontrado" });
+	});
+
 	it("Debería devolver error 500 si falla la consulta", async () => {
 		vi.spyOn(User, 'findById').mockImplementation(() => {
 			throw new Error('Error DB');
 		});
 
 		const req = {
-			params: { id: new mongoose.Types.ObjectId().toString() },
+			params: { 
+				id: new mongoose.Types.ObjectId().toString() 
+			},
 		};
 
 		await getLikedSongs(req, res);

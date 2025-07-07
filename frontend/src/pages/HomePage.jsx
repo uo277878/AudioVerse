@@ -16,6 +16,12 @@ function HomePage(){
     const navigate = useNavigate();
     const [showMatch, setShowMatch] = useState(false);
 
+    useEffect(() =>{
+        if(user.role != "user"){
+            navigate("/error");
+        }
+    }, []);
+
     const onSubmit = handleSubmit(async (data) => {
         try{
             const res = await createPost(user.id, data.txtPost, null, null);

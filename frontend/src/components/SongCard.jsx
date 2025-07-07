@@ -44,7 +44,7 @@ function SongCard({song, likedSongs, text}){
             async function getPlaylists(){
                 try{
                     const pl = await getAllByUser(user);
-                    const filtered = pl.filter(p => p.name != "Canciones que me gustan");
+                    const filtered = pl.filter(p => p.name != "Canciones que me gustan" && p.creator == user.id);
                     setFilteredPlaylists(filtered);
                 } catch(error){
                     toast.error('Se ha producido un error al obtener las playlists del usuario', {

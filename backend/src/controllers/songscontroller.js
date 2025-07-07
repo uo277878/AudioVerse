@@ -52,7 +52,7 @@ export const createPlaylist = async (req, res) => {
         });
 
         const newPlaylist = await playlist.save();
-        res.json({ newPlaylist });
+        res.status(200).json({ newPlaylist });
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }
@@ -118,14 +118,14 @@ export const addSongToPlaylist = async (req, res) => {
  * @returns la playlist actualizada
  */
 export const removeSongPlaylist = async (req, res) => {
-    const {songId, playlistId} = req.body;
-    const playlist = await Playlist.findById(playlistId);
-    if (!playlist) {
-        return res.status(404).json({ msg: "Playlist no encontrada" });
-    } else if(!songId){
-        return res.status(404).json({ msg: "Id de canción inválido" });
-    } else{
-        try{
+    try{
+        const {songId, playlistId} = req.body;
+        const playlist = await Playlist.findById(playlistId);
+        if (!playlist) {
+            return res.status(404).json({ msg: "Playlist no encontrada" });
+        } else if(!songId){
+            return res.status(404).json({ msg: "Id de canción inválido" });
+        } else{
             const index = playlist.songs.findIndex(i => i.songId === songId);
             if(index == -1){
                 return res.status(404).json({ msg: "La playlist no contiene esa canción" });
@@ -138,12 +138,11 @@ export const removeSongPlaylist = async (req, res) => {
             }
             await playlist.save();
             
-            return res.status(200).json({playlist});    
-        } catch(error){
-            console.error(error);
-            return res.status(500).json({ message: "Se ha producido un error al eliminar la canción dela playlist" });
+            return res.status(200).json({playlist}); 
         }
-        
+    } catch(error){
+        console.error(error);
+        return res.status(500).json({ message: "Se ha producido un error al eliminar la canción de la playlist" });
     }
 }
 
@@ -212,7 +211,7 @@ export const getAllByUser = async (req, res) => {
             return res.status(404).json({ message: "No se ha encontrado ningún usuario con ese id" });
         }
         const playlists = await Playlist.find({$or: [{ creator: user._id }, { followedBy: user._id } ]});
-        res.json(playlists);
+        res.status(200).json(playlists);
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });
     }
@@ -230,7 +229,7 @@ export const getPlaylist = async (req, res) => {
         if(!playlist){
             return res.status(404).json({ message: "Playlist no encontrada"});
         } else{
-            res.json(playlist);
+            res.status(200).json(playlist);
         }
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });
@@ -258,7 +257,7 @@ export const searchPlaylist = async (req, res) => {
         if(!playlists || playlists.length == 0){
             return res.status(404).json({ message: "No se encuentran playlists para ese input"});
         } else{
-            res.json(playlists);
+            res.status(200).json(playlists);
         }
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });

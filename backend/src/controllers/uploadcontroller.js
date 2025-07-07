@@ -24,12 +24,12 @@ export const uploadProfileImage = async (req, res) => {
         
         const ext = ["image/jpeg", "image/png"];
         if (!ext.includes(req.files.image.mimetype)) {
-            return res.status(400).json({ msg: "Formato de imagen no permitido. Solo JPG y PNG" });
+            return res.status(401).json({ msg: "Formato de imagen no permitido. Solo JPG y PNG" });
         }
 
         const size = 2 * 1024 * 1024; 
         if (req.files.image.size > size) {
-            return res.status(400).json({ msg: "La imagen debe ser menor de 2MB" });
+            return res.status(402).json({ msg: "La imagen debe ser menor de 2MB" });
         }
 
         const user = await User.findById(req.user.id);
@@ -49,10 +49,9 @@ export const uploadProfileImage = async (req, res) => {
         user.profilePic = result.secure_url;
         await user.save();
 
-        res.json({ profilePic: user.profilePic });
+        res.status(200).json({ profilePic: user.profilePic });
 
     } catch (error) {
-        console.error(error);
         res.status(500).json({ msg: "Error al subir la imagen", error });
     }
 };

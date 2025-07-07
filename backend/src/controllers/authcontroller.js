@@ -62,7 +62,7 @@ export const signup = async (req, res) => {
         await playlist.save();
 
         res.cookie('token', token)
-        res.json({
+        res.status(200).json({
             id: newUser._id,
             username: newUser.username,
             email: newUser.email,

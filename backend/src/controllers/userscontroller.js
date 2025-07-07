@@ -12,7 +12,7 @@ import {validationResult} from "express-validator";
 export const getUsers = async (req, res) => {
     try{
         const users = await User.find();
-        res.json(users);
+        res.status(200).json(users);
     } catch(error){
         return res.status(500).json({ message: "Se ha producido un error" });
     }
@@ -39,7 +39,7 @@ export const createUser = async (req, res) => {
 
         const newUser = await user.save();
 
-        res.json({newUser}); 
+        res.status(200).json({newUser}); 
     } catch(error){
         return res.status(500).json({ message: error.message });
     }
@@ -57,10 +57,10 @@ export const getUser = async (req, res) => {
         if(!user){
             return res.status(404).json({ message: "Usuario no encontrado"});
         } else{
-            res.json(user);
+            res.status(200).json(user);
         }
     } catch(error){
-        return res.status(404).json({ message: "Usuario no encontrado"});
+        return res.status(500).json({ message: "Se ha producido un error"});
     }
 }
 
@@ -91,7 +91,7 @@ export const updateProfile = async (req, res) => {
         if(!user){
             return res.status(404).json({ message: "Usuario no encontrado"});
         } else{
-            res.json({
+            res.status(200).json({
                 id: user._id,
                 username: user.username,
                 email: user.email,
@@ -132,7 +132,7 @@ export const updateUser = async (req, res) => {
         if(!user){
             return res.status(404).json({ message: "Usuario no encontrado"});
         } else{
-            res.json({
+            res.status(200).json({
                 id: user._id,
                 username: user.username,
                 email: user.email,
@@ -168,7 +168,7 @@ export const updatePassword = async (req, res) => {
         user.password = passwordEncriptada;
         await user.save();
 
-        return res.json(user);
+        return res.status(200).json(user);
     } catch(error){
         return res.status(500).json({ message: "Usuario no encontrado"});
     }
@@ -186,7 +186,7 @@ export const getFollowedUsers = async(req, res) => {
         if(!user){
             return res.status(404).json({ message: "Usuario no encontrado"});
         } else{
-            res.json({followed: user.followed});
+            res.status(200).json({followed: user.followed});
         }
     } catch(error){
         return res.status(500).json({ message: "Usuario no encontrado"});
@@ -226,7 +226,7 @@ export const profile = async (req, res) => {
             return res.status(404).json({ message: "Usuario no encontrado" });
         }
 
-        return res.json({
+        return res.status(200).json({
             id: user._id,
             username: user.username,
             email: user.email,
@@ -253,7 +253,7 @@ export const passwordPage = async (req, res) => {
             return res.status(404).json({ message: "Usuario no encontrado" });
         }
 
-        return res.json({
+        return res.status(200).json({
             id: user._id,
             username: user.username,
             email: user.email,
@@ -298,7 +298,7 @@ export const searchUser = async (req, res) => {
                 })
                 .sort((a, b) => b.matchCount - a.matchCount); 
         }
-        return res.json({users});
+        return res.status(200).json({users});
     } catch(error){
         console.error(error);
         return res.status(500).json({ message: "Error al buscar el usuario" });
@@ -342,8 +342,10 @@ export const unfollowUser = async (req, res) => {
             return res.status(404).json({ message: "Usuario a dejar de seguir no encontrado" });
         } else{
             const authUser = await User.findById(req.body.user.id);
-            if (authUser.followed.includes(userToUnfollow._id)) {
-                authUser.followed.pull(userToUnfollow._id);
+            if (authUser.followed.some(id => id.toString() === userToUnfollow._id.toString())) {
+                authUser.followed = authUser.followed.filter(
+                    id => id.toString() !== userToUnfollow._id.toString()
+                );
                 await authUser.save();
             }
             return res.status(200).json({authUser});
@@ -409,7 +411,9 @@ export const dislikeSong = async (req, res) => {
             return res.status(404).json({ message: "Usuario no encontrado" });
         }
         if (user.songsLiked.includes(idSong)) {
-            user.songsLiked.pull(idSong);
+            user.songsLiked = user.songsLiked.filter(
+                id => id.toString() !== idSong.toString()
+            );
             await user.save();
         }
         const mgPlaylist = await Playlist.findOne({creator: user._id, name: "Canciones que me gustan"});

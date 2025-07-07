@@ -5,16 +5,8 @@ import { signup, login, logout } from '../controllers/authcontroller.js';
 import User from '../models/user.js';
 import Playlist from '../models/playlist.js';
 import { validationResult } from 'express-validator';
-import bcrypt from 'bcryptjs';
+import { hash, compare, bcrypt } from 'bcryptjs';
 
-vi.mock('bcryptjs', () => ({
-	default: {
-		hash: vi.fn(async (password) => `hashed-${password}`),
-		compare: vi.fn(async (password, hashed) => {
-			return hashed === `hashed-${password}`;
-		})
-	}
-}));
 
 vi.mock('../libs/jwt.js', () => ({
 	createToken: vi.fn(async ({ id }) => `token-${id}`)
@@ -48,10 +40,10 @@ beforeEach(async () => {
 
 describe("Metodo signup", () => {
 	const res = {
-			status: vi.fn().mockReturnThis(),
-			json: vi.fn().mockReturnThis(),
-			cookie: vi.fn().mockReturnThis()
-		};
+		status: vi.fn().mockReturnThis(),
+		json: vi.fn().mockReturnThis(),
+		cookie: vi.fn().mockReturnThis()
+	};
 	it("Debería crear un nuevo usuario y una playlist por defecto", async () => {
 		const req = {
 			body: {
@@ -64,6 +56,7 @@ describe("Metodo signup", () => {
 
 		await signup(req, res);
 
+		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.cookie).toHaveBeenCalledWith('token', expect.stringContaining('token-'));
 		expect(res.json).toHaveBeenCalledWith(
 			expect.objectContaining({
@@ -79,7 +72,67 @@ describe("Metodo signup", () => {
 
 		const playlist = await Playlist.findOne({ creator: user._id });
 		expect(playlist).not.toBeNull();
-		expect(playlist.name).toBe('Canciones que me gustan');
+		expect(playlist.name).toBe("Canciones que me gustan");
+	});
+
+	it("Debería devolver error cuando el nombre existe", async () => {
+		await User.create({
+			username: 'prueba1',
+			email: 'prueba1@email.com',
+			password: '123456',
+			dateBirth: "2001-05-23", 
+			role: "user"
+		});
+
+		const req = {
+			body: {
+				username: 'prueba1',
+				email: 'prueba2@email.com',
+				password: '123456',
+				dateBirth: '2001-05-23'
+			}
+		};
+
+		const res = {
+			status: vi.fn(() => res),
+			json: vi.fn(() => res),
+			cookie: vi.fn(() => res)
+		};
+
+		await signup(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(401);
+		expect(res.json).toHaveBeenCalledWith({ msg: "El nombre de usuario ya existe" });
+	});
+
+	it("Debería devolver error cuando el email existe", async () => {
+		await User.create({
+			username: 'prueba1',
+			email: 'prueba1@email.com',
+			password: '123456',
+			dateBirth: "2001-05-23", 
+			role: "user"
+		});
+
+		const req = {
+			body: {
+				username: 'prueba2',
+				email: 'prueba1@email.com',
+				password: '123456',
+				dateBirth: '2001-05-23'
+			}
+		};
+
+		const res = {
+			status: vi.fn().mockReturnThis(),
+			json: vi.fn().mockReturnThis(),
+			cookie: vi.fn().mockReturnThis()
+		};
+
+		await signup(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith({ msg: "El email ya existe" });
 	});
 });
 
@@ -90,27 +143,8 @@ describe("Metodo login", () => {
 		cookie: vi.fn().mockReturnThis()
 	};
 
-	it("Debería responder 422 si faltan datos", async () => {
-		validationResult.mockReturnValueOnce({
-			isEmpty: () => false,
-			array: () => [{ msg: 'Email es requerido' }]
-		});
-
-		const req = {
-			body: {
-				email: '',
-				password: ''
-			}
-		};
-		
-		await login(req, res);
-
-		expect(res.status).toHaveBeenCalledWith(422);
-		expect(res.json).toHaveBeenCalledWith([{ msg: 'Email es requerido' }]);
-	});
-
 	it("Debería responder 200 y devolver datos del usuario si login es correcto", async () => {
-		const hashedPassword = await bcrypt.hash('123456', 10);
+		const hashedPassword = await hash('123456', 10);
 
 		const user = new User({
 			username: 'prueba1',
@@ -135,5 +169,80 @@ describe("Metodo login", () => {
 
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({username: 'prueba1', email: 'prueba1@email.com'}));
+	});
+
+	it("Debería responder 422 si faltan datos", async () => {
+		validationResult.mockReturnValueOnce({
+			isEmpty: () => false,
+			array: () => [{ msg: "Email es requerido" }]
+		});
+
+		const req = {
+			body: {
+				email: '',
+				password: ''
+			}
+		};
+		
+		await login(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(422);
+		expect(res.json).toHaveBeenCalledWith([{ msg: "Email es requerido" }]);
+	});
+
+	it("Debería responder 400 si el usuario no existe", async () => {
+		const req = {
+			body: {
+				email: 'prueba1@email.com',
+				password: '123456'
+			}
+		};
+		const user = await User.findOne({ email: 'prueba1@email.com' });
+		expect(user).toBeNull();
+
+		await login(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith({ msg: "Credenciales incorrectas" });
+	});
+
+	it("Debería responder 400 si la contraseña es incorrecta", async () => {
+		const hashedPassword = await hash('123456', 10);
+
+		const user = new User({
+			username: 'prueba1',
+			email: 'prueba1@email.com',
+			password: hashedPassword,
+			dateBirth: '2001-05-23',
+			role: 'user'
+		});
+		await user.save();
+
+		const req = {
+			body: {
+				email: "prueba1@email.com",
+				password: "1234"
+			}
+		}
+
+		await login(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith({ msg: "Credenciales incorrectas" });
+	});
+});
+
+describe("Metodo logout", () => {
+	it("Debería eliminar la cookie del token y responder 200", async () => {
+		const req = {};
+		const res = {
+			cookie: vi.fn().mockReturnThis(),
+			sendStatus: vi.fn().mockReturnThis()
+		}
+
+		await logout(req, res);
+
+		expect(res.cookie).toHaveBeenCalledWith('token', '', { expires: new Date(0) });
+		expect(res.sendStatus).toHaveBeenCalledWith(200);
 	});
 });

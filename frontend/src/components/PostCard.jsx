@@ -25,6 +25,7 @@ function PostCard({post}){
     const [isLiked, setIsLiked] = useState(false);
     const [selectedPlaylist, setSelectedPlaylist] = useState('');
     const { getAllByUser, playlists, addSongToPlaylist } = useSongs();
+    const [filteredPlaylists, setFilteredPlaylists] = useState([]);
     const [color, setColor] = useState("");
     const [likedPost, setLikedPost] = useState(false);
     const navigate = useNavigate();
@@ -93,6 +94,8 @@ function PostCard({post}){
             async function getPlaylists(){
                 try{
                     const pl = await getAllByUser(user);
+                    const filtered = pl.filter(p => p.name != "Canciones que me gustan" && p.creator == user.id);
+                    setFilteredPlaylists(filtered);
                 } catch(error){
                     toast.error('Se ha producido un error al obtener las playlists del usuario', {
                         position: "top-right",
@@ -292,7 +295,7 @@ function PostCard({post}){
                 <select className="w-full p-2 rounded bg-zinc-700 text-white" value={selectedPlaylist} 
                 onChange={(e) => setSelectedPlaylist(e.target.value)}>
                     <option value="">-- Selecciona una playlist --</option>
-                    {playlists.map((playlist) => (
+                    {filteredPlaylists.map((playlist) => (
                         <option key={playlist._id} value={playlist._id}>
                             {playlist.name}
                         </option>

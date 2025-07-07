@@ -51,31 +51,32 @@ describe("Metodo createPost", () => {
             body: {
                 userId: user._id.toString(),
                 text: 'Este es un post de prueba',
-                songId: 'song123',
+                songId: '123',
                 type: 'song'
             }
         };
 
         await createPost(req, res);
 
+		expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({
             newPost: expect.objectContaining({
                 user: user._id,
                 text: 'Este es un post de prueba',
-                song: 'song123',
+                song: '123',
                 item_type: 'song'
             })
         });
 
         const post = await Post.findOne({ user: user._id });
         expect(post).not.toBeNull();
-        expect(post.text).toBe('Este es un post de prueba');
+        expect(post.text).toBe("Este es un post de prueba");
     });
 
     it("Debería responder 422 si faltan datos", async () => {
         validationResult.mockReturnValueOnce({
             isEmpty: () => false,
-            array: () => [{ msg: 'El texto del post no puede estar vacío' }]
+            array: () => [{ msg: "El texto del post no puede estar vacío" }]
         });
 
         const user = await User.create({
@@ -98,7 +99,7 @@ describe("Metodo createPost", () => {
         await createPost(req, res);
 
         expect(res.status).toHaveBeenCalledWith(422);
-        expect(res.json).toHaveBeenCalledWith([{ msg: 'El texto del post no puede estar vacío' }]);
+        expect(res.json).toHaveBeenCalledWith([{ msg: "El texto del post no puede estar vacío" }]);
     });
 });
 
@@ -109,11 +110,30 @@ describe("Metodo getPosts", () => {
 		cookie: vi.fn().mockReturnThis()
 	};
 	it("Debería devolver los posts del usuario y sus seguidos", async () => {
-		const user1 = await User.create({ username: 'prueba1', email: 'prueba1@email.com', password: '123456', dateBirth: '2001-05-23', role: 'user' });
-		const user2 = await User.create({ username: 'prueba2', email: 'prueba2@email.com', password: '123456', dateBirth: '2001-05-23', role: 'user', followed: [user1._id] });
+		const user1 = await User.create({ 
+			username: 'prueba1', 
+			email: 'prueba1@email.com', 
+			password: '123456', 
+			dateBirth: '2001-05-23', 
+			role: 'user' 
+		});
+		const user2 = await User.create({ 
+			username: 'prueba2', 
+			email: 'prueba2@email.com', 
+			password: '123456', 
+			dateBirth: '2001-05-23', 
+			role: 'user', 
+			followed: [user1._id] 
+		});
 
-		const post1 = await Post.create({ user: user1._id, text: 'Post de prueba1' });
-		const post2 = await Post.create({ user: user2._id, text: 'Post de prueba2' });
+		const post1 = await Post.create({ 
+			user: user1._id, 
+			text: 'Post de prueba1' 
+		});
+		const post2 = await Post.create({ 
+			user: user2._id, 
+			text: 'Post de prueba2' 
+		});
 
 		const req = {
 			query: {
@@ -128,8 +148,8 @@ describe("Metodo getPosts", () => {
 		expect(res.json).toHaveBeenCalled();
 		const posts = res.json.mock.calls[0][0];
 		expect(posts.length).toBe(2);
-		expect(posts[0].text).toBe('Post de prueba2');
-		expect(posts[1].text).toBe('Post de prueba1');
+		expect(posts[0].text).toBe("Post de prueba2");
+		expect(posts[1].text).toBe("Post de prueba1");
 	});
 
 	it("Debería devolver error 500 si falla", async () => {
@@ -147,8 +167,19 @@ describe("Método likePost", () => {
 		cookie: vi.fn().mockReturnThis()
 	};
 	it("Debería dar me gusta a un post", async () => {
-		const user = await User.create({ username: 'prueba1', email: 'prueba1@email.com', password: '123456', dateBirth: '2001-05-23', role: 'user' });
-		const post = await Post.create({ user: user._id, text: 'Mi primer post', likes: 0, likedBy: [] });
+		const user = await User.create({ 
+			username: 'prueba1', 
+			email: 'prueba1@email.com', 
+			password: '123456', 
+			dateBirth: '2001-05-23', 
+			role: 'user' 
+		});
+		const post = await Post.create({ 
+			user: user._id, 
+			text: 'Mi primer post', 
+			likes: 0, 
+			likedBy: [] 
+		});
 
 		const req = {
 			params: { id: post._id.toString() },
@@ -165,8 +196,19 @@ describe("Método likePost", () => {
 	});
 
 	it("Debería quitar el me gusta si ya lo tenía", async () => {
-		const user = await User.create({ username: 'prueba1', email: 'prueba1@email.com', password: '123456', dateBirth: '2001-05-23', role: 'user' });
-		const post = await Post.create({ user: user._id, text: 'Post con me gusta', likes: 1, likedBy: [user._id] });
+		const user = await User.create({ 
+			username: 'prueba1', 
+			email: 'prueba1@email.com', 
+			password: '123456', 
+			dateBirth: '2001-05-23', 
+			role: 'user' 
+		});
+		const post = await Post.create({ 
+			user: user._id, 
+			text: 'Post con me gusta', 
+			likes: 1, 
+			likedBy: [user._id] 
+		});
 
 		const req = {
 			params: { id: post._id.toString() },
@@ -203,8 +245,17 @@ describe("Metodo deletePost", () => {
         sendStatus: vi.fn().mockReturnThis(),
 	};
 	it("Debería eliminar un post existente", async () => {
-		const user = await User.create({ username: 'prueba1', email: 'prueba1@email.com', password: '123456', dateBirth: '2001-05-23', role: 'user' });
-		const post = await Post.create({ user: user._id, text: 'Post para eliminar' });
+		const user = await User.create({ 
+			username: 'prueba1', 
+			email: 'prueba1@email.com', 
+			password: '123456', 
+			dateBirth: '2001-05-23', 
+			role: 'user' 
+		});
+		const post = await Post.create({ 
+			user: user._id, 
+			text: 'Post para eliminar' 
+		});
 
 		const req = {
 			params: { id: post._id.toString() }
@@ -225,6 +276,6 @@ describe("Metodo deletePost", () => {
 		await deletePost(req, res);
 
 		expect(res.status).toHaveBeenCalledWith(404);
-		expect(res.json).toHaveBeenCalledWith({ message: 'Post no encontrado' });
+		expect(res.json).toHaveBeenCalledWith({ message: "Post no encontrado" });
 	});
 });
